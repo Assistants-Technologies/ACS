@@ -69,6 +69,7 @@ router.get('/callback', async(req,res)=>{
                 username: user.assistants_username,
                 email: user.email,
                 _id: user._id,
+                admin: user.admin
             }
         }else{
             const NewUser = await User.create({
@@ -83,6 +84,7 @@ router.get('/callback', async(req,res)=>{
                 username: NewUser.assistants_username,
                 email: NewUser.email,
                 _id: NewUser._id,
+                admin: NewUser.admin
             }
         }
     }else{

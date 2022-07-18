@@ -69,6 +69,7 @@ router.get('/callback', (req, res) => {
                         _id: user._id,
                         username: user.assistants_username,
                         email: user.email,
+                        admin: user.admin
                     }
                     req.session.save()
                 }else{
@@ -84,6 +85,7 @@ router.get('/callback', (req, res) => {
                         username: NewUser.assistants_username,
                         email: null,
                         _id: NewUser._id,
+                        admin: NewUser.admin
                     }
                 }
             }else{
