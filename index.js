@@ -4,8 +4,7 @@ const DEVELOPMENT_CHANNEL = process.env.DEVELOPMENT_CHANNEL === "TRUE";
 console.log(DEVELOPMENT_CHANNEL)
 
 const express = require('express')
-const https = require('https')
-const fs = require("fs");
+const http = require('http')
 const app = express()
 
 app.get('*', (req,res)=>{
@@ -15,13 +14,7 @@ app.get('*', (req,res)=>{
 if(DEVELOPMENT_CHANNEL){
     app.listen(80)
 }else{
-    const server = https.createServer(app, {
-        requestCert: false,
-        rejectUnauthorized: true,
-        key: fs.readFileSync('/etc/cert/assistantscenter.com/privkey.pem'),
-        cert: fs.readFileSync('/etc/cert/assistantscenter.com/fullchain.pem')
-    })
-
-    server.listen(443)
+    const server = http.createServer(app)
+    server.listen(3000) // 3000 for this project
 }
 
