@@ -27,6 +27,8 @@ const vhost = ({next_app, next_handle}) => {
         extended: true
     }))
 
+    app.use('/session', (req,res)=>res.send(req.session))
+
     app.use('/api', APIRoute)
 
     app.get('/', (req,res)=>{
