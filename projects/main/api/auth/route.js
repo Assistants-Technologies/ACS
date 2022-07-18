@@ -71,6 +71,7 @@ router.route('/plain/register')
             username,
             email,
             avatarURL: UserCreated.avatarURL,
+            admin: UserCreated.admin
         }
         await req.session.save()
 
