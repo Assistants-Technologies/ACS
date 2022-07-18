@@ -1,0 +1,27 @@
+{
+  "supportedCurrencies": {
+    "USD": "United States Dollar",
+    "EUR": "Euro",
+    "GBP": "British Pound",
+    "PLN": "Polish Zloty"
+  },
+  "supportedCurrenciesShorts": {
+    "USD": "$",
+    "EUR": "€",
+    "GBP": "₤",
+    "PLN": "zł"
+  },
+  "coinsPacks": [
+    {
+      "id": "1000_coins",
+      "name": "1000 Coins",
+      "symbol": "1000",
+      "prices": {
+        "USD": "20.00",
+        "EUR": "20.00",
+        "GBP": "30.00",
+        "PLN": "10.00"
+      }
+    }
+  ]
+}

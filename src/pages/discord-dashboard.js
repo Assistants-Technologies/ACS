@@ -1,0 +1,130 @@
+import React from 'react';
+import Head from 'next/head';
+
+import Script from 'next/script'
+import PageBody from "../components/content/PageBody";
+import Scripts from "../components/content/Scripts";
+
+import FeaturedTab from "../components/row/FeaturedTab";
+import DiscordDashboardProjectTab from "../components/row/DiscordDashboardProjectTab";
+
+export async function getServerSideProps(context) {
+    return {
+        props: {
+            user: context.query.user,
+        },
+    }
+}
+
+export default function TestPage ({ user }) {
+    return (
+        <>
+            <Head>
+                <meta charSet="utf-8" />
+                <meta
+                    name="viewport"
+                    content="width=device-width, initial-scale=1, shrink-to-fit=no"
+                />
+                <title>Star Admin2 </title>
+                <link rel="stylesheet" href="vendors/feather/feather.css" />
+                <link rel="stylesheet" href="vendors/mdi/css/materialdesignicons.min.css" />
+                <link rel="stylesheet" href="vendors/ti-icons/css/themify-icons.css" />
+                <link rel="stylesheet" href="vendors/typicons/typicons.css" />
+                <link
+                    rel="stylesheet"
+                    href="vendors/simple-line-icons/css/simple-line-icons.css"
+                />
+                <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css" />
+                <link
+                    rel="stylesheet"
+                    href="vendors/datatables.net-bs4/dataTables.bootstrap4.css"
+                />
+                <link rel="stylesheet" href="js/select.dataTables.min.css" />
+                <link rel="stylesheet" href="css/vertical-layout-light/style.css" />
+                <link rel="shortcut icon" href="images/favicon.png" />
+                <style>
+                    {`
+                   
+                   
+                    .modal {
+  position: fixed;
+  z-index: 4324;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+}
+
+
+                    .modal-content {
+                      background-color: #fefefe;
+                      margin: 5% auto;
+                      padding: 20px;
+                      border: 1px solid #888;
+                      width: 80%;
+                    }
+                    
+                    @media only screen and (min-width: 910px) and (max-width: 1200px) {
+                        .modal-content {
+                            width: 60% !important;
+                        }
+                    }
+                    
+                    @media only screen and (min-width: 1200px){
+                        .modal-content {
+                            width: 50% !important;
+                        }
+                    }
+`}
+                </style>
+            </Head>
+            <PageBody user={user}>
+                <div className="row">
+                    <div className="col-sm-12">
+                        <div className="home-tab">
+
+                            <div className="tab-content" id="content-featured">
+                                <FeaturedTab
+                                    title={
+                                        <>
+                                            <span className="fw-bold">Discord Dashboard v3</span>{" "}
+                                            is now available
+                                        </>
+                                    }
+                                    button_title={
+                                        'Explore novelties'
+                                    }
+                                    background={'url("https://cdn.assistantscenter.com/l4smwhnd")'}
+                                />
+
+                                <DiscordDashboardProjectTab/>
+
+                                <div className="row flex-grow">
+                                    <div className="col-12 grid-margin stretch-card">
+                                        <div className="card card-rounded table-darkBGImg" style={{background:"url('https://cdn.assistantscenter.com/l4snvbcn')",backgroundSize:'cover !important',backgroundRepeat:'no-repeat'}}>
+                                            <div className="card-body" style={{marginTop:30,marginBottom:30}}>
+                                                <div className="col-sm-8">
+                                                    <h3 className="text-white upgrade-info mb-0">
+                                                        Want us to <b>take care of hosting your Dashboard?</b>
+                                                    </h3>
+                                                    <h5 className="text-white upgrade-info mt-2">
+                                                        Get back to us and we will surely find a profitable solution: <a href="mailto:contact@assistantscenter.com">contact@assistantscenter.com</a>
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </PageBody>
+            <Scripts/>
+        </>
+    )
+}
