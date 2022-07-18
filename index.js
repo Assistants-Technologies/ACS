@@ -1,5 +1,4 @@
 require('dotenv').config({})
-const DEVELOPMENT_CHANNEL = process.env.DEVELOPMENT_CHANNEL === "true";
 
 const express = require('express')
 const https = require('https')
@@ -10,7 +9,7 @@ app.get('*', (req,res)=>{
     res.status(200).send({error:false,message:"Oracle ACS VPS test."})
 })
 
-if(DEVELOPMENT_CHANNEL){
+if(process.env.DEVELOPMENT_CHANNEL){
     app.listen(80)
 }else{
     const server = https.createServer(app, {
