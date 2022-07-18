@@ -8,5 +8,4 @@ src/.next
 .idea
 .next
 node_modules
-public
 test
