@@ -67,7 +67,7 @@ router.route('/plain/register')
         });
 
         req.session.user = {
-            _id: UserCreated,
+            _id: UserCreated._id,
             username,
             email,
             avatarURL: UserCreated.avatarURL,

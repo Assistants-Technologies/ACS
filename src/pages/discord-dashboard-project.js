@@ -13,14 +13,22 @@ import ViewsStats from "../components/dbd-stats/Views";
 export async function getServerSideProps(context) {
     return {
         props: {
-            user: context.query.user,
-            project: context.query.project,
+            url: context.query.url.split('?')[0],
+            user: context.query.user || null,
+            project: context.query.project || null,
         },
     }
 }
 
-export default function TestPage ({ user, project }) {
-    console.log('project', project)
+export default function TestPage ({ user, project, url }) {
+    if(!user || !project || !url) return <a></a>;
+    const ud = (url.split("/").length - 1)
+    let ud_s = ''
+    if(ud != 1){
+        for(let i = 0; i < ud; i++){
+            ud_s += '../'
+        }
+    }
     return (
         <>
             <Head>
@@ -30,22 +38,22 @@ export default function TestPage ({ user, project }) {
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                 />
                 <title>Star Admin2 </title>
-                <link rel="stylesheet" href="../../vendors/feather/feather.css" />
-                <link rel="stylesheet" href="../../vendors/mdi/css/materialdesignicons.min.css" />
-                <link rel="stylesheet" href="../../vendors/ti-icons/css/themify-icons.css" />
-                <link rel="stylesheet" href="../../vendors/typicons/typicons.css" />
+                <link rel="stylesheet" href={`${ud_s}vendors/feather/feather.css`} />
+                <link rel="stylesheet" href={`${ud_s}vendors/mdi/css/materialdesignicons.min.css`}/>
+                <link rel="stylesheet" href={`${ud_s}vendors/ti-icons/css/themify-icons.css`} />
+                <link rel="stylesheet" href={`${ud_s}vendors/typicons/typicons.css`} />
                 <link
                     rel="stylesheet"
-                    href="../../vendors/simple-line-icons/css/simple-line-icons.css"
+                    href={`${ud_s}vendors/simple-line-icons/css/simple-line-icons.css`}
                 />
-                <link rel="stylesheet" href="../../vendors/css/vendor.bundle.base.css" />
+                <link rel="stylesheet" href={`${ud_s}vendors/css/vendor.bundle.base.css`} />
                 <link
                     rel="stylesheet"
-                    href="../../vendors/datatables.net-bs4/dataTables.bootstrap4.css"
+                    href={`${ud_s}vendors/datatables.net-bs4/dataTables.bootstrap4.css`}
                 />
-                <link rel="stylesheet" href="../../js/select.dataTables.min.css" />
-                <link rel="stylesheet" href="../../css/vertical-layout-light/style.css" />
-                <link rel="shortcut icon" href="../../images/favicon.png" />
+                <link rel="stylesheet" href={`${ud_s}js/select.dataTables.min.css`} />
+                <link rel="stylesheet" href={`${ud_s}css/vertical-layout-light/style.css`} />
+                <link rel="shortcut icon" href={`${ud_s}images/favicon.png`} />
                 <style>
                     {`
                    
@@ -85,7 +93,7 @@ export default function TestPage ({ user, project }) {
 `}
                 </style>
             </Head>
-            <PageBody user={user}>
+            <PageBody user={user} uds={ud_s}>
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="home-tab">
@@ -110,10 +118,14 @@ export default function TestPage ({ user, project }) {
                     </div>
                 </div>
             </PageBody>
-            <Scripts src={'../../'}/>
-            <script src="../../vendors/js/vendor.bundle.base.js"></script>
-            <script src="../../js/off-canvas.js"></script>
-            <script src="../../js/hoverable-collapse.js"></script>
+            <Scripts src={ud_s}/>
+            <Script src={`${ud_s}vendors/js/vendor.bundle.base.js`}/>
+            <Script src={`${ud_s}vendors/bootstrap-datepicker/bootstrap-datepicker.min.js`}/>
+            <Script src={`${ud_s}js/off-canvas.js`}/>
+            <Script src={`${ud_s}js/hoverable-collapse.js`}/>
+            <Script src={`${ud_s}js/template.js`}/>
+            <Script src={`${ud_s}js/settings.js`}/>
+            <Script src={`${ud_s}js/todolist.js`}/>
         </>
     )
 }

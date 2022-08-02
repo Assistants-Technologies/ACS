@@ -66,6 +66,10 @@ const userSchema = new Schema({
         type:Boolean,
         default: false,
     },
+    premium_boost: {
+        type: Boolean,
+        default: false,
+    },
     blog_permissions: {
         type: Boolean,
         default: false,
@@ -85,7 +89,9 @@ const userSchema = new Schema({
             type: String
         },
         status: {
-            default: String,
+            default: null,
+            sparse: true,
+            type: String,
         },
     },
     Personal: {
@@ -103,8 +109,10 @@ const userSchema = new Schema({
             type: String
         },
         status: {
+            default: null,
+            sparse: true,
             type: String,
-        }
+        },
     },
     Production: {
         payment_id: {
@@ -121,8 +129,10 @@ const userSchema = new Schema({
             sparse: true
         },
         status: {
+            default: null,
+            sparse: true,
             type: String,
-        }
+        },
     },
 });
 

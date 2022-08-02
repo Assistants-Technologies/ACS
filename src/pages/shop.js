@@ -10,14 +10,24 @@ import Script from "next/script"
 export async function getServerSideProps(context) {
     return {
         props: {
+            url: context.query.url.split('?')[0],
             user: context.query.user,
         },
     }
 }
 
-export default function ShopPage ({ user }) {
+export default function ShopPage ({ user, url }) {
+    const ud = (url.split("/").length - 1)
+    let ud_s = ''
+    if(ud != 1){
+        for(let i = 0; i < ud; i++){
+            ud_s += '../'
+        }
+    }
+
     const [coins, setCoins] = React.useState('fetching')
     const [items, setItems] = React.useState(null)
+    const [digitalItems, setDigitalItems] = React.useState(null)
     const [displayCurrency, setDisplayCurrency] = React.useState('USD')
 
     const [displayCoinsShop, setDisplayCoinsShop] = React.useState(false)
@@ -31,14 +41,31 @@ export default function ShopPage ({ user }) {
     const fetchItems = async () => {
         const res = await axios.get('/api/shop/items/get')
         setItems(res.data.items)
-        console.log(res.data.items)
         setSetSelected(res.data.items.coinsPacks[0].id)
+    }
+
+    const fetchDigitalItems = async () => {
+        const res = await axios.get('/api/shop/digital-items/get')
+        setDigitalItems(res.data.items)
     }
 
     React.useEffect(() => {
         fetchCoins()
         fetchItems()
+        fetchDigitalItems()
     }, [])
+
+    const buyDigitalItem = async (item_id) => {
+        try {
+            const res = await axios.post(`/api/shop/digital-items/buy/${item_id}`)
+            await fetchCoins()
+            await fetchDigitalItems()
+            alert(res.data.message)
+        }catch(err){
+            return alert(err.response.data.message)
+        }
+        return true
+    }
 
 
     return (
@@ -50,22 +77,22 @@ export default function ShopPage ({ user }) {
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                 />
                 <title>Star Admin2 </title>
-                <link rel="stylesheet" href="vendors/feather/feather.css" />
-                <link rel="stylesheet" href="vendors/mdi/css/materialdesignicons.min.css" />
-                <link rel="stylesheet" href="vendors/ti-icons/css/themify-icons.css" />
-                <link rel="stylesheet" href="vendors/typicons/typicons.css" />
+                <link rel="stylesheet" href={`${ud_s}vendors/feather/feather.css`} />
+                <link rel="stylesheet" href={`${ud_s}vendors/mdi/css/materialdesignicons.min.css`}/>
+                <link rel="stylesheet" href={`${ud_s}vendors/ti-icons/css/themify-icons.css`} />
+                <link rel="stylesheet" href={`${ud_s}vendors/typicons/typicons.css`} />
                 <link
                     rel="stylesheet"
-                    href="vendors/simple-line-icons/css/simple-line-icons.css"
+                    href={`${ud_s}vendors/simple-line-icons/css/simple-line-icons.css`}
                 />
-                <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css" />
+                <link rel="stylesheet" href={`${ud_s}vendors/css/vendor.bundle.base.css`} />
                 <link
                     rel="stylesheet"
-                    href="vendors/datatables.net-bs4/dataTables.bootstrap4.css"
+                    href={`${ud_s}vendors/datatables.net-bs4/dataTables.bootstrap4.css`}
                 />
-                <link rel="stylesheet" href="js/select.dataTables.min.css" />
-                <link rel="stylesheet" href="css/vertical-layout-light/style.css" />
-                <link rel="shortcut icon" href="images/favicon.png" />
+                <link rel="stylesheet" href={`${ud_s}js/select.dataTables.min.css`} />
+                <link rel="stylesheet" href={`${ud_s}css/vertical-layout-light/style.css`} />
+                <link rel="shortcut icon" href={`${ud_s}images/favicon.png`} />
 
                 <style>
                     {`
@@ -106,7 +133,7 @@ export default function ShopPage ({ user }) {
 `}
                 </style>
             </Head>
-            <PageBody user={user}>
+            <PageBody user={user} uds={ud_s}>
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="home-tab">
@@ -133,38 +160,25 @@ export default function ShopPage ({ user }) {
                                                         <button type="button" className="btn btn-warning" style={{color:'white',height:40}} onClick={()=>setDisplayCoinsShop(true)}>Top up currency</button>
                                                     </div>
                                                     {
-                                                        items ?
+                                                        digitalItems ?
                                                             <div>
-                                                                <div className="form-group">
-                                                                    <label htmlFor="exampleFormControlSelect2">Currency</label>
-                                                                    <select className="form-control"
-                                                                            id="exampleFormControlSelect2"
-                                                                            value={displayCurrency}
-                                                                            onChange={(event)=>setDisplayCurrency(event.target.value)}
-                                                                            style={{color:'black'}}
-                                                                    >
-                                                                        {
-                                                                            Object.keys(items.supportedCurrencies).map((val,idx)=>{
-                                                                                return (
-                                                                                    <option value={val}>{val} ({Object.values(items.supportedCurrencies)[idx]})</option>
-                                                                                )
-                                                                            })
-                                                                        }
-                                                                    </select>
-                                                                </div>
                                                                 {
-                                                                    items.coinsPacks.map(set=>{
+                                                                    digitalItems.map(d_item=>{
                                                                         return (
                                                                             <>
-                                                                                <a>{set.name}</a>
-                                                                                <a>{set.prices[displayCurrency]}{items.supportedCurrenciesShorts[displayCurrency]}</a>
+                                                                                <a>{d_item.name}</a>
+                                                                                <a>{d_item.owns ? 'Owned' : 'Not owned'}</a>
+                                                                                {
+                                                                                    !d_item.owns &&
+                                                                                    <button type="button" className="btn btn-warning" style={{color:'white',height:40}} onClick={()=>buyDigitalItem(d_item.id)}>Buy</button>
+                                                                                }
                                                                             </>
                                                                         )
                                                                     })
                                                                 }
                                                             </div>
                                                             :
-                                                            <h1>Loading items...</h1>
+                                                            <h1>Loading digital items...</h1>
                                                     }
 
                                                     <div id="coinsShopModal" className="modal" style={{display: displayCoinsShop ? 'block' : 'none'}} onClick={(event)=> {
@@ -262,8 +276,15 @@ export default function ShopPage ({ user }) {
                     </div>
                 </div>
             </PageBody>
-            <Scripts/>
+            <Scripts src={ud_s}/>
             <Script src="https://checkout.stripe.com/checkout.js" strategy="beforeInteractive" defer={true}/>
+            <Script src={`${ud_s}vendors/js/vendor.bundle.base.js`}/>
+            <Script src={`${ud_s}vendors/bootstrap-datepicker/bootstrap-datepicker.min.js`}/>
+            <Script src={`${ud_s}js/off-canvas.js`}/>
+            <Script src={`${ud_s}js/hoverable-collapse.js`}/>
+            <Script src={`${ud_s}js/template.js`}/>
+            <Script src={`${ud_s}js/settings.js`}/>
+            <Script src={`${ud_s}js/todolist.js`}/>
         </>
     )
 }

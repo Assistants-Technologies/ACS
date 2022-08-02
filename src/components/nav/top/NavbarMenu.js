@@ -1,7 +1,7 @@
 import React from 'react'
 import Router from 'next/router'
 
-export default function NavbarMenu ({ user }) {
+export default function NavbarMenu ({ user, uds }) {
     const [welcomeText, setWelcomeText] = React.useState('')
 
     const updateText = () => {
@@ -36,7 +36,7 @@ export default function NavbarMenu ({ user }) {
                         <b style={{color:'#2611bd'}}>Assist<span style={{color:'black'}}>ants</span></b>
                     </a>
                     <a className="navbar-brand brand-logo-mini" href="/">
-                        <img src="images/logo-mini.svg" alt="logo" />
+                        <img src={`${uds}images/logo-mini.svg`} alt="logo" />
                     </a>
                 </div>
             </div>
@@ -52,7 +52,7 @@ export default function NavbarMenu ({ user }) {
                     </li>
                 </ul>
                 <ul className="navbar-nav ms-auto">
-                    <li className="nav-item dropdown">
+                    {/*<li className="nav-item dropdown">
                         <a
                             className="nav-link count-indicator"
                             id="countDropdown"
@@ -110,7 +110,7 @@ export default function NavbarMenu ({ user }) {
                                 </div>
                             </a>
                         </div>
-                    </li>
+                    </li>*/}
                     <li className="nav-item dropdown d-none d-lg-block user-dropdown">
                         <a
                             className="nav-link"
@@ -140,19 +140,11 @@ export default function NavbarMenu ({ user }) {
                                 <p className="mb-0 mt-2 font-weight-semibold">{user.username}</p>
                                 <p className="fw-light text-muted mb-0">{user.email}</p>
                             </div>
-                            <a className="dropdown-item">
+                            <a className="dropdown-item" onClick={()=>Router.push(`${uds}/profile`)}>
                                 <i className="dropdown-item-icon mdi mdi-account-outline text-primary me-2" />{" "}
-                                My Profile <span className="badge badge-pill badge-danger">1</span>
+                                My Profile {/*<span className="badge badge-pill badge-danger">1</span>*/}
                             </a>
-                            <a className="dropdown-item">
-                                <i className="dropdown-item-icon mdi mdi-calendar-check-outline text-primary me-2" />{" "}
-                                Activity
-                            </a>
-                            <a className="dropdown-item">
-                                <i className="dropdown-item-icon mdi mdi-help-circle-outline text-primary me-2" />{" "}
-                                FAQ
-                            </a>
-                            <a className="dropdown-item" onClick={()=>Router.push('/api/auth/session/destroy')}>
+                            <a className="dropdown-item" onClick={()=>Router.push(`${uds}/api/auth/session/destroy`)}>
                                 <i className="dropdown-item-icon mdi mdi-power text-primary me-2" />
                                 Sign Out
                             </a>

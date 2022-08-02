@@ -32,20 +32,24 @@ const vhost = ({next_app, next_handle}) => {
     app.use('/api', APIRoute)
 
     app.get('/', (req,res)=>{
-        return next_app.render(req, res, '/index', )
+        return next_app.render(req, res, '/index', {
+            url: req.url,
+        })
     })
 
     app.get('/auth', (req,res) => {
-        return next_app.render(req, res, '/auth', )
+        return next_app.render(req, res, '/auth', {
+            url: req.url,
+        })
     })
 
     app.get('/shop', (req,res)=>{
         if(!req.session.user) {
             return res.redirect('/auth?back_redirect=/shop')
         }
-        if(!req.session?.user?.admin)return res.status(401).json({error:true, message: "Sorry, you are not allowed to access this resource"});
 
         return next_app.render(req, res, '/shop', {
+            url: req.url,
             user: req.session.user
         })
     })
@@ -54,9 +58,9 @@ const vhost = ({next_app, next_handle}) => {
         if(!req.session.user) {
             return res.redirect('/auth?back_redirect=/profile')
         }
-        if(!req.session?.user?.admin)return res.status(401).json({error:true, message: "Sorry, you are not allowed to access this resource"});
 
         return next_app.render(req, res, '/profile', {
+            url: req.url,
             user: req.session.user
         })
     })
@@ -64,8 +68,9 @@ const vhost = ({next_app, next_handle}) => {
     app.get('/dashboard', (req,res)=>{
         if(!req.session.user)
             return res.redirect('/auth?back_redirect=/dashboard');
-        if(!req.session?.user?.admin)return res.status(401).json({error:true, message: "Sorry, you are not allowed to access this resource"});
+
         return next_app.render(req, res, '/dashboard', {
+            url: req.url,
             user: req.session.user,
         })
     })
@@ -74,6 +79,7 @@ const vhost = ({next_app, next_handle}) => {
         if(!req.session.user)
             return res.redirect('/auth?back_redirect=/discord-dashboard');
         return next_app.render(req, res, '/discord-dashboard', {
+            url: req.url,
             user: req.session.user,
         })
     })
@@ -82,10 +88,9 @@ const vhost = ({next_app, next_handle}) => {
         const projectId = req.params.projectId
         if(!req.session.user)
             return res.redirect('/auth?back_redirect=/discord-dashboard/project/'+projectId)
-        if(!req.session?.user?.admin)return res.status(401).json({error:true, message: "Sorry, you are not allowed to access this resource"});
-
 
         const ProjectData = await Project.findOne({
+            url: req.url,
             _id: projectId,
         })
 
@@ -96,6 +101,7 @@ const vhost = ({next_app, next_handle}) => {
             return res.redirect('/auth?back_redirect=/discord-dashboard/project/'+projectId+`&error=You are not authorized to access this project. Please use proper account.`)
 
         return next_app.render(req, res, '/discord-dashboard-project', {
+            url: req.url,
             user: req.session.user,
             project: {
                 _id: ProjectData._id.toString(),

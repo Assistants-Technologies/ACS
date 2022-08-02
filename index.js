@@ -31,12 +31,6 @@ const createApp = () => {
 
         server.listen(3000)
     }else{
-        /*
-            PROD PORTS:
-            - BETA.ASSISTANTSCENTER.COM - 3000
-            - CDN.BETA.ASSISTANTSCENTER.COM - 3001 (wont work for BETA, cloudflare is stuped)
-         */
-
         for (const vhostName of vhostList) {
             const vhost = require(`./projects/${vhostName}/vhost.js`).vhost({next_app, next_handle})
             const vServer = http.createServer(vhost)

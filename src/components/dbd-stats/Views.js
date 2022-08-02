@@ -125,7 +125,7 @@ const Comparison = ({project}) => {
     }, [data])
 
     return <>{
-        data?null:<a>Loading...</a>
+        data?<a></a>:<a>Loading...</a>
     }</>
 }
 

@@ -7,7 +7,23 @@ import Router from 'next/router'
 import LoginForm from '../components/auth/LoginForm'
 import RegisterForm from '../components/auth/RegisterForm'
 
-export default function AuthPage (props) {
+export async function getServerSideProps(context) {
+    return {
+        props: {
+            url: context.query.url.split('?')[0],
+        },
+    }
+}
+
+export default function AuthPage ({ url }) {
+    const ud = (url.split("/").length - 1)
+    let ud_s = ''
+    if(ud != 1){
+        for(let i = 0; i < ud; i++){
+            ud_s += '../'
+        }
+    }
+
     const router = useRouter()
 
     const [method, setMethod] = React.useState('login')
@@ -69,23 +85,23 @@ export default function AuthPage (props) {
             />
             <title>Star Admin2 </title>
             {/* plugins:css */}
-            <link rel="stylesheet" href="vendors/feather/feather.css" />
+            <link rel="stylesheet" href={`${ud_s}vendors/feather/feather.css`} />
             <link
                 rel="stylesheet"
-                href="vendors/mdi/css/materialdesignicons.min.css"
+                href={`${ud_s}vendors/mdi/css/materialdesignicons.min.css`}
             />
-            <link rel="stylesheet" href="vendors/ti-icons/css/themify-icons.css" />
-            <link rel="stylesheet" href="vendors/typicons/typicons.css" />
+            <link rel="stylesheet" href={`${ud_s}vendors/ti-icons/css/themify-icons.css`} />
+            <link rel="stylesheet" href={`${ud_s}vendors/typicons/typicons.css`} />
             <link
                 rel="stylesheet"
-                href="vendors/simple-line-icons/css/simple-line-icons.css"
+                href={`${ud_s}vendors/simple-line-icons/css/simple-line-icons.css`}
             />
-            <link rel="stylesheet" href="vendors/css/vendor.bundle.base.css" />
+            <link rel="stylesheet" href={`${ud_s}vendors/css/vendor.bundle.base.css`} />
             {/* endinject */}
             {/* Plugin css for this page */}
             {/* End plugin css for this page */}
             {/* inject:css */}
-            <link rel="stylesheet" href="css/vertical-layout-light/style.css" />
+            <link rel="stylesheet" href={`${ud_s}css/vertical-layout-light/style.css`} />
             {/* endinject */}
             <link rel="shortcut icon" href="images/favicon.png" />
             <div className="container-scroller">
@@ -130,14 +146,14 @@ export default function AuthPage (props) {
                     </div>
                 </div>
             </div>
-            <Script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" strategy={"beforeInteractive"}/>
-            <Script src="vendors/js/vendor.bundle.base.js"/>
-            <Script src="vendors/bootstrap-datepicker/bootstrap-datepicker.min.js"/>
-            <Script src="js/off-canvas.js"/>
-            <Script src="js/hoverable-collapse.js"/>
-            <Script src="js/template.js"/>
-            <Script src="js/settings.js"/>
-            <Script src="js/todolist.js"/>
+            <Script src={`https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js`} strategy={"beforeInteractive"}/>
+            <Script src={`${ud_s}vendors/js/vendor.bundle.base.js`}/>
+            <Script src={`${ud_s}vendors/bootstrap-datepicker/bootstrap-datepicker.min.js`}/>
+            <Script src={`${ud_s}js/off-canvas.js`}/>
+            <Script src={`${ud_s}js/hoverable-collapse.js`}/>
+            <Script src={`${ud_s}js/template.js`}/>
+            <Script src={`${ud_s}js/settings.js`}/>
+            <Script src={`${ud_s}js/todolist.js`}/>
         </>
 
     )

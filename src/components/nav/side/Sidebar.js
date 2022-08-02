@@ -50,13 +50,14 @@ export default function Sidebar ({ user }) {
                     </a>
                     <div className={`collapse ${asPath.startsWith('/discord-dashboard')?' show':''}`} id="form-elements">
                         <ul className="nav flex-column sub-menu">
-                            <li className="nav-item"><a className={`nav-link${(asPath.startsWith('/discord-dashboard') && !asPath.startsWith('/discord-dashboard/')) || asPath.startsWith('/discord-dashboard/project/')?' active':''}`} href="/discord-dashboard">Projects</a></li>
-                            <li className="nav-item"><a className="nav-link" href="#">Documentation</a></li>
-                            <li className="nav-item"><a className="nav-link" href="#">Tutorial</a></li>
+                            {/*<li className="nav-item"><a className={`nav-link${(asPath.startsWith('/discord-dashboard') && !asPath.startsWith('/discord-dashboard/')) || asPath.startsWith('/discord-dashboard/project/')?' active':''}`} href="/discord-dashboard">Projects</a></li>*/}
+                            <li className="nav-item"><a className={`nav-link${asPath.startsWith('/discord-dashboard/v2')?' active':''}`} href="/discord-dashboard/v2">v2 Licenses</a></li>
+                            <li className="nav-item"><a className="nav-link" href="https://dbd-docs.assistantscenter.com/#/" target="_blank">Documentation</a></li>
+                            <li className="nav-item"><a className="nav-link" href="https://learnit.assistantscenter.com/category/discord-dashboard/discord-dashboard-tutorial/" target="_blank">Tutorial</a></li>
                         </ul>
                     </div>
                 </li>
-                <li className="nav-item">
+                {/*<li className="nav-item">
                     <a className="nav-link" data-bs-toggle="collapse" href="#form-elements2" aria-expanded="false"
                        aria-controls="form-elements2">
                         <i className="menu-icon mdi mdi-twitter"></i>
@@ -77,6 +78,7 @@ export default function Sidebar ({ user }) {
                         <span className="menu-title">CDN</span>
                     </a>
                 </li>
+                */}
 
 
                 {

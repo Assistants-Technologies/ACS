@@ -143,7 +143,7 @@ router.get('/views/comparison/:projectId', async(req,res)=>{
         }
     })
 
-    if(ProjectData.owner != req.session.user._id)
+    if(ProjectData?.owner != req.session.user._id)
         return res.json({
             error: true,
             message: 'You are not authorized to access this project. Please use proper account.',
