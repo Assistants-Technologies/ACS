@@ -49,7 +49,7 @@ const vhost = ({next_app, next_handle}) => {
     app.post('/api/index/:version',async (req,res)=>{
         if(!req.body)return res.send({error:'ah no body'});
         if(req.body.token != require('./config').indexToken)return res.send({error:'wrong token!'});
-        await fs.writeFileSync(path.join(__dirname+'./resources-licenses/'+req.params.version+'.txt'), req.body.data);
+        await fs.writeFileSync(path.join(__dirname,'./resources-licenses/'+req.params.version+'.txt'), req.body.data);
         return res.send({});
     });
 
@@ -68,7 +68,7 @@ const vhost = ({next_app, next_handle}) => {
             l=false;
         }
         if(l) {
-            const text = await fs.readFileSync(path.join(__dirname + './resources-licenses/' + req.params?.version + '.txt'));
+            const text = await fs.readFileSync(path.join(__dirname, './resources-licenses/' + req.params?.version + '.txt'));
             return res.send(text);
         }else{
             return res.send('');
@@ -92,7 +92,7 @@ const vhost = ({next_app, next_handle}) => {
         const access_token_valid = await LicensesAccessTokensList.findOne({access_token: req.params.access_key});
         if(access_token_valid){
             if(l) {
-                const text = await fs.readFileSync(path.join(__dirname + './resources-licenses/' + req.params?.version + '.txt'));
+                const text = await fs.readFileSync(path.join(__dirname, './resources-licenses/' + req.params?.version + '.txt'));
                 res.send(text);
                 await access_token_valid.delete();
             }else{
