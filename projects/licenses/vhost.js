@@ -108,5 +108,5 @@ const vhost = ({next_app, next_handle}) => {
 
 module.exports = {
     vhost,
-    prodPort: 3001
+    prodPort: process.env.PROD_BUT_BETA === "TRUE" ? 2001 : 3001
 };
