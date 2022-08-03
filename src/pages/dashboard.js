@@ -84,7 +84,7 @@ export default function TestPage ({ user, url }) {
                                             </>
                                         }
                                         button_title={
-                                            'Explore novelties' + (process.env.PROD_BUT_BETA === "TRUE" ? ' (beta)' : '')
+                                            'Explore novelties'
                                         }
                                         background={'url("https://cdn.assistantscenter.com/l4smwhnd")'}
                                     />
