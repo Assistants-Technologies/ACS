@@ -63,7 +63,7 @@ export default function TestPage ({ user, url }) {
                     <div className="col-sm-12">
                         <div className="home-tab">
                             <div className="tab-content" id="content-featured">
-                                <FeaturedTab
+                                {/* <FeaturedTab
                                     title={
                                         <>
                                             <span className="fw-bold">Discord Dashboard v3</span>{" "}
@@ -74,7 +74,21 @@ export default function TestPage ({ user, url }) {
                                         'Explore novelties'
                                     }
                                     background={'url("https://cdn.assistantscenter.com/l4smwhnd")'}
-                                />
+                                />*/}
+                                {
+                                    <FeaturedTab
+                                        title={
+                                            <>
+                                                <span className="fw-bold">ACS v3</span>{" "}
+                                                is now available
+                                            </>
+                                        }
+                                        button_title={
+                                            'Explore novelties' + (process.env.NODE_ENV === 'development' ? ' (dev)' : '')
+                                        }
+                                        background={'url("https://cdn.assistantscenter.com/l4smwhnd")'}
+                                    />
+                                }
                             </div>
                             <div className={"row"} id="tabs">
                                 <div className="col-lg-6 d-flex flex-column">
