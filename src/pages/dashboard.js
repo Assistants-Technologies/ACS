@@ -14,6 +14,8 @@ import Scripts from "../components/content/Scripts";
 import FeaturedTab from "../components/row/FeaturedTab";
 import DiscordDashboardProjectTab from "../components/row/DiscordDashboardProjectTab";
 
+import IsBeta from '../isBeta'
+
 export async function getServerSideProps(context) {
     return {
         props: {
@@ -40,7 +42,7 @@ export default function TestPage ({ user, url }) {
                     name="viewport"
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                 />
-                <title>Star Admin2 </title>
+                <title>{IsBeta ? 'BETA | ' : ''}Assistants Center - Dashboard</title>
                 <link rel="stylesheet" href={`${ud_s}vendors/feather/feather.css`} />
                 <link rel="stylesheet" href={`${ud_s}vendors/mdi/css/materialdesignicons.min.css`}/>
                 <link rel="stylesheet" href={`${ud_s}vendors/ti-icons/css/themify-icons.css`} />
