@@ -170,7 +170,7 @@ export default function ShopPage ({ user, url }) {
                                                                                 <a>{d_item.owns ? 'Owned' : 'Not owned'}</a>
                                                                                 {
                                                                                     !d_item.owns &&
-                                                                                    <button type="button" className="btn btn-warning" style={{color:'white',height:40}} onClick={()=>buyDigitalItem(d_item.id)}>Buy</button>
+                                                                                    <button type="button" className="btn btn-warning" style={{color:'white',height:40}} onClick={()=>buyDigitalItem(d_item.id)}>{d_item.price==0?"Get for free":"Buy"}</button>
                                                                                 }
                                                                             </>
                                                                         )
