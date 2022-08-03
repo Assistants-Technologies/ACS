@@ -39,6 +39,14 @@ const vhost = ({next_app, next_handle}) => {
         })
     })
 
+    app.get('/licenses', (req,res)=>{
+        res.redirect('/discord-dashboard/v2')
+    })
+
+    app.get('/licenses/:t', (req,res)=>{
+        res.redirect('/discord-dashboard/v2')
+    })
+
     app.get('/auth', (req,res) => {
         return next_app.render(req, res, '/auth', {
             url: req.url,

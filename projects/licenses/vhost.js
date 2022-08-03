@@ -16,7 +16,7 @@ const vhost = ({next_app, next_handle}) => {
     }))
 
     app.get('/', (req,res)=>{
-        res.redirect('https://assistantscenter.com/shop?feature=dbdv2_licenses')
+        res.redirect('https://assistantscenter.com/discord-dashboard/v2')
     })
 
     app.post('/validate', async (req,res)=>{
