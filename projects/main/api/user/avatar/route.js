@@ -13,11 +13,11 @@ const fileUpload = require('express-fileupload');
 router.use(fileUpload())
 
 router.get('/:user_id', async (req,res) => {
-    const fileExists = fs.existsSync(path.join(__dirname, `../../../../../public/avatar/${req.session.user._id+'.png'}`));
+    const fileExists = fs.existsSync(path.join(__dirname, `../../../public/avatar/${req.session.user._id+'.png'}`));
     if(fileExists)
-        return res.sendFile(path.join(__dirname, `../../../../../public/avatar/${req.session.user._id+'.png'}`));
+        return res.sendFile(path.join(__dirname, `../../../public/avatar/${req.session.user._id+'.png'}`));
     else
-        return res.sendFile(path.join(__dirname, `../../../../../public/avatar/default.png`));
+        return res.sendFile(path.join(__dirname, `../../../public/avatar/default.png`));
 })
 
 router.post('/', async (req,res) => {
@@ -47,7 +47,7 @@ router.post('/', async (req,res) => {
             message: 'Invalid file extension type',
         })
 
-    fs.writeFileSync(path.join(__dirname, `../../../../../public/avatar/${req.session.user._id+'.png'}`), avatarFile.data)
+    fs.writeFileSync(path.join(__dirname, `../../../public/avatar/${req.session.user._id+'.png'}`), avatarFile.data)
     return res.send({error:false})
 })
 

@@ -108,5 +108,5 @@ const vhost = ({next_app, next_handle}) => {
 
 module.exports = {
     vhost,
-    prodPort: 3004
+    prodPort: 3001
 };

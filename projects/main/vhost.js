@@ -7,6 +7,8 @@ const APIRoute = require('./api/route')
 const Project = require('../../models/DBDStats/dbd_project')
 const Views = require('../../models/DBDStats/Views/view')
 
+const User = require('../../models/user')
+
 const vhost = ({next_app, next_handle}) => {
     const app = express()
 
@@ -84,6 +86,24 @@ const vhost = ({next_app, next_handle}) => {
         })
     })
 
+    app.get('/discord-dashboard/v2', async (req, res) => {
+        if(!req.session.user)
+            return res.redirect('/auth?back_redirect=/discord-dashboard');
+        const user = await User.findOne({
+            _id: req.session.user._id,
+        })
+        const licenses = {
+            OpenSource: user?.OpenSource?.license_id || null,
+            Personal: user?.Personal?.license_id || null,
+            Production: user?.Production?.license_id || null,
+        }
+        return next_app.render(req, res, '/discord-dashboard-v2', {
+            url: req.url,
+            user: req.session.user,
+            licenses,
+        })
+    })
+
     app.get('/discord-dashboard/project/:projectId', async (req,res)=>{
         const projectId = req.params.projectId
         if(!req.session.user)
@@ -113,9 +133,13 @@ const vhost = ({next_app, next_handle}) => {
         })
     })
 
-    app.use(express.static(path.join(__dirname, '../../public')))
+    app.use(express.static(path.join(__dirname, './public'), ))
 
-    app.use('/cdn', express.static(path.join(__dirname, '../../cdn'), { redirect : false }))
+    /*
+     *  AOS assets v2 (old) support
+     */
+    app.use(express.static(path.join(__dirname, './assets-v2'), { redirect : false }))
+
 
     app.all('*', (req,res)=>next_handle(req,res))
 

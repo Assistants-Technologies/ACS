@@ -77,14 +77,12 @@ export default function AuthPage ({ url }) {
 
     return (
         <>
-            {/* Required meta tags */}
             <meta charSet="utf-8" />
             <meta
                 name="viewport"
                 content="width=device-width, initial-scale=1, shrink-to-fit=no"
             />
             <title>Star Admin2 </title>
-            {/* plugins:css */}
             <link rel="stylesheet" href={`${ud_s}vendors/feather/feather.css`} />
             <link
                 rel="stylesheet"
@@ -97,12 +95,7 @@ export default function AuthPage ({ url }) {
                 href={`${ud_s}vendors/simple-line-icons/css/simple-line-icons.css`}
             />
             <link rel="stylesheet" href={`${ud_s}vendors/css/vendor.bundle.base.css`} />
-            {/* endinject */}
-            {/* Plugin css for this page */}
-            {/* End plugin css for this page */}
-            {/* inject:css */}
             <link rel="stylesheet" href={`${ud_s}css/vertical-layout-light/style.css`} />
-            {/* endinject */}
             <link rel="shortcut icon" href="images/favicon.png" />
             <div className="container-scroller">
                 <div className="container-fluid page-body-wrapper full-page-wrapper">

@@ -114,9 +114,13 @@ export default function ShopPage ({ user, url }) {
                                                                        placeholder="E-mail" aria-label="Email"
                                                                        value={user.email} disabled
                                                                 />
+                                                                {
+                                                                    user.username.startsWith('@t_') || user.username.startsWith('@d_') &&
+                                                                    <label><b>Why is nothing here?</b> For registration, you have used <i>{user.username.startsWith('@d_') ? 'Discord' : (user.username.startsWith('@t_') ? 'Twitter' : null)}</i>. Soon you will be able to link your email address to your account.</label>
+                                                                }
                                                             </div>
                                                         </div>
-                                                        <div className="col-md-6">
+                                                        {/*<div className="col-md-6">
                                                             <div className="form-group">
                                                                 <label>Profile image update</label>
                                                                 <div>
@@ -136,7 +140,7 @@ export default function ShopPage ({ user, url }) {
                                                                     </button>
                                                                 </div>
                                                             </div>
-                                                        </div>
+                                                        </div>*/}
                                                     </div>
 
                                                     <h5 className="pt-3">Profile secrets</h5>

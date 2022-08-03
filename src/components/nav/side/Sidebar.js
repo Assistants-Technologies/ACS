@@ -42,14 +42,14 @@ export default function Sidebar ({ user }) {
 
 
                 <li className={`nav-item${asPath.startsWith('/discord-dashboard')?' active':''}`}>
-                    <a className="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false"
+                    <a style={{borderRadius: '0px 20px 0px 0px'}} className="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false"
                        aria-controls="form-elements">
                         <i className="menu-icon mdi mdi-view-dashboard"></i>
                         <span className="menu-title">Discord-Dashboard</span>
                         <i className="menu-arrow"></i>
                     </a>
                     <div className={`collapse ${asPath.startsWith('/discord-dashboard')?' show':''}`} id="form-elements">
-                        <ul className="nav flex-column sub-menu">
+                        <ul className="nav flex-column sub-menu" style={{borderRadius: '0px 0px 20px 0px'}}>
                             {/*<li className="nav-item"><a className={`nav-link${(asPath.startsWith('/discord-dashboard') && !asPath.startsWith('/discord-dashboard/')) || asPath.startsWith('/discord-dashboard/project/')?' active':''}`} href="/discord-dashboard">Projects</a></li>*/}
                             <li className="nav-item"><a className={`nav-link${asPath.startsWith('/discord-dashboard/v2')?' active':''}`} href="/discord-dashboard/v2">v2 Licenses</a></li>
                             <li className="nav-item"><a className="nav-link" href="https://dbd-docs.assistantscenter.com/#/" target="_blank">Documentation</a></li>

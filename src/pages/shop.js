@@ -225,7 +225,7 @@ export default function ShopPage ({ user, url }) {
                                                                                         {
                                                                                             items.coinsPacks.map(set=>{
                                                                                                 return (
-                                                                                                    <option value={set.name}>{set.name}</option>
+                                                                                                    <option value={set.id}>{set.name}</option>
                                                                                                 )
                                                                                             })
                                                                                         }

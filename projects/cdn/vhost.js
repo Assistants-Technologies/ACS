@@ -1,44 +1,30 @@
 const express = require('express')
-const path = require("path")
-const uuid = require('uuid').v4
+const db = require('quick.db');
+const uploadAppDb = new db.table('uploadApp');
 
-const fileUpload = require('express-fileupload')
+const cloudinary = require('cloudinary').v2;
+cloudinary.config(require('../../cloudinary_config').cloudinary);
 
 const vhost = ({next_app, next_handle}) => {
-    const app = express();
+    const uploadAppGet = express();
 
-    app.use(express.static(path.join(__dirname, '../../cdn'), { redirect : false }));
+    uploadAppGet.get('/:id', async (req,res)=>{
+        const image = uploadAppDb.get(req.params.id);
+        if(!image)return res.send({error:true,message:"No image with this id passed found."});
+        try{
+            const response = await require('node-fetch')(image);
+            const buffer = await response.buffer();
+            res.writeHead(200,{'Content-type':'image/jpg'});
+            res.end(buffer);
+        }catch(err){
+            return res.send({error:true,message:"No image with this id passed found."});
+        }
+    });
 
-   /* app.get('/get', async(req,res) => {
-        const data = await CDN.List('.')
-        res.send(data)
-    })
-
-    app.get('/upload', async (req,res) => {
-        let allowedExtensions = ["jpg", "png", "jpeg"]
-
-        let sampleFile = req.files.file
-        let fileName = req.body?.fileName || uuid()
-        let extension
-
-        if (!files || Object.keys(files).length === 0)
-            return res.status(400).send('No files were uploaded.')
-
-        if(sampleFile.size > 30000000)return res.status(401).send("File too big. Max size is +- 30MB")
-
-        extension = sampleFile.name.substring(sampleFile.name.lastIndexOf('.') + 1)
-
-        if (!allowedExtensions.includes(extension))
-            return res.status(401).send('Invalid file extension type.')
-
-        const upload_stream = CDN.Upload(req.body?.resourceFolder || '.', fileName, sampleFile.data)
-        return res.send(upload_stream)
-    })*/
-
-    return app
+    return uploadAppGet
 }
 
 module.exports = {
     vhost,
-    prodPort: 3001
+    prodPort: 3003,
 }

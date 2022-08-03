@@ -11,3 +11,5 @@ node_modules
 test
 projects/licenses/config.js
 projects/licenses/resources-licenses
+json.sqlite
+cloudinary_config.js
