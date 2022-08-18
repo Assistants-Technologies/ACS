@@ -176,6 +176,14 @@ const vhost = ({next_app, next_handle}) => {
         })
     })
 
+    app.get('/discord-dashboard/v3', async (req, res) => {
+        if(!req.session.user)
+        return res.redirect('/auth?back_redirect=/discord-dashboard')
+    
+        if(!req.session.user.admin)
+            return res.status(403).send()
+    })
+
     app.get('/discord-dashboard/project/:projectId', async (req,res)=>{
         if(!req.session.user)
         return res.redirect('/auth?back_redirect=/discord-dashboard')
