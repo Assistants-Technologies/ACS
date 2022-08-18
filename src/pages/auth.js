@@ -101,7 +101,12 @@ export default function AuthPage ({ url, back_redirect }) {
             />
             <link rel="stylesheet" href={`${ud_s}vendors/css/vendor.bundle.base.css`} />
             <link rel="stylesheet" href={`${ud_s}css/vertical-layout-light/style.css`} />
-            <link rel="shortcut icon" href="images/favicon.png" />
+            {
+                    IsBeta ?
+                        <link rel="shortcut icon" href={`${ud_s}images/favicon.png`} />
+                    :
+                        <link rel="shortcut icon" href={`${ud_s}favicon.png`} />
+                }
             <link  rel="stylesheet" href={`${ud_s}mycss/my_dark_css.css`}/>
             <div className="container-scroller">
                 <div className="container-fluid page-body-wrapper full-page-wrapper">

@@ -89,7 +89,12 @@ export default function ShopPage ({ user, url, connections, query, email }) {
             />
             <link rel="stylesheet" href={`${ud_s}js/select.dataTables.min.css`} />
             <link rel="stylesheet" href={`${ud_s}css/vertical-layout-light/style.css`} />
-            <link rel="shortcut icon" href={`${ud_s}images/favicon.png`} />
+            {
+                    IsBeta ?
+                        <link rel="shortcut icon" href={`${ud_s}images/favicon.png`} />
+                    :
+                        <link rel="shortcut icon" href={`${ud_s}favicon.png`} />
+                }
             <style>
                 {`
                

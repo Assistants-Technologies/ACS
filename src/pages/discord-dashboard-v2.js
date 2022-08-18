@@ -55,7 +55,12 @@ export default function TestPage ({ user, url, licenses }) {
                 />
                 <link rel="stylesheet" href={`${ud_s}js/select.dataTables.min.css`} />
                 <link rel="stylesheet" href={`${ud_s}css/vertical-layout-light/style.css`} />
-                <link rel="shortcut icon" href={`${ud_s}images/favicon.png`} />
+                {
+                    IsBeta ?
+                        <link rel="shortcut icon" href={`${ud_s}images/favicon.png`} />
+                    :
+                        <link rel="shortcut icon" href={`${ud_s}favicon.png`} />
+                }
 
                 <link  rel="stylesheet" href={`${ud_s}mycss/my_dark_css.css`}/>
             </Head>
