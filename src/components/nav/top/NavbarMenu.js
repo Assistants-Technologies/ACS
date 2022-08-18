@@ -140,10 +140,6 @@ export default function NavbarMenu ({ user, uds }) {
                                 <p className="mb-0 mt-2 font-weight-semibold">{user?.username}</p>
                                 <p className="fw-light text-muted mb-0">{user?.email}</p>
                             </div>
-                            <a className="dropdown-item" onClick={()=>Router.push(`${uds}/profile`)}>
-                                <i className="dropdown-item-icon mdi mdi-account-outline text-primary me-2" />{" "}
-                                My Profile {/*<span className="badge badge-pill badge-danger">1</span>*/}
-                            </a>
                             <a className="dropdown-item" onClick={()=>Router.push(`${uds}/api/auth/session/destroy`)}>
                                 <i className="dropdown-item-icon mdi mdi-power text-primary me-2" />
                                 Sign Out

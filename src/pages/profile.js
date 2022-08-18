@@ -289,6 +289,6 @@ background-color: rgba(0,0,0,0.4);
         <Script src={`${ud_s}js/todolist.js`}/>
     </>
     :
-    <></>
+    <>Loading...</>
     )
 }
