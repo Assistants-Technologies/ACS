@@ -25,8 +25,9 @@ router.get('/authorize', async(req,res)=>{
     });
     req.session.oauth_discord = {
         mode: 'authorize',
-        back_redirect: req.query?.back_redirect || '/',
+        back_redirect: req.session.back_redirect || req.query.back_redirect || '/',
     }
+    req.session.back_redirect = null
     await req.session.save()
     res.redirect(url)
 })
@@ -39,8 +40,9 @@ router.get('/connect', async(req,res)=>{
     });
     req.session.oauth_discord = {
         mode: 'connect',
-        back_redirect: req.query?.back_redirect || '/',
+        back_redirect: req.session.back_redirect || req.query.back_redirect || '/',
     }
+    req.session.back_redirect = null
     await req.session.save()
     res.redirect(url)
 })
@@ -90,16 +92,13 @@ router.get('/callback', async(req,res)=>{
     }else{
         if(user){
             if(user._id == req.session.user._id){
-                return res.redirect('/profile')
+                return res.redirect('/profile?error=Requested Discord account is already connected with your ACS account.')
             }
-            return res.redirect('/?error=This account is already connected to another user.')
+            return res.redirect('/profile?error=Requested Discord account is already connected to another ACS account.')
         }else{
             const ThisUser = await User.findOne({
                 _id: req.session.user?._id,
             })
-            if(ThisUser.connections?.discord?.id){
-                return res.redirect('/?error=Your account is already connected to a Discord account.')
-            }
             ThisUser.connections.discord = {
                 id: UserDiscordData.id,
             }

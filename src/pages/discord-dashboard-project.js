@@ -1,14 +1,16 @@
-import React from 'react';
-import Head from 'next/head';
+import React from 'react'
+import Head from 'next/head'
 
 import Script from 'next/script'
-import PageBody from "../components/content/PageBody";
-import Scripts from "../components/content/Scripts";
+import PageBody from "../components/content/PageBody"
+import Scripts from "../components/content/Scripts"
 
-import FeaturedTab from "../components/row/FeaturedTab";
-import DiscordDashboardProjectTab from "../components/row/DiscordDashboardProjectTab";
-import StatsRow from "../components/stats/StatsRow";
-import ViewsStats from "../components/dbd-stats/Views";
+import FeaturedTab from "../components/row/FeaturedTab"
+import DiscordDashboardProjectTab from "../components/row/DiscordDashboardProjectTab"
+import StatsRow from "../components/stats/StatsRow"
+import ViewsStats from "../components/dbd-stats/Views"
+
+import IsBeta from '../isBeta'
 
 export async function getServerSideProps(context) {
     return {
@@ -37,7 +39,7 @@ export default function TestPage ({ user, project, url }) {
                     name="viewport"
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                 />
-                <title>Star Admin2 </title>
+                <title>{IsBeta ? 'BETA | ' : ''}Assistants Center - Dashboard Project - {project.name}</title>
                 <link rel="stylesheet" href={`${ud_s}vendors/feather/feather.css`} />
                 <link rel="stylesheet" href={`${ud_s}vendors/mdi/css/materialdesignicons.min.css`}/>
                 <link rel="stylesheet" href={`${ud_s}vendors/ti-icons/css/themify-icons.css`} />

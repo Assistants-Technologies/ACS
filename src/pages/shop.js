@@ -7,6 +7,8 @@ import PageBody from "../components/content/PageBody"
 import Scripts from "../components/content/Scripts"
 import Script from "next/script"
 
+import IsBeta from '../isBeta'
+
 export async function getServerSideProps(context) {
     return {
         props: {
@@ -55,13 +57,21 @@ export default function ShopPage ({ user, url }) {
         fetchDigitalItems()
     }, [])
 
+    const [confirmModal, setConfirmModal] = React.useState(null)
+
+    const [itemBought, setItemBought] = React.useState(null)
+
     const buyDigitalItem = async (item_id) => {
         try {
             const res = await axios.post(`/api/shop/digital-items/buy/${item_id}`)
             await fetchCoins()
             await fetchDigitalItems()
-            alert(res.data.message)
+            setConfirmModal(null)
+            if(res.data.error === false){
+                setItemBought(digitalItems.find(e=>e.id===item_id))
+            }
         }catch(err){
+            setConfirmModal(null)
             return alert(err.response.data.message)
         }
         return true
@@ -76,7 +86,7 @@ export default function ShopPage ({ user, url }) {
                     name="viewport"
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                 />
-                <title>Star Admin2 </title>
+                <title>{IsBeta ? 'BETA | ' : ''}Assistants Center - Digital Features Shop</title>
                 <link rel="stylesheet" href={`${ud_s}vendors/feather/feather.css`} />
                 <link rel="stylesheet" href={`${ud_s}vendors/mdi/css/materialdesignicons.min.css`}/>
                 <link rel="stylesheet" href={`${ud_s}vendors/ti-icons/css/themify-icons.css`} />
@@ -159,28 +169,72 @@ export default function ShopPage ({ user, url }) {
                                                         </div>
                                                         <button type="button" className="btn btn-warning" style={{color:'white',height:40}} onClick={()=>setDisplayCoinsShop(true)}>Top up currency</button>
                                                     </div>
-                                                    {
-                                                        digitalItems ?
-                                                            <div>
-                                                                {
-                                                                    digitalItems.map(d_item=>{
-                                                                        return (
-                                                                            <>
-                                                                                <a>{d_item.name}</a>
-                                                                                <a>{d_item.owns ? 'Owned' : 'Not owned'}</a>
-                                                                                {
-                                                                                    !d_item.owns &&
-                                                                                    <button type="button" className="btn btn-warning" style={{color:'white',height:40}} onClick={()=>buyDigitalItem(d_item.id)}>{d_item.price==0?"Get for free":"Buy"}</button>
-                                                                                }
-                                                                            </>
-                                                                        )
-                                                                    })
-                                                                }
-                                                            </div>
-                                                            :
-                                                            <h1>Loading digital items...</h1>
-                                                    }
+                                                    <div className="table-responsive">
+                                                        <table className="table table-striped">
+                                                            <thead>
+                                                            <tr>
+                                                                <th>
+                                                                </th>
+                                                                <th>
+                                                                </th>
+                                                                <th>
+                                                                </th>
+                                                                <th>
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            {
+                                                                digitalItems && 
+                                                                digitalItems.map(item => {
+                                                                    return (
+                                                                        <tr>
+                                                                            <td class="py-1">
+                                                                            <img src={item.image} alt="image"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div>
+                                                                                    <h6>{item.name}</h6>
+                                                                                    <p>{item.description}</p>
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                            Price: <b>{item.price}</b>
+                                                                            </td>
+                                                                            <td>
+                                                                            {
+                                                                                item.owns ?
+                                                                                (
+                                                                                    item.aho?.type === 'redirect' ?
+                                                                                    <>
+                                                                                        <button type="button" className="btn btn-info" style={{color:'white',height:40}} onClick={()=>Router.push(item.aho.url)}>View</button>
+                                                                                    </>
+                                                                                    :
+                                                                                    <>
+                                                                                        <button type="button" className="btn btn-warning" style={{color:'white',height:40}} disabled={true}>Buy</button>
+                                                                                        <label>Already have</label>
+                                                                                    </>
+                                                                                )
+                                                                                :
+                                                                                ( 
+                                                                                    item.price <= coins ?
 
+                                                                                    <button type="button" className="btn btn-warning" style={{color:'white',height:40}} onClick={()=>setConfirmModal(item)}>{item.price==0?"Get for free":"Buy"}</button>
+                                                                                    :
+                                                                                    <>
+                                                                                        <button type="button" className="btn btn-warning" style={{color:'white',height:40}} disabled={true}>Buy</button>
+                                                                                        <label>No enough coins</label>
+                                                                                    </>
+                                                                                )
+                                                                            }
+                                                                            </td>
+                                                                        </tr>
+                                                                    )
+                                                                })
+                                                            }
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                     <div id="coinsShopModal" className="modal" style={{display: displayCoinsShop ? 'block' : 'none'}} onClick={(event)=> {
                                                        if(event.target.id == "coinsShopModal"){
                                                            setDisplayCoinsShop(false)
@@ -243,6 +297,10 @@ export default function ShopPage ({ user, url }) {
 
                                                                                 <hr/>
 
+                                                                                <p><b>By clicking "Purchase" button:</b><br/>
+                                                                                - You agree to <a href="/pp" target="_blank">Privacy Policy</a>, <a href="/tos" target="_blank">Terms of Services</a> and <a href="/top" target="_blank">Terms of Purchase</a>,<br/>
+                                                                                - You accept that <b>any Assistants Center Coins purchased and used are non-refundable</b>.</p>
+
                                                                                 <div className={"d-flex"} style={{justifyContent:'space-between'}}>
                                                                                     <div style={{paddingTop:15}}>
                                                                                         <button type="button"
@@ -265,6 +323,104 @@ export default function ShopPage ({ user, url }) {
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    </div>
+
+
+                                                    <div id="confirmModal" className="modal" style={{display: confirmModal ? 'block' : 'none'}} onClick={(event)=> {
+                                                       if(event.target.id == "confirmModal"){
+                                                            setConfirmModal(null)
+                                                       }
+                                                    }}>
+                                                        {
+                                                            confirmModal?.name &&
+                                                            <div className="modal-content" style={{borderRadius:15}}>
+                                                            <div className="card card-rounded">
+                                                                <div className="card-body">
+                                                                    <h3><b>Confirm Purchase</b></h3>
+
+                                                                    <hr/>
+
+                                                                    <h4><b>{confirmModal.name}</b></h4>
+                                                                    <h6>{confirmModal.description}</h6>
+
+                                                                    <hr/>
+
+                                                                    <h6>Cost: <b>{confirmModal.price}</b></h6>
+                                                                    <h6>Your AC coins after purchase: <b>{coins} - {confirmModal.price} = {Number(coins) - confirmModal.price}</b></h6>
+
+                                                                    <div className={"d-flex"} style={{}}>
+                                                                        <div style={{paddingTop:15}}>
+                                                                            <button type="button"
+                                                                                    className="btn btn-primary btn-icon-text"
+                                                                                    onClick={()=>buyDigitalItem(confirmModal.id)}
+                                                                                    style={{color:'white',height:'50px',fontSize:'16px',justifyContent:'center', display:'flex',}}
+                                                                            >
+                                                                                Purchase
+                                                                            </button>
+                                                                        </div>
+                                                                        <div style={{paddingTop:15}}>
+                                                                            <button type="button"
+                                                                                    className="btn btn-danger btn-icon-text"
+                                                                                    onClick={()=>setConfirmModal(null)}
+                                                                                    style={{color:'white',height:'50px',fontSize:'16px',justifyContent:'center', display:'flex',}}
+                                                                            >
+                                                                                Cancel
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        }
+                                                    </div>
+
+                                                    <div id="itemBoughtModal" className="modal" style={{display: itemBought ? 'block' : 'none'}} onClick={(event)=> {
+                                                       if(event.target.id == "itemBoughtModal"){
+                                                            setItemBought(null)
+                                                       }
+                                                    }}>
+                                                        {
+                                                            itemBought?.name &&
+                                                            <div className="modal-content" style={{borderRadius:15}}>
+                                                            <div className="card card-rounded">
+                                                                <div className="card-body">
+                                                                    <h3><b>You have bought an item</b></h3>
+
+                                                                    <hr/>
+
+                                                                    <h4><b>{itemBought.name}</b></h4>
+                                                                    <h6>{itemBought.description}</h6>
+
+                                                                    <hr/>
+
+                                                                    <div className={"d-flex"} style={{}}>
+                                                                        
+                                                                        {
+                                                                            itemBought.aho?.type === 'redirect' &&   
+                                                                            <div style={{paddingTop:15}}>                                              
+                                                                                <button type="button"
+                                                                                        className="btn btn-info btn-icon-text"
+                                                                                        onClick={()=>Router.push(itemBought.aho.url)}
+                                                                                        style={{color:'white',height:'50px',fontSize:'16px',justifyContent:'center', display:'flex',}}
+                                                                                >
+                                                                                    View
+                                                                                </button>
+                                                                            </div>
+                                                                        }
+                                                                        <div style={{paddingTop:15}}>
+                                                                            <button type="button"
+                                                                                    className="btn btn-primary btn-icon-text"
+                                                                                    onClick={()=>setItemBought(null)}
+                                                                                    style={{color:'white',height:'50px',fontSize:'16px',justifyContent:'center', display:'flex',}}
+                                                                            >
+                                                                                Okay
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>

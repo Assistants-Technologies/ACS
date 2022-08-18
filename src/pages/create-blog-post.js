@@ -1,7 +1,17 @@
 import React from 'react';
 import Head from 'next/head';
+import dynamic from 'next/dynamic';
 
 import Script from 'next/script'
+
+import { EditorState, convertToRaw, convertFromRaw, draftToHtml } from 'draft-js';
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
+
+const Editor = dynamic(
+    () => import('react-draft-wysiwyg').then(mod => mod.Editor),
+    { ssr: false })  
+    
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 
 /*import Row from '../components/row/Row';
 import Column from '../components/column/Column';*/
@@ -25,6 +35,9 @@ export async function getServerSideProps(context) {
     }
 }
 
+
+const defaultContent = {"blocks":[{"key":"3s3kt","text":"Start writing to create your first epic Assistants Post!","type":"header-two","depth":0,"inlineStyleRanges":[{"offset":0,"length":56,"style":"BOLD"}],"entityRanges":[],"data":{}},{"key":"f7fd2","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"8cp4u","text":"\"There's only one thing we know for sure. That life is now.\"\n- Isak ❤️","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":61,"length":9,"style":"BOLD"},{"offset":61,"length":9,"style":"ITALIC"}],"entityRanges":[],"data":{}}],"entityMap":{}}
+
 export default function TestPage ({ user, url }) {
     const ud = (url.split("/").length - 1)
     let ud_s = ''
@@ -32,6 +45,12 @@ export default function TestPage ({ user, url }) {
         for(let i = 0; i < ud; i++){
             ud_s += '../'
         }
+    }
+
+    const [editorState, setEditorState] = React.useState(EditorState.createWithContent(convertFromRaw(defaultContent)))
+
+    const onEditorStateChange = (newEditorState) => {
+        setEditorState(newEditorState)
     }
 
     return (
@@ -64,53 +83,34 @@ export default function TestPage ({ user, url }) {
                 <div className="row">
                     <div className="col-sm-12">
                         <div className="home-tab">
-                            <div className="tab-content" id="content-featured">
-                                {/* <FeaturedTab
-                                    title={
-                                        <>
-                                            <span className="fw-bold">Discord Dashboard v3</span>{" "}
-                                            is now available
-                                        </>
-                                    }
-                                    button_title={
-                                        'Explore novelties'
-                                    }
-                                    background={'url("https://cdn.assistantscenter.com/l4smwhnd")'}
-                                />*/}
-                                {
-                                    <FeaturedTab
-                                        title={
-                                            <>
-                                                <span className="fw-bold">ACS v3</span>{" "}
-                                                is now available
-                                            </>
-                                        }
-                                        mt={45}
-                                        mb={45}
-                                        background={'url("https://cdn.assistantscenter.com/l4smwhnd")'}
-                                    />
-                                }
-                            </div>
                             <div className={"row"} id="tabs">
-                                <div className="col-lg-6 d-flex flex-column">
-                                    <FeaturedTab
-                                        title={<b>Discord Dashboard v2</b>}
-                                        subtitle={"The best way to create Dashboard for your bot."}
-                                        button_title={"Generate License"}
-                                        button_url={"/discord-dashboard/v2"}
-                                        background={"url('https://cdn.assistantscenter.com/l4smyro6')"}
-                                    />
-                                </div>
-                                <div className="col-lg-6 d-flex flex-column">
-                                    <FeaturedTab
-                                        title={<b>Learn IT</b>}
-                                        subtitle={"Tutorials from the IT world available to you."}
-                                        button_title={"Explore"}
-                                        button_url={'https://learnit.assistantscenter.com'}
-                                        background={"url('https://cdn.assistantscenter.com/l4smzkqt')"}
-                                    />
+                                <div className="col-sm-12">
+                                    <div className="card card-rounded">
+                                        <div className="card-body">
+                                           <Editor
+                                                editorState={editorState}
+                                                toolbarClassName="toolbarClassName"
+                                                wrapperClassName="wrapperClassName"
+                                                editorClassName="editorClassName"
+                                                onEditorStateChange={onEditorStateChange}
+                                            />
+
+                                            <textarea disabled value={JSON.stringify(convertToRaw(editorState.getCurrentContent()))}/>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                            {/*
+                            <div className={"row"} id="tabs" style={{paddingTop:200}}>
+                                <div className="col-sm-12">
+                                    <h1>Preview</h1>
+                                    <div className="card card-rounded">
+                                        <div className="card-body">
+                                            <Editor toolbarHidden editorState={editorState} readOnly={true} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*/}
                         </div>
                     </div>
                 </div>

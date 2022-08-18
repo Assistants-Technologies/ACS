@@ -1,11 +1,11 @@
 import React from 'react'
 
-export default function FeaturedTab ({ id, title, button_title, background, subtitle }) {
+export default function FeaturedTab ({ id, mt=30, mb=30, title, button_title, background, subtitle, button_url }) {
     return (
         <div className="row flex-grow">
             <div className="col-12 grid-margin stretch-card">
                 <div className="card card-rounded table-darkBGImg" style={{background:background,backgroundSize:'cover !important',backgroundRepeat:'no-repeat'}}>
-                    <div className="card-body" style={{marginTop:30,marginBottom:30}}>
+                    <div className="card-body" style={{marginTop:mt,marginBottom:mb}}>
                         <div className="col-sm-8">
                             <h3 className="text-white upgrade-info mb-0">
                                 {title}
@@ -17,7 +17,7 @@ export default function FeaturedTab ({ id, title, button_title, background, subt
                                     </h5>
                                     :null
                             }
-                            <a href="#" className="btn btn-info upgrade-btn">{button_title}</a>
+                            {button_title && <a href={button_url ?? '#'} className="btn btn-info upgrade-btn">{button_title}</a>}
                         </div>
                     </div>
                 </div>

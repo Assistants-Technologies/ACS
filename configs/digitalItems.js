@@ -8,6 +8,11 @@ module.exports = {
     digital_items: [
         {
             id: "dbd_opensource_license",
+            image: "https://cdn.assistantscenter.com/l6yvtyo6",
+            aho: {
+                type: 'redirect',
+                url: '/discord-dashboard/v2'
+            },
             name: "OpenSource DBD v2 License",
             description: "This license is for the OpenSource DBD v2 project. It is free to use and can be used by anyone.",
             price: 0,
@@ -40,6 +45,11 @@ module.exports = {
         },
         {
             id: "dbd_personal_license",
+            image: "https://cdn.assistantscenter.com/l6yvtyo6",
+            aho: {
+                type: 'redirect',
+                url: '/discord-dashboard/v2'
+            },
             name: "Personal DBD v2 License",
             description: "This license is for the Personal DBD v2 project. It allows profit-making from the project.",
             price: 1000,
@@ -72,6 +82,11 @@ module.exports = {
         },
         {
             id: "dbd_production_license",
+            image: "https://cdn.assistantscenter.com/l6yvtyo6",
+            aho: {
+                type: 'redirect',
+                url: '/discord-dashboard/v2'
+            },
             name: "Production DBD v2 License",
             description: "This license is for the Personal DBD v2 project. It allows profit-making from the project. It can be shared with friends.",
             price: 10000,

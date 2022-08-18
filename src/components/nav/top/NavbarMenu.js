@@ -44,7 +44,7 @@ export default function NavbarMenu ({ user, uds }) {
                 <ul className="navbar-nav">
                     <li className="nav-item font-weight-semibold d-none d-lg-block ms-0">
                         <h1 className="welcome-text">
-                            Good {welcomeText}, <span className="text-black fw-bold">{user.username}</span>
+                            Good {welcomeText}{user && <>, <span className="text-black fw-bold">{user.username}</span></>}
                         </h1>
                         <h3 className="welcome-sub-text">
                             Manage your Assistants Center Services{" "}
@@ -111,7 +111,7 @@ export default function NavbarMenu ({ user, uds }) {
                             </a>
                         </div>
                     </li>*/}
-                    <li className="nav-item dropdown d-none d-lg-block user-dropdown">
+                    {user && <li className="nav-item dropdown d-none d-lg-block user-dropdown">
                         <a
                             className="nav-link"
                             id="UserDropdown"
@@ -121,7 +121,7 @@ export default function NavbarMenu ({ user, uds }) {
                         >
                             <img
                                 className="img-xs rounded-circle"
-                                src={`/api/user/avatar/${user._id}`}
+                                src={`/api/user/avatar/${user?._id}`}
                                 alt="Profile image"
                                 style={{objectFit: 'cover'}}
                             />{" "}
@@ -133,12 +133,12 @@ export default function NavbarMenu ({ user, uds }) {
                             <div className="dropdown-header text-center">
                                 <img
                                     className="img-md rounded-circle"
-                                    src={`/api/user/avatar/${user._id}`}
+                                    src={`/api/user/avatar/${user?._id}`}
                                     alt="Profile image"
                                     style={{marginTop:5, width: 35, height: 35, objectFit: 'cover'}}
                                 />
-                                <p className="mb-0 mt-2 font-weight-semibold">{user.username}</p>
-                                <p className="fw-light text-muted mb-0">{user.email}</p>
+                                <p className="mb-0 mt-2 font-weight-semibold">{user?.username}</p>
+                                <p className="fw-light text-muted mb-0">{user?.email}</p>
                             </div>
                             <a className="dropdown-item" onClick={()=>Router.push(`${uds}/profile`)}>
                                 <i className="dropdown-item-icon mdi mdi-account-outline text-primary me-2" />{" "}
@@ -149,7 +149,7 @@ export default function NavbarMenu ({ user, uds }) {
                                 Sign Out
                             </a>
                         </div>
-                    </li>
+                    </li>}
                 </ul>
                 <button
                     className="navbar-toggler navbar-toggler-right d-lg-none align-self-center"

@@ -14,3 +14,4 @@ projects/licenses/resources-licenses
 json.sqlite
 cloudinary_config.js
 src/isBeta.js
+projects/auth

@@ -39,6 +39,39 @@ const vhost = ({next_app, next_handle}) => {
         })
     })
 
+    app.get('/privacy-policy', (req,res)=>{
+        return next_app.render(req, res, '/legal/pp', {
+            url: req.url,
+            user: req.session.user,
+        })
+    })
+
+    app.get('/pp', (req,res)=>{
+        return res.redirect('/privacy-policy')
+    })
+
+    app.get('/terms-of-services', (req,res)=>{
+        return next_app.render(req, res, '/legal/tos', {
+            url: req.url,
+            user: req.session.user,
+        })
+    })
+
+    app.get('/tos', (req,res)=>{
+        return res.redirect('/terms-of-services')
+    })
+
+    app.get('/terms-of-purchase', (req,res)=>{
+        return next_app.render(req, res, '/legal/top', {
+            url: req.url,
+            user: req.session.user,
+        })
+    })
+
+    app.get('/top', (req,res)=>{
+        return res.redirect('/terms-of-purchase')
+    })
+
     app.get('/licenses', (req,res)=>{
         res.redirect('/discord-dashboard/v2')
     })
@@ -48,8 +81,23 @@ const vhost = ({next_app, next_handle}) => {
     })
 
     app.get('/auth', (req,res) => {
+        const { back_redirect } = req?.query
+
+        if(req.session?.user)return res.status(401).redirect(back_redirect || '/')
+
+        req.session.back_redirect = back_redirect || '/'
         return next_app.render(req, res, '/auth', {
             url: req.url,
+            back_redirect: back_redirect || '/'
+        })
+    })
+
+    app.get('/blog/create', (req, res) => {
+        if(req.session?.user?.admin !== true)return res.status(401).redirect('/')
+
+        return next_app.render(req, res, '/create-blog-post', {
+            url: req.url,
+            user: req.session.user || {}
         })
     })
 
@@ -64,20 +112,31 @@ const vhost = ({next_app, next_handle}) => {
         })
     })
 
-    app.get('/profile', (req,res)=>{
+    app.get('/profile', async (req,res)=>{
         if(!req.session.user) {
             return res.redirect('/auth?back_redirect=/profile')
         }
 
+        const user = await User.findOne({
+            _id: req.session.user._id,
+        })
+        let connections = {}
+
+        connections.Discord = user?.connections?.discord?.id || null
+        connections.Twitter = user?.connections?.twitter?.id || null
+
         return next_app.render(req, res, '/profile', {
             url: req.url,
-            user: req.session.user
+            user: req.session.user,
+            connections,
+            query: req.query || {},
+            email: user.email
         })
     })
 
     app.get('/dashboard', (req,res)=>{
         if(!req.session.user)
-            return res.redirect('/auth?back_redirect=/dashboard');
+            return res.redirect('/auth?back_redirect=/dashboard')
 
         return next_app.render(req, res, '/dashboard', {
             url: req.url,
@@ -87,7 +146,11 @@ const vhost = ({next_app, next_handle}) => {
 
     app.get('/discord-dashboard', (req, res) => {
         if(!req.session.user)
-            return res.redirect('/auth?back_redirect=/discord-dashboard');
+            return res.redirect('/auth?back_redirect=/discord-dashboard')
+        
+        if(!req.session.user.admin)
+            return res.status(403).redirect('/discord-dashboard/v2')
+
         return next_app.render(req, res, '/discord-dashboard', {
             url: req.url,
             user: req.session.user,
@@ -96,7 +159,8 @@ const vhost = ({next_app, next_handle}) => {
 
     app.get('/discord-dashboard/v2', async (req, res) => {
         if(!req.session.user)
-            return res.redirect('/auth?back_redirect=/discord-dashboard');
+            return res.redirect('/auth?back_redirect=/discord-dashboard')
+
         const user = await User.findOne({
             _id: req.session.user._id,
         })
@@ -113,6 +177,12 @@ const vhost = ({next_app, next_handle}) => {
     })
 
     app.get('/discord-dashboard/project/:projectId', async (req,res)=>{
+        if(!req.session.user)
+        return res.redirect('/auth?back_redirect=/discord-dashboard')
+    
+        if(!req.session.user.admin)
+            return res.status(403).redirect('/discord-dashboard/v2')
+
         const projectId = req.params.projectId
         if(!req.session.user)
             return res.redirect('/auth?back_redirect=/discord-dashboard/project/'+projectId)

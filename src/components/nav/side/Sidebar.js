@@ -71,14 +71,15 @@ export default function Sidebar ({ user }) {
                             <li className="nav-item"><a className="nav-link" href="pages/forms/basic_elements.html">Tutorial</a></li>
                         </ul>
                     </div>
-                </li>
+                </li>*/
+                }
+
                 <li className="nav-item">
-                    <a className="nav-link" href="/cdn">
+                    <a className="nav-link" href="https://upload.assistantscenter.com" target={"_blank"}>
                         <i className="mdi mdi-cloud menu-icon" />
                         <span className="menu-title">CDN</span>
                     </a>
                 </li>
-                */}
 
 
                 {

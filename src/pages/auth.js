@@ -7,15 +7,18 @@ import Router from 'next/router'
 import LoginForm from '../components/auth/LoginForm'
 import RegisterForm from '../components/auth/RegisterForm'
 
+import IsBeta from '../isBeta'
+
 export async function getServerSideProps(context) {
     return {
         props: {
             url: context.query.url.split('?')[0],
+            back_redirect: context.query.back_redirect,
         },
     }
 }
 
-export default function AuthPage ({ url }) {
+export default function AuthPage ({ url, back_redirect }) {
     const ud = (url.split("/").length - 1)
     let ud_s = ''
     if(ud != 1){
@@ -42,7 +45,7 @@ export default function AuthPage ({ url }) {
                 password
             })
             if(res.data.error)return setError(res.data.message)
-            return location.href = router.query?.back_redirect || '/'
+            return location.href = back_redirect
         }catch(err){
             setError(err.message)
         }
@@ -56,7 +59,7 @@ export default function AuthPage ({ url }) {
                 password
             })
             if(res.data.error)return setError(res.data.message)
-            return location.href = router.query?.back_redirect || '/'
+            return location.href = back_redirect
         }catch(err){
             setError(err.message)
         }
@@ -82,7 +85,7 @@ export default function AuthPage ({ url }) {
                 name="viewport"
                 content="width=device-width, initial-scale=1, shrink-to-fit=no"
             />
-            <title>Star Admin2 </title>
+            <title>{IsBeta ? 'BETA | ' : ''}Assistants Center - Authenticate</title>
             <link rel="stylesheet" href={`${ud_s}vendors/feather/feather.css`} />
             <link
                 rel="stylesheet"
@@ -115,7 +118,7 @@ export default function AuthPage ({ url }) {
                                         error={error}
                                         setError={setError}
 
-                                        back_redirect={router.query?.back_redirect}
+                                        back_redirect={back_redirect}
                                     />
                                     :
                                     <RegisterForm
@@ -132,7 +135,7 @@ export default function AuthPage ({ url }) {
                                         error={error}
                                         setError={setError}
 
-                                        back_redirect={router.query?.back_redirect}
+                                        back_redirect={back_redirect}
                                     />
                             }
                         </div>
