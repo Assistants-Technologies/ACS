@@ -314,7 +314,7 @@ export default function ShopPage ({ user, url }) {
                                                                                         </button>
                                                                                     </div>
                                                                                     <div>
-                                                                                        <img style={{width:210,height:'auto',maxWidth:'100%'}} src={"https://cdn.assistantscenter.com/l4odmzg7"}/>
+                                                                                        <img style={{width:210,height:'auto',maxWidth:'100%'}} src={"https://cdn.assistantscenter.com/l6zgd9yy"}/>
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
