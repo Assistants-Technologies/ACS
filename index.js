@@ -3,7 +3,6 @@ const DEVELOPMENT_CHANNEL = process.env.DEVELOPMENT_CHANNEL === "TRUE";
 
 const express = require('express')
 const http = require('http')
-const https = require('https')
 
 const vhost = require('vhost')
 const next = require('next')
@@ -34,7 +33,7 @@ const createApp = () => {
     }else{
         for (const vhostName of vhostList) {
             const vhost = require(`./projects/${vhostName}/vhost.js`).vhost({next_app, next_handle})
-            const vServer = https.createServer(vhost)
+            const vServer = http.createServer(vhost)
             vServer.listen(require(`./projects/${vhostName}/vhost.js`).prodPort)
             console.log(`Added vhost: ${vhostName} on port ${require(`./projects/${vhostName}/vhost.js`).prodPort} (PROD)`)
         }
