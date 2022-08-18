@@ -33,7 +33,7 @@ export default function NavbarMenu ({ user, uds }) {
                 </div>
                 <div>
                     <a className="navbar-brand brand-logo" href="/">
-                        <b style={{color:'#2611bd'}}>Assist<span style={{color:'black'}}>ants</span></b>
+                        <b style={{color:'#2f15eb'}}>Assist<span style={{color:'#e7e6ed'}}>ants</span></b>
                     </a>
                     <a className="navbar-brand brand-logo-mini" href="/">
                         <img src={`${uds}images/logo-mini.svg`} alt="logo" />
