@@ -35,7 +35,7 @@ const createApp = () => {
             const vhost = require(`./projects/${vhostName}/vhost.js`).vhost({next_app, next_handle})
             const vServer = http.createServer(vhost)
             vServer.listen(require(`./projects/${vhostName}/vhost.js`).prodPort)
-            console.log(`Added vhost: ${vhostName} on port ${require(`./projects/${vhostName}/vhost.js`).prodPort}`)
+            console.log(`Added vhost: ${vhostName} on port ${require(`./projects/${vhostName}/vhost.js`).prodPort} (PROD)`)
         }
     }
 }
