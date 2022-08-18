@@ -12,7 +12,7 @@ import IsBeta from '../isBeta'
 export async function getServerSideProps(context) {
     return {
         props: {
-            url: context.query.url.split('?')[0],
+            url: (context.query.url || '/').split('?')[0],
             user: context.query.user,
             connections: context.query.connections,
             query: context.query.query,
@@ -126,6 +126,8 @@ export default function ShopPage ({ user, url, connections, query, email }) {
                     }
 `}
                 </style>
+
+                <link  rel="stylesheet" href={`${ud_s}mycss/my_dark_css.css`}/>
             </Head>
             <PageBody user={user} uds={ud_s}>
                 <div className="row">

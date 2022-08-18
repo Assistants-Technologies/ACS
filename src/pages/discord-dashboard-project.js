@@ -56,6 +56,8 @@ export default function TestPage ({ user, project, url }) {
                 <link rel="stylesheet" href={`${ud_s}js/select.dataTables.min.css`} />
                 <link rel="stylesheet" href={`${ud_s}css/vertical-layout-light/style.css`} />
                 <link rel="shortcut icon" href={`${ud_s}images/favicon.png`} />
+
+
                 <style>
                     {`
                    
@@ -94,6 +96,8 @@ export default function TestPage ({ user, project, url }) {
                     }
 `}
                 </style>
+
+                <link  rel="stylesheet" href={`${ud_s}mycss/my_dark_css.css`}/>
             </Head>
             <PageBody user={user} uds={ud_s}>
                 <div className="row">
