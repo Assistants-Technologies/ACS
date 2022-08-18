@@ -4,6 +4,9 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo');
 const APIRoute = require('./api/route')
 
+const rateLimit = require('express-rate-limit')
+const rateMongoStore = require('rate-limit-mongo')
+
 const Project = require('../../models/DBDStats/dbd_project')
 const Views = require('../../models/DBDStats/Views/view')
 
@@ -29,9 +32,50 @@ const vhost = ({next_app, next_handle}) => {
         extended: true
     }))
 
-    app.get('/session', (req,res)=>res.send(req.session))
+    const globalLimiter = rateLimit({
+        windowMs: 10 * 60 * 1000,
+        max: 1500,
+        standardHeaders: true,
+        legacyHeaders: false,
+        store: new rateMongoStore({
+            uri: process.env.MONGO_URL,
+            expireTimeMs: 10 * 60 * 1000,
+            collectionName: 'RateLimitGLOBAL',
+        }),
+        message: () => {return {error: true, message: "You are ratelimited. Only 1500 requests per 10 minutes are allowed to /"}},
+    })
 
-    app.use('/api', APIRoute)
+    app.use('*', globalLimiter)
+
+    const apiLimiter = rateLimit({
+        windowMs: 5 * 60 * 1000,
+        max: 500,
+        standardHeaders: true,
+        legacyHeaders: false,
+        store: new rateMongoStore({
+            uri: process.env.MONGO_URL,
+            expireTimeMs: 5 * 60 * 1000,
+            collectionName: 'RateLimitAPI',
+        }),
+        message: () => {return {error: true, message: "You are ratelimited. Only 500 requests per 5 minutes are allowed to /api/"}},
+    })
+
+    const apiAuthLimiter = rateLimit({
+        windowMs: 10 * 60 * 1000,
+        max: 30,
+        standardHeaders: true,
+        legacyHeaders: false,
+        store: new rateMongoStore({
+            uri: process.env.MONGO_URL,
+            expireTimeMs: 10 * 60 * 1000,
+            collectionName: 'RateLimitAUTH',
+        }),
+        message: () => {return {error: true, message: "You are ratelimited. Only 30 requests per 10 minutes are allowed to /api/auth/"}},
+    })
+
+    app.use('/api/auth/', apiAuthLimiter)
+
+    app.use('/api', apiLimiter, APIRoute)
 
     app.get('/', (req,res)=>{
         return next_app.render(req, res, '/index', {
