@@ -17191,3 +17191,29 @@ gr-main-header {
     background-color: #1c6c87 !important;
 }
 embed[type="application/pdf"][src="about:blank"] { filter: invert(100%) contrast(90%); }
+
+@media screen and (max-width: 991px) {
+    .sidebar-offcanvas.active > .nav > li:nth-child(7) > a, .sidebar-offcanvas.active > .nav > li:nth-child(7) > div > ul {
+            border-radius: 0px !important;
+    }
+}
+
+.nav > li:nth-child(7) > a {
+    transition: border-radius 1.5s ease !important;
+}
+
+.nav > li:nth-child(7) > a[aria-expanded="true"] {
+    transition: border-radius 0.1s ease !important;
+}
+
+.nav > li:nth-child(7) > a.collapsed {
+    border-radius: 0 20px 20px 0 !important;
+}
+
+.nav > li:nth-child(7) > a {
+    border-radius: 0 20px 0 0 !important;
+}
+
+.nav > li:nth-child(7) > div > ul {
+    border-radius: 0 0 20px 0 !important;
+}
