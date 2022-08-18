@@ -61,7 +61,7 @@ export default function TestPage ({ user, url }) {
                     <div className="card-body">
                         <div className="col-sm-12">
                             <h1 style={{paddingBottom:20}}>Privacy Policy</h1>
-                            <h2 className="h2 text-blue mb-10" style={{ color: "black !important" }}>
+                            <h2 className="h2 text-blue mb-10" style={{ color: "white !important" }}>
                                 Introduction
                             </h2>
                             <h6>
@@ -73,13 +73,13 @@ export default function TestPage ({ user, url }) {
                                 AssistantsCenter.com is an unregistered activity located in Poland, by
                                 Marcin Kondrat. In case of any doubts as to the rules of our Privacy Policy,
                                 please contact us by e-mail:{" "}
-                                <b style={{ color: "black" }}>support@assistantscenter.com</b>
+                                <b style={{ color: "white" }}>support@assistantscenter.com</b>
                             </h6>
                             <h6>
                                 <a href="/tos">Terms of Services</a>
                             </h6>
                             <hr />
-                            <h2 className="h2 text-blue mb-10" style={{ color: "black !important", paddingTop: 7 }}>
+                            <h2 className="h2 text-blue mb-10" style={{ color: "white !important", paddingTop: 7 }}>
                                 WEBSITE VISITORS
                             </h2>
                             <h6>
@@ -91,7 +91,7 @@ export default function TestPage ({ user, url }) {
                                 information is to better understand how AssistantsCenter.com's visitors use
                                 its website.
                             </h6>
-                            <h2 className="h2 text-blue mb-10" style={{ color: "black !important", paddingTop: 7 }}>
+                            <h2 className="h2 text-blue mb-10" style={{ color: "white !important", paddingTop: 7 }}>
                                 ADVERTISEMENTS
                             </h2>
                             <h6>
@@ -106,7 +106,7 @@ export default function TestPage ({ user, url }) {
                                 https://policies.google.com/technologies/partner-sites
                                 </a>
                             </h6>
-                            <h2 className="h2 text-blue mb-10" style={{ color: "black !important", paddingTop: 7 }}>
+                            <h2 className="h2 text-blue mb-10" style={{ color: "white !important", paddingTop: 7 }}>
                                 LINKS TO EXTERNAL SITES
                             </h2>
                             <h6>
@@ -120,7 +120,7 @@ export default function TestPage ({ user, url }) {
                                 privacy policies or practices of any third party sites, products or
                                 services.
                             </h6>
-                            <h2 className="h2 text-blue mb-10" style={{ color: "black !important", paddingTop: 7 }}>
+                            <h2 className="h2 text-blue mb-10" style={{ color: "white !important", paddingTop: 7 }}>
                                 AGGREGATED STATISTICS
                             </h2>
                             <h6>
@@ -129,7 +129,7 @@ export default function TestPage ({ user, url }) {
                                 or provide it to others. However, AssistantsCenter.com does not disclose
                                 your personally-identifying information.
                             </h6>
-                            <h2 className="h2 text-blue mb-10" style={{ color: "black !important", paddingTop: 7 }}>
+                            <h2 className="h2 text-blue mb-10" style={{ color: "white !important", paddingTop: 7 }}>
                                 COOKIES
                             </h2>
                             <h6>
@@ -154,7 +154,7 @@ export default function TestPage ({ user, url }) {
                                 By continuing to navigate our website without changing your cookie settings,
                                 you hereby acknowledge and agree to AssistantsCenter.com's use of cookies.
                             </h6>
-                            <h2 className="h2 text-blue mb-10" style={{ color: "black !important", paddingTop: 7 }}>
+                            <h2 className="h2 text-blue mb-10" style={{ color: "white !important", paddingTop: 7 }}>
                                 PRIVACY POLICY CHANGES
                             </h2>
                             <h6>
