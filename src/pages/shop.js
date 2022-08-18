@@ -209,11 +209,11 @@ export default function ShopPage ({ user, url }) {
                                                                                 (
                                                                                     item.aho?.type === 'redirect' ?
                                                                                     <>
-                                                                                        <button type="button" className="btn btn-info" style={{color:'white',height:40}} onClick={()=>Router.push(item.aho.url)}>View</button>
+                                                                                        <button type="button" className="btn btn-info" style={{color:'white',height:40,margin: 'auto 12px 0 0'}} onClick={()=>Router.push(item.aho.url)}>View</button>
                                                                                     </>
                                                                                     :
                                                                                     <>
-                                                                                        <button type="button" className="btn btn-warning" style={{color:'white',height:40}} disabled={true}>Buy</button>
+                                                                                        <button type="button" className="btn btn-warning" style={{color:'white',height:40,margin: 'auto 12px 0 0'}} disabled={true}>Buy</button>
                                                                                         <label>Already have</label>
                                                                                     </>
                                                                                 )
@@ -221,10 +221,10 @@ export default function ShopPage ({ user, url }) {
                                                                                 ( 
                                                                                     item.price <= coins ?
 
-                                                                                    <button type="button" className="btn btn-warning" style={{color:'white',height:40}} onClick={()=>setConfirmModal(item)}>{item.price==0?"Get for free":"Buy"}</button>
+                                                                                    <button type="button" className="btn btn-warning" style={{color:'white',height:40,margin: 'auto 12px 0 0'}} onClick={()=>setConfirmModal(item)}>{item.price==0?"Get for free":"Buy"}</button>
                                                                                     :
                                                                                     <>
-                                                                                        <button type="button" className="btn btn-warning" style={{color:'white',height:40}} disabled={true}>Buy</button>
+                                                                                        <button type="button" className="btn btn-warning" style={{color:'white',height:40,margin: 'auto 12px 0 0'}} disabled={true}>Buy</button>
                                                                                         <label>No enough coins</label>
                                                                                     </>
                                                                                 )
