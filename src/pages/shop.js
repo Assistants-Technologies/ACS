@@ -296,7 +296,7 @@ export default function ShopPage ({ user, url }) {
 
                                                                                 <h4><b>Pack Selected</b></h4>
                                                                                 <h5 className="pt-2">Item: {items.coinsPacks.find(e=>e.id==setSelected).name}</h5>
-                                                                                <h5>Total Price: {items.coinsPacks.find(e=>e.id==setSelected).prices[displayCurrency]}{items.supportedCurrenciesShorts[displayCurrency]}</h5>
+                                                                                <h5>Total Price: {items.supportedCurrenciesShorts[displayCurrency]}{items.coinsPacks.find(e=>e.id==setSelected).prices[displayCurrency]}</h5>
 
 
                                                                                 <div className="pt-2">Total Coins after Purchase: <b>{coins + Number((setSelected || '0').replace('_coins',''))}</b></div>
