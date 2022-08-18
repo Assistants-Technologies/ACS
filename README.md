@@ -1,0 +1,5 @@
+All rights are reserved and it is not Open Source or Free. You cannot modify or redistribute this code without explicit permission from the copyright holder.
+
+<hr/>
+
+Assistants Center, 2022
