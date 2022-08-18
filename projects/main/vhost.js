@@ -78,9 +78,10 @@ const vhost = ({next_app, next_handle}) => {
     app.use('/api', apiLimiter, APIRoute)
 
     app.get('/', (req,res)=>{
-        return next_app.render(req, res, '/index', {
+        return res.redirect('/dashboard')
+        /*return next_app.render(req, res, '/index', {
             url: req.url,
-        })
+        })*/
     })
 
     app.get('/privacy-policy', (req,res)=>{
