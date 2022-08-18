@@ -71,12 +71,14 @@ export default function AuthPage ({ url, back_redirect }) {
         setEmail('')
         setPassword('')
         setError('')
-    }, [method]);
+    }, [method])
 
     React.useEffect(()=>{
         setError('')
-    }, [parameter, username, email, password]);
+    }, [parameter, username, email, password])
 
+
+    const title = `${IsBeta ? 'BETA | ' : ''}Assistants Center - Authenticate`
 
     return (
         <>
@@ -85,7 +87,7 @@ export default function AuthPage ({ url, back_redirect }) {
                 name="viewport"
                 content="width=device-width, initial-scale=1, shrink-to-fit=no"
             />
-            <title>{IsBeta ? 'BETA | ' : ''}Assistants Center - Authenticate</title>
+            <title>{title}</title>
             <link rel="stylesheet" href={`${ud_s}vendors/feather/feather.css`} />
             <link
                 rel="stylesheet"

@@ -77,6 +77,7 @@ export default function ShopPage ({ user, url }) {
         return true
     }
 
+    const title = `${IsBeta ? 'BETA | ':''}Assistants Center - Digital Features Shop`
 
     return (
         <>
@@ -86,7 +87,7 @@ export default function ShopPage ({ user, url }) {
                     name="viewport"
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                 />
-                <title>{IsBeta ? 'BETA | ' : ''}Assistants Center - Digital Features Shop</title>
+                <title>{title}</title>
                 <link rel="stylesheet" href={`${ud_s}vendors/feather/feather.css`} />
                 <link rel="stylesheet" href={`${ud_s}vendors/mdi/css/materialdesignicons.min.css`}/>
                 <link rel="stylesheet" href={`${ud_s}vendors/ti-icons/css/themify-icons.css`} />
