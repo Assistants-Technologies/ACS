@@ -79,7 +79,7 @@ export default function LoginForm({ parameter, setParameter, password, setPasswo
                         </a>
                     </div>
                     <div className="text-center mt-4 fw-light">
-                        <a href="#" style={{color:'black',}} onClick={()=>Router.push('/')}>
+                        <a href="#" style={{color:'white',}} onClick={()=>Router.push('/')}>
                             {'<'} Back home?
                         </a>
                     </div>
