@@ -151,7 +151,7 @@ background-color: rgba(0,0,0,0.4);
                                                             <label>Username</label>
                                                             <input type="text" className="form-control"
                                                                    placeholder="Username" aria-label="Username"
-                                                                   value={user?.username}
+                                                                   value={user?.username || ''}
                                                                    disabled
                                                             />
                                                         </div>
@@ -161,7 +161,7 @@ background-color: rgba(0,0,0,0.4);
                                                             <label>E-mail</label>
                                                             <input type="email" className="form-control"
                                                                    placeholder="E-mail" aria-label="Email"
-                                                                   value={email} disabled
+                                                                   value={email || ''} disabled
                                                             />
                                                             {
                                                                 (user.username.startsWith('@t_') || user.username.startsWith('@d_')) &&
