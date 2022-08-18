@@ -159,7 +159,7 @@ export default function ShopPage ({ user, url }) {
 
                                                     <h4 className={"pt-2"}>
                                                         <small className="text-muted">
-                                                            Store for virtual goodies for your account and projects. Here you can purchase items such as licenses, access to features, or even account upgrades. The currency used in the store is virtual currency which you can top up by clicking the button below.
+                                                            Shop for virtual goodies for your account and projects. Here you can purchase items such as licenses, access to features, or even account upgrades. The currency used in the store is virtual currency which you can top up by clicking the button below.
                                                         </small>
                                                     </h4>
 
@@ -169,7 +169,7 @@ export default function ShopPage ({ user, url }) {
                                                                 Your AC coins: <span style={{fontWeight:'bolder'}}>{coins=='fetching' ? 'FETCHING...' : coins} <i className="mdi mdi-cash-multiple" /></span>
                                                             </h6>
                                                         </div>
-                                                        <button type="button" className="btn btn-warning" style={{color:'white',height:40}} onClick={()=>setDisplayCoinsShop(true)}>Top up currency</button>
+                                                        <button type="button" className="btn btn-warning" style={{color:'white',height:40, borderColor: 'transparent !important'}} onClick={()=>setDisplayCoinsShop(true)}>Top up currency</button>
                                                     </div>
                                                     <div className="table-responsive">
                                                         <table className="table table-striped">
@@ -209,11 +209,11 @@ export default function ShopPage ({ user, url }) {
                                                                                 (
                                                                                     item.aho?.type === 'redirect' ?
                                                                                     <>
-                                                                                        <button type="button" className="btn btn-info" style={{color:'white',height:40,margin: 'auto 12px 0 0'}} onClick={()=>Router.push(item.aho.url)}>View</button>
+                                                                                        <button type="button" className="btn btn-info" style={{color:'white',height:40,margin: 'auto 12px 0 0', borderColor: 'transparent !important'}} onClick={()=>Router.push(item.aho.url)}>View</button>
                                                                                     </>
                                                                                     :
                                                                                     <>
-                                                                                        <button type="button" className="btn btn-warning" style={{color:'white',height:40,margin: 'auto 12px 0 0'}} disabled={true}>Buy</button>
+                                                                                        <button type="button" className="btn btn-warning" style={{color:'white',height:40,margin: 'auto 12px 0 0', borderColor: 'transparent !important'}} disabled={true}>Buy</button>
                                                                                         <label>Already have</label>
                                                                                     </>
                                                                                 )
@@ -221,11 +221,11 @@ export default function ShopPage ({ user, url }) {
                                                                                 ( 
                                                                                     item.price <= coins ?
 
-                                                                                    <button type="button" className="btn btn-warning" style={{color:'white',height:40,margin: 'auto 12px 0 0'}} onClick={()=>setConfirmModal(item)}>{item.price==0?"Get for free":"Buy"}</button>
+                                                                                    <button type="button" className="btn btn-warning" style={{color:'white',height:40,margin: 'auto 12px 0 0', borderColor: 'transparent !important'}} onClick={()=>setConfirmModal(item)}>{item.price==0?"Get for free":"Buy"}</button>
                                                                                     :
                                                                                     <>
-                                                                                        <button type="button" className="btn btn-warning" style={{color:'white',height:40,margin: 'auto 12px 0 0'}} disabled={true}>Buy</button>
-                                                                                        <label>No enough coins</label>
+                                                                                        <button type="button" className="btn btn-warning" style={{color:'white',height:40,margin: 'auto 12px 0 0', borderColor: 'transparent !important'}} disabled={true}>Buy</button>
+                                                                                        <label>Not enough coins</label>
                                                                                     </>
                                                                                 )
                                                                             }
@@ -255,7 +255,6 @@ export default function ShopPage ({ user, url }) {
                                                                                             id="exampleFormControlSelect2"
                                                                                             value={displayCurrency}
                                                                                             onChange={(event)=>setDisplayCurrency(event.target.value)}
-                                                                                            style={{color:'black'}}
                                                                                     >
                                                                                         {
                                                                                             Object.keys(items.supportedCurrencies).map((val,idx)=>{
@@ -276,7 +275,6 @@ export default function ShopPage ({ user, url }) {
                                                                                             onChange={(event)=> {
                                                                                                 setSetSelected(event.target.value)
                                                                                             }}
-                                                                                            style={{color:'black'}}
                                                                                     >
                                                                                         {
                                                                                             items.coinsPacks.map(set=>{
@@ -308,7 +306,7 @@ export default function ShopPage ({ user, url }) {
                                                                                         <button type="button"
                                                                                                 className="btn btn-primary btn-icon-text"
                                                                                                 onClick={()=>Router.push(`/api/shop/payment/create?currency=${displayCurrency}&items=${setSelected}`)}
-                                                                                                style={{color:'white',height:'50px',fontSize:'16px',justifyContent:'center', display:'flex',}}
+                                                                                                style={{color:'white',height:'50px',fontSize:'16px',justifyContent:'center', display:'flex', borderColor: 'transparent !important'}}
                                                                                         >
                                                                                             <i style={{fontSize:'14px'}} className="mdi mdi-credit-card"></i>
                                                                                             Purchase
@@ -355,7 +353,7 @@ export default function ShopPage ({ user, url }) {
                                                                             <button type="button"
                                                                                     className="btn btn-primary btn-icon-text"
                                                                                     onClick={()=>buyDigitalItem(confirmModal.id)}
-                                                                                    style={{color:'white',height:'50px',fontSize:'16px',justifyContent:'center', display:'flex',}}
+                                                                                    style={{color:'white',height:'50px',fontSize:'16px',justifyContent:'center', display:'flex', borderColor: 'transparent !important'}}
                                                                             >
                                                                                 Purchase
                                                                             </button>
@@ -364,7 +362,7 @@ export default function ShopPage ({ user, url }) {
                                                                             <button type="button"
                                                                                     className="btn btn-danger btn-icon-text"
                                                                                     onClick={()=>setConfirmModal(null)}
-                                                                                    style={{color:'white',height:'50px',fontSize:'16px',justifyContent:'center', display:'flex',}}
+                                                                                    style={{color:'white',height:'50px',fontSize:'16px',justifyContent:'center', display:'flex', borderColor: 'transparent !important'}}
                                                                             >
                                                                                 Cancel
                                                                             </button>
@@ -403,7 +401,7 @@ export default function ShopPage ({ user, url }) {
                                                                                 <button type="button"
                                                                                         className="btn btn-info btn-icon-text"
                                                                                         onClick={()=>Router.push(itemBought.aho.url)}
-                                                                                        style={{color:'white',height:'50px',fontSize:'16px',justifyContent:'center', display:'flex',}}
+                                                                                        style={{color:'white',height:'50px',fontSize:'16px',justifyContent:'center', display:'flex', borderColor: 'transparent !important'}}
                                                                                 >
                                                                                     View
                                                                                 </button>
@@ -413,7 +411,7 @@ export default function ShopPage ({ user, url }) {
                                                                             <button type="button"
                                                                                     className="btn btn-primary btn-icon-text"
                                                                                     onClick={()=>setItemBought(null)}
-                                                                                    style={{color:'white',height:'50px',fontSize:'16px',justifyContent:'center', display:'flex',}}
+                                                                                    style={{color:'white',height:'50px',fontSize:'16px',justifyContent:'center', display:'flex', borderColor: 'transparent !important'}}
                                                                             >
                                                                                 Okay
                                                                             </button>

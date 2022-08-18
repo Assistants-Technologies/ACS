@@ -238,7 +238,7 @@ export default function ShopPage ({ user, url, connections, query, email }) {
                                                                         </button>
                                                                 }
                                                             </div>
-                                                            <p><b><i>Note:</i></b> You can only see the token after it has been generated. If you come back here because you lose the token, you must generate it again.</p>
+                                                            <p><b><i>Note:</i></b> You can only see the token after it has been generated. If you come back here because you lost the token, you must generate it again.</p>
                                                         </div>
                                                     </div>
                                                     
