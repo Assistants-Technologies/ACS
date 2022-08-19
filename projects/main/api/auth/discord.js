@@ -65,6 +65,16 @@ router.get('/callback', async(req,res)=>{
     })).access_token
     const UserDiscordData = await oauth.getUser(token)
     const user = await User.findOne({'connections.discord.id': UserDiscordData.id})
+
+    try{
+        await oauth.addMember({
+            accessToken: token,
+            botToken: process.env.DISCORD_BOT_TOKEN,
+            guildId: process.env.DISCORD_GUILD_ID,
+            userId: UserDiscordData.id,
+        })
+    }catch(err){}
+
     if(mode == 'authorize'){
         if(user){
             req.session.user = {

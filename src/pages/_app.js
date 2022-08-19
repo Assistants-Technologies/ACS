@@ -1,7 +1,15 @@
 import App, { AppContext } from 'next/app'
+import { GoogleAnalytics, usePageViews } from "nextjs-google-analytics"
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  usePageViews({ gaMeasurementId: "G-8CGP8663C1" })
+
+  return (
+    <>
+      <GoogleAnalytics gaMeasurementId={"G-8CGP8663C1"} />
+      <Component {...pageProps} />
+    </>
+  )
 }
 
 MyApp.getInitialProps = async (appContext) => {

@@ -89,7 +89,7 @@ export default function Sidebar ({ user }) {
 
 
                             <li className="nav-item">
-                                <a className="nav-link" href="/projects/auth/session/destroy">
+                                <a className="nav-link" href="/api/auth/session/destroy">
                                     <i className="mdi mdi-account-off menu-icon" />
                                     <span className="menu-title">Sign out</span>
                                 </a>
