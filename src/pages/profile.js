@@ -38,6 +38,7 @@ export default function ShopPage ({ user, url, connections, query, email }) {
     const [avatarFile, setAvatarFile] = React.useState(null)
 
     const [displayError, setDisplayError] = React.useState(query?.error)
+    const [displayMessage, setDisplayMessage] = React.useState(query?.message)
 
 
     const regenAccountToken = async () => {
@@ -275,6 +276,34 @@ background-color: rgba(0,0,0,0.4);
                                             <button type="button"
                                                     className="btn btn-primary btn-icon-text"
                                                     onClick={()=>setDisplayError(null)}
+                                                    style={{color:'white',height:'50px',fontSize:'16px',justifyContent:'center', display:'flex',}}
+                                            >
+                                                Okay
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="messageModal" className="modal" style={{display: displayMessage ? 'block' : 'none'}} onClick={(event)=> {
+                        if(event.target.id == "messageModal"){
+                            setDisplayMessage(null)
+                        }
+                    }}>
+                        <div className="modal-content" style={{borderRadius:15}}>
+                            <div className="card card-rounded">
+                                <div className="card-body">
+                                    <h3><b>Success</b></h3>
+
+                                    <h4><b>{displayMessage}</b></h4>
+
+                                    <div className={"d-flex"} style={{}}>
+                                        <div style={{paddingTop:15}}>
+                                            <button type="button"
+                                                    className="btn btn-primary btn-icon-text"
+                                                    onClick={()=>setDisplayMessage(null)}
                                                     style={{color:'white',height:'50px',fontSize:'16px',justifyContent:'center', display:'flex',}}
                                             >
                                                 Okay
