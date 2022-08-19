@@ -3,24 +3,31 @@ require('dotenv').config({ path: './.env' });
 const express = require('express')
 const router = express.Router()
 
+const CryptoJS = require("crypto-js")
+
 const { TwitterApi } = require('twitter-api-v2')
 
 const User = require('../../../../models/user')
 
+const TwitterTokens = require('../../../../models/twitterTokens')
+
 const TWITTER_APP_KEY = process.env.TWITTER_APP_KEY
 const TWITTER_APP_SECRET = process.env.TWITTER_APP_SECRET
+const TWITTER_CLIENT_ID = process.env.TWITTER_CLIENT_ID
+const TWITTER_CLIENT_SECRET = process.env.TWITTER_CLIENT_SECRET
 const CALLBACK_URL = process.env.TWITTER_CALLBACK_URL
 
-const client = new TwitterApi({ appKey: TWITTER_APP_KEY, appSecret: TWITTER_APP_SECRET });
+const client = new TwitterApi({ clientId: TWITTER_CLIENT_ID, clientSecret: TWITTER_CLIENT_SECRET, });
 
 router.get('/authorize', async(req,res)=>{
     if(req.session.user)
         return res.redirect('/?error=You are already logged in.')
-    const {oauth_token, oauth_token_secret, url} = await client.generateAuthLink(CALLBACK_URL, { linkMode: 'authorize' });
+    const { url, codeVerifier, state } = await client.generateOAuth2AuthLink(CALLBACK_URL, { scope: ['tweet.read', 'users.read', 'tweet.write', 'offline.access'] });
     req.session.oauth_twitter = {
         mode: 'authorize',
-        oauth_token,
-        oauth_token_secret,
+        url,
+        codeVerifier,
+        state,
         back_redirect: req.session.back_redirect || req.query.back_redirect || '/',
     }
     req.session.back_redirect = null
@@ -31,37 +38,35 @@ router.get('/authorize', async(req,res)=>{
 router.get('/connect', async(req,res)=>{
     if(!req.session.user)
         return res.redirect('/?error=You are not logged in.')
-    const {oauth_token, oauth_token_secret, url} = await client.generateAuthLink(CALLBACK_URL, { linkMode: 'authorize' });
+    const { url, codeVerifier, state } = await client.generateOAuth2AuthLink(CALLBACK_URL, { scope: ['tweet.read', 'users.read', 'tweet.write', 'offline.access'] });
     req.session.oauth_twitter = {
-        mode: 'connect',
-        oauth_token,
-        oauth_token_secret,
-        back_redirect: req.session.back_redirect || req.query.back_redirect || '/',
-    }
+            mode: 'connect',
+            url,
+            codeVerifier,
+            state,
+            back_redirect: req.session.back_redirect || req.query.back_redirect || '/',
+        }
     req.session.back_redirect = null
     await req.session.save()
     res.redirect(url)
 })
 
 router.get('/callback', (req, res) => {
-    const { oauth_token, oauth_verifier } = req.query;
-    const { oauth_token_secret, mode, back_redirect } = req.session.oauth_twitter;
-    req.session.oauth_twitter = null;
+    const { state, code } = req.query
+    const { url, codeVerifier, state: sessionState, back_redirect, mode } = req.session.oauth_twitter
+    req.session.oauth_twitter = null
 
-    if (!oauth_token || !oauth_verifier || !oauth_token_secret || !mode) {
-        return res.redirect('/?error=' + 'You denied the app or your session expired!');
+    if (!codeVerifier || !state || !sessionState || !code) {
+        return res.status(400).send('You denied the app or your session expired!');
     }
-    const client = new TwitterApi({
-        appKey: TWITTER_APP_KEY,
-        appSecret: TWITTER_APP_SECRET,
-        accessToken: oauth_token,
-        accessSecret: oauth_token_secret,
-    });
+    if (state !== sessionState) {
+        return res.status(400).send('Stored tokens didnt match!');
+    }
 
-    client.login(oauth_verifier)
-        .then(async ({ client: loggedClient, accessToken, accessSecret }) => {
+    client.loginWithOAuth2({ code, codeVerifier, redirectUri: CALLBACK_URL })
+        .then(async ({ client: loggedClient, accessToken, refreshToken, expiresIn }) => {
             const userData = (await loggedClient.v2.me()).data
-            const { id } = userData;
+            const { id } = userData
 
             const user = await User.findOne({ 'connections.twitter.id': id })
 
@@ -107,9 +112,23 @@ router.get('/callback', (req, res) => {
                 }
             }
 
+            const twitterTokensFound = await TwitterTokens.findOne({ user: req.session.user._id })
+            if(twitterTokensFound){
+                twitterTokensFound.acceess_token = CryptoJS.AES.encrypt(accessToken, process.env.TWITTER_ENCODE_KEY).toString()
+                twitterTokensFound.refresh_token = CryptoJS.AES.encrypt(refreshToken, process.env.TWITTER_ENCODE_KEY).toString()
+                await twitterTokensFound.save()
+            }else{
+                await TwitterTokens.create({
+                    user: req.session.user._id,
+                    acceess_token: CryptoJS.AES.encrypt(accessToken, process.env.TWITTER_ENCODE_KEY).toString(),
+                    refresh_token: CryptoJS.AES.encrypt(refreshToken, process.env.TWITTER_ENCODE_KEY).toString()
+                })
+            }
             return res.redirect(back_redirect)
         })
-        .catch(() => res.status(403).send('Invalid verifier or access tokens!'));
+        .catch((e) => {
+            res.status(403).send('Invalid verifier or access tokens!')
+        });
 });
 
 module.exports = router
