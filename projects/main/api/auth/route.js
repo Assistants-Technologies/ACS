@@ -5,6 +5,14 @@ const SHA256 = require("crypto-js").SHA256
 
 const User = require('../../../../models/user')
 
+const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      )
+}
+
 router.route('/plain/login')
     .post(async(req,res)=>{
         if(req.session.user)
@@ -12,6 +20,12 @@ router.route('/plain/login')
         const { parameter, password } = req?.body
         if(!parameter || !password)
             return res.send({error:true,message: "Request not full."})
+        
+        if(parameter.length < 5 || parameter.length > 25)
+            return res.send({error:true,message: "Parameter should be min 5 and max 25 characters"})
+
+        if(password.length < 6 || password.length > 35)
+            return res.send({error: true, message: "Password should be min 6 and max 35 characters"})
 
         const ByEmail = await User.findOne({ email: new RegExp(`^${parameter}$`, 'i') })
         const ByUsername = await User.findOne({ assistants_username: new RegExp(`^${parameter}$`, 'i') })
@@ -43,8 +57,17 @@ router.route('/plain/register')
         if(!email || !username || !password)
             return res.send({error:true,message: "Request not full."})
 
-        if(username.startsWith('@'))
-            return res.send({error:true,message: "Username cannot start with '@' character."})
+        if(username.includes('@'))
+            return res.send({error:true,message: "Username cannot include '@' character."})
+        
+        if(!validateEmail(email))
+            return res.send({error:true,message: "Email is not valid"})
+        
+        if(email.length < 5 || email.length > 25 || username.length < 5 || username.length > 25)
+            return res.send({error:true,message: "Email and username should be min 5 and max 25 characters"})
+        
+        if(password.length < 6 || password.length > 35)
+            return res.send({error: true, message: "Password should be min 6 and max 35 characters"})
 
         const ByEmail = await User.findOne({ email: new RegExp(`^${email}$`, 'i') })
         const ByUsername = await User.findOne({ assistants_username: new RegExp(`^${username}$`, 'i') })
