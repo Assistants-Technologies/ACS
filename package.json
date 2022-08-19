@@ -69,6 +69,7 @@
     "next": "^12.1.6",
     "next-seo": "^5.5.0",
     "nextjs-google-analytics": "^2.0.0",
+    "nodemailer": "^6.7.8",
     "nouislider": "^13.1.5",
     "oauth2-server": "^3.1.1",
     "owl-carousel-2": "0.0.3",

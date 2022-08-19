@@ -3,7 +3,10 @@ const router = express.Router()
 
 const SHA256 = require("crypto-js").SHA256
 
+const { v4 } = require('uuid')
+
 const User = require('../../../../models/user')
+const EmailConfirmation = require('../../../../models/emailConfirmation')
 
 const validateEmail = (email) => {
     return String(email)
@@ -12,6 +15,34 @@ const validateEmail = (email) => {
         /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       )
 }
+
+const { AssistantsCenterMailer, Mailers } = require('../../../../mailer/assistantscentercom')
+const RegisteredMailer = new AssistantsCenterMailer(Mailers.noreply)
+
+const RegisteredHtmlContent = require('../../../../mailer/templates/confirm_account/create')
+
+router.route('/plain/confirm-email')
+    .get(async(req,res)=>{
+        const { token: confirm_token } = (req.query || {})
+        const confirmation = await EmailConfirmation.findOne({
+            confirm_token,
+        })
+
+        if(!confirmation)return res.status(404).redirect('/profile?error=Confirmation token was invalid!')
+
+        await EmailConfirmation.findOneAndDelete({
+            confirm_token,
+        })
+
+        const user = await User.findOne({
+            _id: confirmation.user,
+        })
+        user.verified = true
+
+        await user.save()
+
+        return res.redirect('/profile?message=Email adress was confirmed successfully.')
+    })
 
 router.route('/plain/login')
     .post(async(req,res)=>{
@@ -98,7 +129,26 @@ router.route('/plain/register')
         }
         await req.session.save()
 
-        return res.send({error:false})
+        const confirm_token = v4()
+
+        await EmailConfirmation.create({
+            user: req.session.user._id,
+            confirm_token
+        })
+
+        try{
+            RegisteredMailer.sendMail({
+                to_email: email,
+                from_name: "Assistants Center No-reply",
+                subject: "Confirm your Assistants Center Account",
+                html_content: RegisteredHtmlContent({
+                    username,
+                    confirm_token
+                })
+            })
+        }catch(err){}
+        
+        res.send({error:false})
     })
 
 router.route('/session/destroy')
