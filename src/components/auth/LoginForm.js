@@ -1,7 +1,7 @@
 import React from 'react'
 import Router from 'next/router'
 
-export default function LoginForm({ parameter, setParameter, password, setPassword, loginSubmitted, setMethod, error, back_redirect }) {
+export default function LoginForm({ parameter, setParameter, password, setPassword, loginSubmitted, setMethod, setError, error, back_redirect }) {
     return (
         <div className="col-lg-4 mx-auto">
             <div className="auth-form-light text-left py-5 px-4 px-sm-5">
@@ -30,12 +30,10 @@ export default function LoginForm({ parameter, setParameter, password, setPasswo
                         />
                     </div>
                     {
-                        error?
+                        error&&
                             <div className="mt-3 d-flex justify-content-center" style={{color:'red'}}>
-                                <b>Error: </b>{error}
+                                <b>Error:&nbsp;</b>{error}
                             </div>
-                        :
-                            <></>
                     }
                     <div className="mt-3">
                         <button
@@ -50,7 +48,7 @@ export default function LoginForm({ parameter, setParameter, password, setPasswo
                             Forgot password?
                         </a>
                     </div>
-                    <div className="mb-2 d-flex">
+                    <div className="mb-2 d-flex" style={{paddingTop:15}}>
                         <button
                             type="button"
                             className="btn btn-block btn-facebook auth-form-btn"
@@ -75,7 +73,7 @@ export default function LoginForm({ parameter, setParameter, password, setPasswo
                         <a href="#" className="text-primary" onClick={()=> {
                             setMethod('register')
                         }}>
-                            Create
+                            Sign up
                         </a>
                     </div>
                     <div className="text-center mt-4 fw-light">
