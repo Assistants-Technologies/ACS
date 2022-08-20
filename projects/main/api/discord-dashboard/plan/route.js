@@ -9,7 +9,7 @@ const DiscordDashboard = require('../../../../../models/discordDashboard')
 const getPlanStatus = require('./dbd_subscriptions/getStatus')
 
 const { Stripe } = require('stripe');
-const stripe = new Stripe(process.env.DEVELOPMENT_CHANNEL === "TRUE" ? process.env.STRIPE_SK_DEV : process.env.STRIPE_SK_LIVE, {
+const stripe = new Stripe((process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE") ? process.env.STRIPE_SK_DEV : process.env.STRIPE_SK_LIVE, {
     apiVersion: 'latest',
     appInfo: {
         name: "assistants_services/shop",
