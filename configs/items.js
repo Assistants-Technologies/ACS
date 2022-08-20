@@ -85,7 +85,7 @@ module.exports = (dev) => {
             }
         ],
         paymentTypes: {
-            "PLN": ["p24", "card"],
+            "PLN": ["p24", "card", "blik"],
             "EUR": ["p24", "card", "sofort"],
             "USD": ["card"],
             "GBP": ["card",]

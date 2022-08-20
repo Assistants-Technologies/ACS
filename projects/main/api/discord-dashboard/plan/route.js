@@ -111,7 +111,7 @@ router.route('/create/premium')
 
         const session = await stripe.checkout.sessions.create({
             mode: 'subscription',
-            payment_method_types: ['card'],
+            payment_method_types: ['card', 'blik'],
             customer: customer.id,
             line_items: [
               {
