@@ -80,12 +80,15 @@ export default function TestPage ({ user, url}) {
                                     <h2><b>[ADMIN] Users List</b></h2>
 
                                     <h4 style={{paddingTop:10}}>Users Count: <b>{users ? users.length : "Loading..."}</b></h4>
+                                    <h4>Verified: <b>{users ? users.filter(u=>u.verified===true).length : "Loading..."}</b></h4>
                                     <h4>Admins: <b>{users ? users.filter(u=>u.admin===true).length : "Loading..."}</b></h4>
 
                                     <h4 style={{paddingTop:10}}>OpenSource: <b>{users ? users.filter(u=>u.OpenSource?.license_id !== null).length : "Loading..."}</b></h4>
                                     <h4>Personal: <b>{users ? users.filter(u=>u.Personal?.license_id != null).length : "Loading..."}</b></h4>
                                     <h4>Production: <b>{users ? users.filter(u=>u.Production?.license_id != null).length : "Loading..."}</b></h4>
 
+                                    <h4 style={{paddingTop:10}}>Discord: <b>{users ? users.filter(u=>u.connections?.discord?.id !== null).length : "Loading..."}</b></h4>
+                                    <h4>Twitter: <b>{users ? users.filter(u=>u.connections?.twitter?.id != null).length : "Loading..."}</b></h4>
 
                                     <div className="table-responsive">
                                         <table className="table table-striped">
@@ -107,6 +110,9 @@ export default function TestPage ({ user, url}) {
                                                     Role
                                                 </th>
                                                 <th>
+                                                    Verified
+                                                </th>
+                                                <th>
                                                     DBD v2
                                                 </th>
                                             </tr>
@@ -122,7 +128,7 @@ export default function TestPage ({ user, url}) {
                                                     return (
                                                         <tr>
                                                             <td class="py-1">
-                                                            <img src={user.avatarURL} alt="image"/>
+                                                            <img src={user.avatarURL.replace('assistants.ga', 'assistantscenter.com')} alt="image"/>
                                                             </td>
                                                             <td>
                                                                 <div>
@@ -138,6 +144,9 @@ export default function TestPage ({ user, url}) {
                                                             </td>
                                                             <td>
                                                                 <b>{user.admin ? "ADMIN" : "USER"}</b>
+                                                            </td>
+                                                            <td>
+                                                                <b>{user.verified ? "YES" : "NO"}</b>
                                                             </td>
                                                             <td>
                                                                 {userDBDv2Licenses.length > 0 ? userDBDv2Licenses.join(', ') : "any"}
