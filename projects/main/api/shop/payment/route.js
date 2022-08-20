@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const {items, paymentTypes} = require('../../../../../configs/items')(process.env.DEVELOPMENT_CHANNEL === "TRUE")
+const {items, paymentTypes} = require('../../../../../configs/items')((process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE"))
 
 const { Stripe } = require('stripe');
 const stripe = new Stripe((process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE") ? process.env.STRIPE_SK_DEV : process.env.STRIPE_SK_LIVE, {
