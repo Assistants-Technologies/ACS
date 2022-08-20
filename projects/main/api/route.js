@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 router.use('/auth', require('./auth/route'))
+router.use('/admin', require('./admin/route'))
 
 router.use('/dbd-stats', require('./dbd-stats/route'))
 router.use('/shop', require('./shop/route'))

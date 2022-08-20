@@ -15,6 +15,11 @@ const User = require('../../models/user')
 const vhost = ({next_app, next_handle}) => {
     const app = express()
 
+    app.use((req,res,next)=>{
+        req.next_app = next_app
+        next()
+    })
+
     app.set('trust proxy', 1)
     app.use(session({
         secret: process.env.COOKIES_SECRET,
@@ -76,6 +81,8 @@ const vhost = ({next_app, next_handle}) => {
     app.use('/api/auth/', apiAuthLimiter)
 
     app.use('/api', apiLimiter, APIRoute)
+
+    app.use('/admin', require('./admin'))
 
     app.get('/', (req,res)=>{
         return res.redirect('/dashboard')
