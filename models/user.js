@@ -133,7 +133,7 @@ const userSchema = new Schema({
             sparse: true,
             type: String,
         },
-    },
+    }
 });
 
 userSchema.plugin(uniqueValidator, {

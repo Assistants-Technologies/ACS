@@ -12,11 +12,12 @@ const Views = require('../../models/DBDStats/Views/view')
 
 const User = require('../../models/user')
 
-const vhost = ({next_app, next_handle}) => {
+const vhost = ({next_app, next_handle, client}) => {
     const app = express()
 
     app.use((req,res,next)=>{
         req.next_app = next_app
+        req.client = client
         next()
     })
 

@@ -11,6 +11,10 @@ const fs = require('fs')
 const mongo = require('mongoose')
 const config = require('./configs/config')
 
+const { Client, GatewayIntentBits } = require('discord.js')
+const client = new Client({ intents: [ GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages ] })
+client.login(process.env.DISCORD_BOT_TOKEN)
+
 const next_app = next({dev: DEVELOPMENT_CHANNEL, dir: DEVELOPMENT_CHANNEL ? 'src' : './'})
 const next_handle = next_app.getRequestHandler()
 
@@ -25,14 +29,14 @@ const createApp = () => {
         for (const vhostName of vhostList) {
             console.log(`Adding vhost: ${vhostName}`)
             const vhostHost = vhostName == 'main' ? null : vhostName
-            const vhostApp = require(`./projects/${vhostName}/vhost.js`).vhost({next_app, next_handle})
+            const vhostApp = require(`./projects/${vhostName}/vhost.js`).vhost({next_app, next_handle, client})
             server.use(vhost(vhostHost ? `${vhostHost}.${domain}` : domain, vhostApp))
         }
 
         server.listen(3000)
     }else{
         for (const vhostName of vhostList) {
-            const vhost = require(`./projects/${vhostName}/vhost.js`).vhost({next_app, next_handle})
+            const vhost = require(`./projects/${vhostName}/vhost.js`).vhost({next_app, next_handle, client})
             const vServer = http.createServer(vhost)
             vServer.listen(require(`./projects/${vhostName}/vhost.js`).prodPort)
             console.log(`Added vhost: ${vhostName} on port ${require(`./projects/${vhostName}/vhost.js`).prodPort} (PROD)`)

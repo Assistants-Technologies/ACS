@@ -13,7 +13,8 @@ const stripe = new Stripe(process.env.DEVELOPMENT_CHANNEL === "TRUE" ? process.e
     }
 });
 
-const ShopPayment = require('../../../../../models/Shop/payment');
+const ShopPayment = require('../../../../../models/Shop/payment')
+const User = require('../../../../../models/user')
 
 router.get('/create', async (req, res) => {
     if(!req.session?.user){
@@ -63,7 +64,23 @@ router.get('/create', async (req, res) => {
         }
     }
 
+    const user = await User.findOne({
+        _id: req.session.user._id,
+    })
+
+    if(!user.stripe_customer){
+        const stripe_customer = await stripe.customers.create({
+            description: `user with _id ${user._id}`,
+            email: user.verified ? user.email : null,
+        })
+        user.stripe_customer = stripe_customer.id
+        await user.save()
+    }
+
+    const customer = await stripe.customers.retrieve(user.stripe_customer)
+
     const session = await stripe.checkout.sessions.create({
+        customer: customer.id,
         line_items: paymentItemsList,
         mode: 'payment',
         success_url: process.env.STRIPE_SUCCESS_URL,

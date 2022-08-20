@@ -49,9 +49,9 @@ export default function DiscordDashboardProjectTab () {
         <div className="col-lg-12 grid-margin stretch-card">
             <div className="card card-rounded">
                 <div className="card-body">
-                    <h4 className="card-title" style={{fontWeight: 'bolder'}}>Your Discord Dashboard Projects</h4>
+                    <h4 className="card-title" style={{fontWeight: 'bolder'}}>Your Discord Dashboard v3 Projects</h4>
                     <p className="card-description">
-                        You can have up to 2 projects. <a href="#" style={{color:'gold', fontWeight:'bold', textDecoration:'none'}}>Premium Account</a> allows you to have up to 16 projects.
+                        You can have up to 1 project. <a href="#" style={{color:'gold', fontWeight:'bold', textDecoration:'none'}}>Discord-Dashboard Premium Plan</a> allows you to have up to 10 projects.
                     </p>
                     <div className="table-responsive">
                         <table className="table">
@@ -114,6 +114,11 @@ export default function DiscordDashboardProjectTab () {
                                         </>
                                     </>
                             }
+                        </div>
+                        <div>
+                            <p className="card-description">
+                            Not interested in Discord-Dashboard v3? Move to <a href="/discord-dashboard/v2" style={{fontWeight:'bold', textDecoration:'none'}}>Discord-Dashboard v2 Licenses</a> page
+                            </p>
                         </div>
                         <div id="modal" className="modal" style={{display: displayModal ? 'block' : 'none'}}>
                             <div className="modal-content" style={{borderRadius:15}}>
