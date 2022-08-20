@@ -83,11 +83,11 @@ export default function TestPage ({ user, url}) {
                                     <h4>Verified: <b>{users ? users.filter(u=>u.verified===true).length : "Loading..."}</b></h4>
                                     <h4>Admins: <b>{users ? users.filter(u=>u.admin===true).length : "Loading..."}</b></h4>
 
-                                    <h4 style={{paddingTop:10}}>OpenSource: <b>{users ? users.filter(u=>u.OpenSource?.license_id !== null).length : "Loading..."}</b></h4>
+                                    <h4 style={{paddingTop:10}}>OpenSource: <b>{users ? users.filter(u=>u.OpenSource?.license_id != null).length : "Loading..."}</b></h4>
                                     <h4>Personal: <b>{users ? users.filter(u=>u.Personal?.license_id != null).length : "Loading..."}</b></h4>
                                     <h4>Production: <b>{users ? users.filter(u=>u.Production?.license_id != null).length : "Loading..."}</b></h4>
 
-                                    <h4 style={{paddingTop:10}}>Discord: <b>{users ? users.filter(u=>u.connections?.discord?.id !== null).length : "Loading..."}</b></h4>
+                                    <h4 style={{paddingTop:10}}>Discord: <b>{users ? users.filter(u=>u.connections?.discord?.id != null).length : "Loading..."}</b></h4>
                                     <h4>Twitter: <b>{users ? users.filter(u=>u.connections?.twitter?.id != null).length : "Loading..."}</b></h4>
 
                                     <div className="table-responsive">
