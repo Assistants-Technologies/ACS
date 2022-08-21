@@ -19,7 +19,7 @@ module.exports = ({client}) => {
         for(const Subscription of All_Subscriptions){
             if(Subscription.plan?.plan_type == 'premium'/* && (Date.now() > Subscription.plan?.active_until)*/){
                 const subscription = await stripe.subscriptions.retrieve(Subscription.plan.subscription.id)
-                const latest_invoice = await stripe.invoices.retrieve(Subscription.plan.subscription.latest_invoice)
+                const latest_invoice = await stripe.invoices.retrieve('pm_1LYsdcKWxgCmg6Sfc9Sziwjg')
                 console.log(latest_invoice)
                 if(subscription.status != "active"){
                     try{
