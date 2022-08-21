@@ -119,8 +119,16 @@ router.route('/create/premium')
                 quantity: 1
               }
             ],
+            /*discounts: [
+                {
+                    coupon: 'nhSqiNs9'
+                }
+            ],*/
             success_url: process.env.DBD_PREMIUM_SUCCESS_URL,
-            cancel_url: process.env.DBD_PREMIUM_CANCEL_URL
+            cancel_url: process.env.DBD_PREMIUM_CANCEL_URL,
+            payment_intent_data: {
+                receipt_email: user.verified ? user.email : null,
+            }
           })
 
         res.redirect(303, session.url)

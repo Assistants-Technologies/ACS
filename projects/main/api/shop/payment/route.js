@@ -86,6 +86,14 @@ router.get('/create', async (req, res) => {
         success_url: process.env.STRIPE_SUCCESS_URL,
         cancel_url: process.env.STRIPE_CANCEL_URL,
         payment_method_types: paymentTypes[currency],
+        payment_intent_data: {
+            receipt_email: user.verified ? user.email : null,
+        },
+        /*discounts: [
+            {
+                coupon: 'nhSqiNs9'
+            }
+        ],*/
     });
 
     await ShopPayment.create({
