@@ -88,7 +88,7 @@ router.get('/create', async (req, res) => {
         cancel_url: process.env.STRIPE_CANCEL_URL,
         payment_method_types: paymentTypes[currency],
         payment_intent_data: {
-            receipt_email: user.verified ? user.email : null,
+            receipt_email: user.verified ? user.email : undefined,
         },
         /*discounts: [
             {
