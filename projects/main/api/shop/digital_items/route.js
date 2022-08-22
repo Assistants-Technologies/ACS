@@ -3,7 +3,12 @@ const router = express.Router()
 
 const User = require('../../../../../models/user')
 
-const { digital_items } = require('../../../../../configs/digitalItems');
+const { digital_items } = require('../../../../../configs/digitalItems')
+let digital_items_line = []
+
+for(const category of digital_items) {
+    digital_items_line = [...category.categoryItems, ...digital_items_line]
+}
 
 router.get('/get', async (req, res) => {
     if(!req.session?.user){
@@ -13,11 +18,15 @@ router.get('/get', async (req, res) => {
         })
     }
 
-    let user_owned = [];
+    let user_owned = []
 
-    for(const item of digital_items) {
-        const owns = await item.owns_already({ user_id: req.session?.user?._id });
-        user_owned.push({ ...item, owns })
+    for(const category of digital_items) {
+        let cat_temp = {categoryId: category.categoryId, categoryDescription: category.categoryDescription, categoryItems: []}
+        for(const item of category.categoryItems) {
+            const owns = await item.owns_already({ user_id: req.session?.user?._id })
+            cat_temp.categoryItems.push({ ...item, owns })
+        }
+        user_owned.push(cat_temp)
     }
 
     return res.status(200).json({
@@ -34,8 +43,8 @@ router.post('/buy/:item_id', async (req, res) => {
         })
     }
 
-    const item_id = req.params.item_id;
-    const item = digital_items.find(item => item.id == item_id);
+    const item_id = req.params.item_id
+    const item = digital_items_line.find(item => item.id == item_id)
 
     if(!item) {
         return res.status(400).json({
