@@ -57,6 +57,7 @@ router.route('/')
             case 'checkout.session.async_payment_succeeded':
                 const checkoutAsyncIntent = event.data.object
                 const SessionAsyncData = await CheckoutSession.findOne({'session_data.id': checkoutAsyncIntent.id})
+                if(!SessionAsyncData)break
 
                 if(SessionAsyncData.session_finished_data)break
 
@@ -81,6 +82,7 @@ router.route('/')
                 const checkoutIntent = event.data.object
                 if (checkoutIntent.payment_status != 'paid') break
                 const SessionData = await CheckoutSession.findOne({'session_data.id': checkoutIntent.id})
+                if(!SessionData)break
 
                 if(SessionData.session_finished_data)break
 
