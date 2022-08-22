@@ -7,7 +7,7 @@ const DiscordDashboard = mongoose.model('DiscordDashboard',
         plan: {
             plan_type: {
                 type: String,
-                default: 'free'
+                default: 'free' // free or premium
             },
 
             subscription: {
