@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 
 module.exports = {
     digital_items: [
-        [
             {
                 categoryName: "Discord-Dashboard v2 Licenses",
                 categoryDescription: "Choose a license you'd like to use.",
@@ -125,5 +124,4 @@ module.exports = {
                 ]
             }
         ]
-    ]
 }
