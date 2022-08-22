@@ -5,6 +5,10 @@ const LicensesList = require('../models/licensesList')
 const mongoose = require("mongoose");
 const DiscordDashboard = require('../models/discordDashboard')
 
+const { Client, GatewayIntentBits } = require('discord.js')
+const client = new Client({ intents: [ GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages ] })
+client.login(process.env.DISCORD_BOT_TOKEN)
+
 module.exports = (dev) => [
     {
         id: 'dbd_premium',
@@ -32,9 +36,25 @@ module.exports = (dev) => [
 
             UserDBDPremium.plan = {
                 plan_type: 'premium',
-                active_until: new Date(subscription.current_period_end*1000),
+                active_until: new Date(subscription.current_period_end*1000+172800000),
                 subscription,
                 session
+            }
+            await UserDBDPremium.save()
+        },
+        subscriptionRenewed: async ({ subscription, user_id }) => {
+            let UserDBDPremium = await DiscordDashboard.findOne({
+                user: user_id
+            })
+            if(!UserDBDPremium)UserDBDPremium = await DiscordDashboard.create({
+                user: user_id
+            })
+
+            UserDBDPremium.plan = {
+                plan_type: 'premium',
+                active_until: new Date(subscription.current_period_end*1000+172800000),
+                subscription: subscription,
+                session: UserDBDPremium.session
             }
             await UserDBDPremium.save()
         },

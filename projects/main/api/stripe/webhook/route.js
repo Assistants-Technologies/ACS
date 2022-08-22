@@ -13,6 +13,14 @@ const stripe = new Stripe((process.env.DEVELOPMENT_CHANNEL === "TRUE" || process
     }
 })
 
+const { Client, GatewayIntentBits } = require('discord.js')
+const client = new Client({ intents: [ GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages ] })
+client.login(process.env.DISCORD_BOT_TOKEN)
+
+client.guilds.fetch(process.env.DISCORD_GUILD_ID).then(guild=>{
+    guild.channels.fetch(process.env.DISCORD_LOGS_CHANNEL_ID)
+})
+
 const SubscriptionItems = require('../../../../../configs/subscriptionItems')(process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE")
 
 const ShopPayment = require('../../../../../models/Shop/payment')
@@ -54,6 +62,25 @@ router.route('/')
         }
 
         switch (event.type) {
+            case 'invoice.paid':
+                const invoiceIntent = event.data.object
+                const sub = invoiceIntent.subscription
+                if(!sub)break
+
+                const SessionSubscription = await CheckoutSession.findOne({'session_data.subscription': sub})
+                if(!SessionSubscription?.session_finished_data)break
+
+                try{
+                    client.guilds.cache.get(process.env.DISCORD_GUILD_ID).channels.cache.get(process.env.DISCORD_LOGS_CHANNEL_ID).send(`Subscription renewed for ${SessionSubscription.user}`)
+                }catch(err){
+                    console.log(err)
+                }
+
+                const SubscriptionItem = SubscriptionItems.find(sub=>sub.id==SessionSubscription.subscription_id)
+                const subscription_stripe = await stripe.subscriptions.retrieve(sub)
+
+                await SubscriptionItem.subscriptionRenewed({ user_id: SessionSubscription.user, subscription: subscription_stripe })
+                break
             case 'checkout.session.async_payment_succeeded':
                 const checkoutAsyncIntent = event.data.object
                 const SessionAsyncData = await CheckoutSession.findOne({'session_data.id': checkoutAsyncIntent.id})
@@ -76,6 +103,12 @@ router.route('/')
 
                     SessionAsyncData.session_finished_data = checkoutAsyncIntent
                     await SessionAsyncData.save()
+
+                    try{
+                        client.guilds.cache.get(process.env.DISCORD_GUILD_ID).channels.cache.get(process.env.DISCORD_LOGS_CHANNEL_ID).send(`Subscription created for ${SessionAsyncData.user} using async payment`)
+                    }catch(err){
+                        console.log(err)
+                    }
                 }
                 break
             case 'checkout.session.completed':
@@ -102,6 +135,12 @@ router.route('/')
                     SessionData.session_finished_data = checkoutIntent
                     await SessionData.save()
                 }
+                try{
+                    client.guilds.cache.get(process.env.DISCORD_GUILD_ID).channels.cache.get(process.env.DISCORD_LOGS_CHANNEL_ID).send(`Subscription created for ${SessionData.user} using instant payment`)
+                }catch(err){
+                    console.log(err)
+                }
+
                 break
             default:
                 break
