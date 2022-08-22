@@ -14,6 +14,7 @@ const stripe = new Stripe((process.env.DEVELOPMENT_CHANNEL === "TRUE" || process
 });
 
 const ShopPayment = require('../../../../../models/Shop/payment')
+const CheckoutSession = require('../../../../../models/Shop/checkoutSession')
 const User = require('../../../../../models/user')
 
 router.get('/create', async (req, res) => {
@@ -25,8 +26,8 @@ router.get('/create', async (req, res) => {
     }
     const { items: itemsFromQuery, currency } = req?.query;
 
-    const countriesList = Object.keys(paymentTypes);
-    if(!countriesList.includes(currency)) {
+    const currenciesList = Object.keys(paymentTypes);
+    if(!currenciesList.includes(currency)) {
         return res.status(400).json({
             error: true,
             message: 'Invalid currency',
@@ -96,66 +97,23 @@ router.get('/create', async (req, res) => {
         ],*/
     });
 
-    await ShopPayment.create({
+    await CheckoutSession.create({
         user: req.session.user._id,
-        session_id: session.id,
-        payment_intent: session.payment_intent,
-        amount_subtotal: session.amount_subtotal,
-        amount_total: session.amount_total,
-        currency: session.currency.toUpperCase(),
-        status: session.status,
+        item_type: 'item',
+        session_data: session,
         items_ids: itemsList,
-        assigned: false,
-        full_object: session,
     })
-
     res.redirect(303, session.url);
 });
 
 
 router.get('/success', async (req, res) => {
-    const { session_id } = req?.query
-    if(!session_id){
-        return res.status(400).json({
-            error: true,
-            message: 'Missing required fields',
-        })
-    }
-
-    const Session = await ShopPayment.findOne({
-        session_id,
+    const {session_id = ''} = req.query
+    return req.next_app.render(req, res, '/wait-for-items-assign', {
+        url: req.url,
+        session_id: session_id,
+        redirect: '/shop'
     })
-    if(!Session){
-        return res.status(400).json({
-            error: true,
-            message: "Invalid session"
-        })
-    }
-
-    const session = await stripe.checkout.sessions.retrieve(session_id)
-    if(session?.status != "complete"){
-        return res.status(400).json({
-            error: true,
-            message: 'Payment wasn\'t completed. Was it? Contact us: billing@assistantscenter.com',
-        })
-    }
-
-    if(Session.assigned) {
-        return res.status(400).json({
-            error: true,
-            message: 'Payment was already assigned',
-        })
-    }
-
-    for(const item of Session.items_ids){
-        await (items.find(e=>e.id==item)).assign_item({ Session })
-    }
-
-    Session.assigned = true;
-    Session.status = "complete";
-    await Session.save();
-
-    return res.redirect(`/shop?purchase_state=complete&purchased=${Session.items_ids.join(',')}&session_id=${Session.session_id}`);
 })
 
 

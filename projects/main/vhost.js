@@ -33,6 +33,7 @@ const vhost = ({next_app, next_handle, client}) => {
         }),
     }))
 
+    app.use('/api/stripe/webhook', express.raw({type: "*/*"}))
     app.use(express.json())
     app.use(express.urlencoded({
         extended: true

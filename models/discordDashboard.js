@@ -16,10 +16,6 @@ const DiscordDashboard = mongoose.model('DiscordDashboard',
                 default: null
             },
 
-            active: {
-                type: Boolean,
-                default: false
-            },
             active_until: {
                 type: Date,
                 sparse: true,

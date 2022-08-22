@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
 
-router.use('/project', require('./project/route'))
+router.use('/webhook', require('./webhook/route'))
 
 module.exports = router

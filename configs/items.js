@@ -12,8 +12,7 @@ module.exports = (dev) => {
                     "USD": dev ? "price_1LSQQ8KWxgCmg6SfIv0BYxJt" : "price_1LSQjQKWxgCmg6SfcI2iCPvw",
                     "GBP": dev ? "price_1LSQQ8KWxgCmg6SfIv0BYxJt" : "price_1LSQjgKWxgCmg6SfcayDiZ0g"
                 },
-                assign_item: async ({Session}) => {
-                    const user_id = Session.user._id
+                assign_item: async ({ session, user_id }) => {
                     const user = await User.findOne({_id: user_id})
 
                     const coins = user.coins
@@ -32,8 +31,7 @@ module.exports = (dev) => {
                     "USD": dev ? "price_1LSQXnKWxgCmg6SfQdTRx4dK" : "price_1LSQlPKWxgCmg6SfaAd1AQNO",
                     "GBP": dev ? "price_1LSQXnKWxgCmg6SfQdTRx4dK" : "price_1LSQleKWxgCmg6SflCh62LSk"
                 },
-                assign_item: async ({Session}) => {
-                    const user_id = Session.user._id
+                assign_item: async ({ session, user_id }) => {
                     const user = await User.findOne({_id: user_id})
 
                     const coins = user.coins
@@ -52,8 +50,7 @@ module.exports = (dev) => {
                     "USD": dev ? "price_1LSQYvKWxgCmg6Sfa3acqhnF" : "price_1LSQmvKWxgCmg6SfqBzL7Q6W",
                     "GBP": dev ? "price_1LSQYvKWxgCmg6Sfa3acqhnF" : "price_1LSQnEKWxgCmg6Sf7d6Mi9y1"
                 },
-                assign_item: async ({Session}) => {
-                    const user_id = Session.user._id
+                assign_item: async ({ session, user_id }) => {
                     const user = await User.findOne({_id: user_id})
 
                     const coins = user.coins
@@ -72,8 +69,7 @@ module.exports = (dev) => {
                     "USD": dev ? "price_1LSQa4KWxgCmg6SfwUjwesc0" : "price_1LSQoyKWxgCmg6Sfyerbi6f1",
                     "GBP": dev ? "price_1LSQa4KWxgCmg6SfwUjwesc0" : "price_1LSQpCKWxgCmg6SfLQRtOEhl"
                 },
-                assign_item: async ({Session}) => {
-                    const user_id = Session.user._id
+                assign_item: async ({ session, user_id }) => {
                     const user = await User.findOne({_id: user_id})
 
                     const coins = user.coins
