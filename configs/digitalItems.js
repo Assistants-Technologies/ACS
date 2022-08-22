@@ -6,7 +6,11 @@ const mongoose = require("mongoose");
 
 module.exports = {
     digital_items: [
-        {
+        [
+            categoryName: "Discord-Dashboard v2 Licenses",
+            categoryDescription: "Choose a license you'd like to use.",
+            categoryItems: [
+                        {
             id: "dbd_opensource_license",
             image: "https://cdn.assistantscenter.com/l6yvtyo6",
             aho: {
@@ -117,5 +121,7 @@ module.exports = {
                 return true
             }
         }
+            ]
+        ]
     ]
 }
