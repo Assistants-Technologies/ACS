@@ -220,7 +220,7 @@ export default function ShopPage ({ user, url }) {
                                                                                     :
                                                                                     <>
                                                                                         <button type="button" className="btn btn-warning" style={{color:'white',height:40,margin: 'auto 12px 0 0', borderColor: 'transparent !important'}} disabled={true}>Buy</button>
-                                                                                        <label>Already have</label>
+                                                                                        <label>Already owned</label>
                                                                                     </>
                                                                                 )
                                                                                 :
