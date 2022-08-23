@@ -21,7 +21,7 @@ router.get('/get', async (req, res) => {
     let user_owned = []
 
     for(const category of digital_items) {
-        let cat_temp = {categoryId: category.categoryId, categoryDescription: category.categoryDescription, categoryItems: []}
+        let cat_temp = {categoryName: category.categoryName, categoryDescription: category.categoryDescription, categoryItems: []}
         for(const item of category.categoryItems) {
             const owns = await item.owns_already({ user_id: req.session?.user?._id })
             cat_temp.categoryItems.push({ ...item, owns })
