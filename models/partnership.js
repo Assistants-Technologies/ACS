@@ -12,10 +12,6 @@ const Partnership = mongoose.model('Partnership',
             type: Array,
             default: []
         },
-        user_partnership_worth: {
-            type: Number,
-            default: 0,
-        }
     })
 );
 
