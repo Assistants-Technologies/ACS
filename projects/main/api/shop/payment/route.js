@@ -11,7 +11,9 @@ const stripe = new Stripe((process.env.DEVELOPMENT_CHANNEL === "TRUE" || process
         version: "0.0.1",
         url: process.env.DOMAIN_URL
     }
-});
+})
+
+const { v4 } = require('uuid')
 
 const ShopPayment = require('../../../../../models/Shop/payment')
 const CheckoutSession = require('../../../../../models/Shop/checkoutSession')
@@ -88,6 +90,8 @@ router.get('/create', async (req, res) => {
 
     const customer = await stripe.customers.retrieve(user.stripe_customer)
 
+    const checkout_metadata_key = v4()
+
     const session = await stripe.checkout.sessions.create({
         customer: customer.id,
         line_items: paymentItemsList,
@@ -98,6 +102,9 @@ router.get('/create', async (req, res) => {
         payment_intent_data: {
             receipt_email: user.verified ? user.email : undefined,
         },
+        metadata: {
+            'checkout_metadata_key': checkout_metadata_key
+        }
         /*discounts: [
             {
                 coupon: 'nhSqiNs9'
@@ -111,6 +118,7 @@ router.get('/create', async (req, res) => {
         item_type: 'item',
         session_data: session,
         items_ids: itemsList,
+        checkout_metadata_key
     })
     res.redirect(303, session.url);
 });

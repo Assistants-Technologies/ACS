@@ -65,10 +65,14 @@ router.route('/')
         switch (event.type) {
             case 'invoice.paid':
                 const invoiceIntent = event.data.object
+                console.log('checkout_metadata_key', invoiceIntent.metadata)
                 const sub = invoiceIntent.subscription
                 if(!sub)break
 
-                const SessionSubscription = await CheckoutSession.findOne({'session_data.subscription': sub})
+                const sub_info = await stripe.subscriptions.retrieve(sub)
+                const checkout_metadata_key = sub_info.metadata.checkout_metadata_key
+
+                const SessionSubscription = await CheckoutSession.findOne({checkout_metadata_key})
                 if(!SessionSubscription?.session_finished_data)break
 
                 try{
@@ -78,9 +82,8 @@ router.route('/')
                 }
 
                 const SubscriptionItem = SubscriptionItems.find(sub=>sub.id==SessionSubscription.subscription_id)
-                const subscription_stripe = await stripe.subscriptions.retrieve(sub)
 
-                await SubscriptionItem.subscriptionRenewed({ user_id: SessionSubscription.user, subscription: subscription_stripe })
+                await SubscriptionItem.subscriptionRenewed({ user_id: SessionSubscription.user, subscription: sub_info })
                 break
             case 'checkout.session.async_payment_succeeded':
                 const checkoutAsyncIntent = event.data.object

@@ -7,6 +7,8 @@ const User = require('../../../../../models/user')
 const DiscordDashboard = require('../../../../../models/discordDashboard')
 const CheckoutSession = require('../../../../../models/Shop/checkoutSession')
 
+const {v4} = require('uuid')
+
 const { Stripe } = require('stripe');
 const stripe = new Stripe((process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE") ? process.env.STRIPE_SK_DEV : process.env.STRIPE_SK_LIVE, {
     apiVersion: 'latest',
@@ -90,6 +92,8 @@ router.route('/create/:subscription_id')
 
         const plan_price = Subscription.prices[currency]
 
+        const checkout_metadata_key = v4()
+
         const session = await stripe.checkout.sessions.create({
             mode: 'subscription',
             payment_method_types: ['card'],
@@ -102,13 +106,15 @@ router.route('/create/:subscription_id')
             ],
             success_url: Subscription.success_url,
             cancel_url: Subscription.cancel_url,
+            metadata: {'subscription_id': req.params.subscription_id, 'checkout_metadata_key': checkout_metadata_key }
           })
 
           await CheckoutSession.create({
             user: req.session.user._id,
             item_type: "subscription",
             session_data: session,
-            subscription_id: req.params.subscription_id
+            subscription_id: req.params.subscription_id,
+            checkout_metadata_key
           })
 
         res.redirect(303, session.url)

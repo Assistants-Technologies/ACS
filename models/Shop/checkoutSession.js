@@ -31,6 +31,9 @@ const checkoutSessionSchema = new Schema(
         },
         subscription_id: {
             type: String
+        },
+        checkout_metadata_key: { 
+            type: String
         }
     },
     {
