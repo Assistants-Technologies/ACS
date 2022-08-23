@@ -9,16 +9,20 @@ import Script from "next/script"
 
 import IsBeta from '../isBeta'
 
+import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
+
 export async function getServerSideProps(context) {
     return {
         props: {
             url: context.query.url.split('?')[0],
             user: context.query.user,
+            preloadedReferralCode: context.query?.preloadedReferralCode || null,
         },
     }
 }
 
-export default function ShopPage({ user, url }) {
+export default function ShopPage({ user, url, preloadedReferralCode }) {
     const ud = (url.split("/").length - 1)
     let ud_s = ''
     if (ud != 1) {
@@ -36,6 +40,8 @@ export default function ShopPage({ user, url }) {
     const [setSelected, setSetSelected] = React.useState(null)
 
     const [elementsLoaded, setElementsLoaded] = React.useState(false)
+
+    const [referralCode, setReferralCode] = React.useState(preloadedReferralCode || '')
 
     React.useEffect(()=>{
         const urlString = window.location.href
@@ -159,7 +165,6 @@ export default function ShopPage({ user, url }) {
                     }
                 `}
                 </style>
-
                 <link rel="stylesheet" href={`${ud_s}mycss/my_dark_css.css`} />
             </Head>
             <PageBody user={user} uds={ud_s}>
@@ -192,7 +197,6 @@ export default function ShopPage({ user, url }) {
                                             </div>
                                         </div>
                                     </div>
-
                                     {
                                         (digitalItems && coins != null) &&
                                         digitalItems.map((category,idx) => {
@@ -292,9 +296,9 @@ export default function ShopPage({ user, url }) {
                                                         (items && coins != null && setSelected) ?
                                                             <div className={"pt-3"}>
                                                                 <div className="form-group">
-                                                                    <label htmlFor="exampleFormControlSelect2">Currency</label>
+                                                                    <label htmlFor="currencySelector">Currency</label>
                                                                     <select className="form-control"
-                                                                        id="exampleFormControlSelect2"
+                                                                        id="currencySelector"
                                                                         value={displayCurrency}
                                                                         onChange={(event) => setDisplayCurrency(event.target.value)}
                                                                     >
@@ -308,11 +312,11 @@ export default function ShopPage({ user, url }) {
                                                                     </select>
                                                                 </div>
                                                                 <div className="form-group">
-                                                                    <label htmlFor="exampleFormControlSelect2">
+                                                                    <label htmlFor="packSelector">
                                                                         Pack
                                                                     </label>
                                                                     <select className="form-control"
-                                                                        id="exampleFormControlSelect2"
+                                                                        id="packSelector"
                                                                         value={setSelected}
                                                                         onChange={(event) => {
                                                                             setSetSelected(event.target.value)
@@ -339,6 +343,13 @@ export default function ShopPage({ user, url }) {
 
                                                                 <hr />
 
+                                                                <div className="form-group">
+                                                                    <label htmlFor="supportCreatorCode">
+                                                                        Support a creator
+                                                                    </label>
+                                                                    <input value={referralCode} onChange={(event)=>setReferralCode(event.target.value)} type="text" class="form-control" id="supportCreatorCode" placeholder="Referral code" />
+                                                                </div>
+
                                                                 <p><b>By clicking "Purchase" button:</b><br />
                                                                     - You agree to <a href="/pp" target="_blank">Privacy Policy</a>, <a href="/tos" target="_blank">Terms of Services</a> and <a href="/top" target="_blank">Terms of Purchase</a>,<br />
                                                                     - You accept that <b>any Assistants Center Coins purchased and used are non-refundable</b>.</p>
@@ -347,7 +358,7 @@ export default function ShopPage({ user, url }) {
                                                                     <div style={{ paddingTop: 15 }}>
                                                                         <button type="button"
                                                                             className="btn btn-primary btn-icon-text"
-                                                                            onClick={() => Router.push(`/api/shop/payment/create?currency=${displayCurrency}&items=${setSelected}`)}
+                                                                            onClick={() => Router.push(`/api/shop/payment/create?currency=${displayCurrency}&items=${setSelected}&referral_code=${referralCode}`)}
                                                                             style={{ color: 'white', height: '50px', fontSize: '16px', justifyContent: 'center', display: 'flex', borderColor: 'transparent !important' }}
                                                                         >
                                                                             <i style={{ fontSize: '14px' }} className="mdi mdi-credit-card"></i>
