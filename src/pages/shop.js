@@ -27,13 +27,26 @@ export default function ShopPage({ user, url }) {
         }
     }
 
-    const [coins, setCoins] = React.useState('fetching')
+    const [coins, setCoins] = React.useState(null)
     const [items, setItems] = React.useState(null)
     const [digitalItems, setDigitalItems] = React.useState(null)
     const [displayCurrency, setDisplayCurrency] = React.useState('USD')
 
     const [displayCoinsShop, setDisplayCoinsShop] = React.useState(false)
     const [setSelected, setSetSelected] = React.useState(null)
+
+    const [elementsLoaded, setElementsLoaded] = React.useState(false)
+
+    React.useEffect(()=>{
+        const urlString = window.location.href
+        const elementToJump = (urlString.split('#')[1] || '').toLowerCase()
+        setTimeout(()=>{
+            if(elementToJump){
+                const element_jump = document.getElementById(elementToJump)
+                element_jump && element_jump.scrollIntoView({ behavior: 'smooth', block: 'center'})
+            }
+        }, 500)
+    }, [elementsLoaded])
 
     const fetchCoins = async () => {
         const res = await axios.get('/api/shop/coins/get')
@@ -48,7 +61,6 @@ export default function ShopPage({ user, url }) {
 
     const fetchDigitalItems = async () => {
         const res = await axios.get('/api/shop/digital-items/get')
-        console.log(res.data.items)
         setDigitalItems(res.data.items)
     }
 
@@ -113,19 +125,17 @@ export default function ShopPage({ user, url }) {
 
                 <style>
                     {`
-                   
-                   
                     .modal {
-  position: fixed;
-  z-index: 4324;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow: auto;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.4);
-}
+                      position: fixed;
+                      z-index: 4324;
+                      left: 0;
+                      top: 0;
+                      width: 100%;
+                      height: 100%;
+                      overflow: auto;
+                      background-color: rgb(0,0,0);
+                      background-color: rgba(0,0,0,0.4);
+                    }
 
 
                     .modal-content {
@@ -147,7 +157,7 @@ export default function ShopPage({ user, url }) {
                             width: 50% !important;
                         }
                     }
-`}
+                `}
                 </style>
 
                 <link rel="stylesheet" href={`${ud_s}mycss/my_dark_css.css`} />
@@ -173,10 +183,10 @@ export default function ShopPage({ user, url }) {
                                                     <div className={"d-flex column pt-2"} style={{ alignItems: 'center' }}>
                                                         <div style={{ marginRight: 15 }}>
                                                             <h6 >
-                                                                Your AC coins: <span style={{ fontWeight: 'bolder' }}>{coins == 'fetching' ? 'FETCHING...' : coins} <i className="mdi mdi-cash-multiple" /></span>
+                                                                Your AC coins: <span style={{ fontWeight: 'bolder' }}>{coins == null ? 'FETCHING...' : coins} <i className="mdi mdi-cash-multiple" /></span>
                                                             </h6>
                                                         </div>
-                                                        <button type="button" className="btn btn-warning" style={{ color: 'white', height: 40, borderColor: 'transparent !important' }} onClick={() => setDisplayCoinsShop(true)}>Top up currency</button>
+                                                        <button type="button" className="btn btn-warning" style={{ color: 'white', height: 40, borderColor: 'transparent !important' }} onClick={() => setDisplayCoinsShop(true)}>Top up coins</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -184,16 +194,17 @@ export default function ShopPage({ user, url }) {
                                     </div>
 
                                     {
-                                        digitalItems &&
-                                        digitalItems.map(category => {
+                                        (digitalItems && coins != null) &&
+                                        digitalItems.map((category,idx) => {
+                                            if(idx == digitalItems.length)setElementsLoaded(true) 
                                             return (
                                                 <div className="row mt-4">
                                                     <div className="col-sm-12">
-                                                        <div className="card card-rounded">
+                                                        <div className="card card-rounded" id={category.categoryName.toLowerCase().replace(/\s/g, '')}>
                                                             <div className="card-body">
+                                                                <h3>{category.categoryName}</h3>
+                                                                <p>{category.categoryDescription}</p>
                                                                 <div className="table-responsive">
-                                                                    <h3>{category.categoryName}</h3>
-                                                                    <h5>{category.categoryDescription}</h5>
                                                                     <table className="table table-striped">
                                                                         <thead>
                                                                             <tr>
@@ -225,28 +236,29 @@ export default function ShopPage({ user, url }) {
                                                                                             <td>
                                                                                                 Price: <b>{item.price}</b>
                                                                                             </td>
-                                                                                            <td>
+                                                                                            <td style={{ textAlign: 'center' }}>
                                                                                                 {
                                                                                                     item.owns ?
                                                                                                         (
                                                                                                             item.aho?.type === 'redirect' ?
                                                                                                                 <>
-                                                                                                                    <button type="button" className="btn btn-info" style={{ color: 'white', height: 40, margin: 'auto 12px 0 0', borderColor: 'transparent !important' }} onClick={() => Router.push(item.aho.url)}>View</button>
+                                                                                                                    <button type="button" className="btn btn-info" style={{ color: 'white', height: 40, margin: 'auto', borderColor: 'transparent' }} onClick={() => Router.push(item.aho.url)}>View</button>
                                                                                                                 </>
                                                                                                                 :
                                                                                                                 <>
-                                                                                                                    <button type="button" className="btn btn-warning" style={{ color: 'white', height: 40, margin: 'auto 12px 0 0', borderColor: 'transparent !important' }} disabled={true}>Buy</button>
+                                                                                                                    <button type="button" className="btn btn-warning" style={{ color: 'white', height: 40, margin: 'auto', borderColor: 'transparent' }} disabled={true}>Buy</button>
                                                                                                                     <label>Already owned</label>
                                                                                                                 </>
                                                                                                         )
                                                                                                         :
                                                                                                         (
                                                                                                             item.price <= coins ?
-
-                                                                                                                <button type="button" className="btn btn-warning" style={{ color: 'white', height: 40, margin: 'auto 12px 0 0', borderColor: 'transparent !important' }} onClick={() => setConfirmModal(item)}>{item.price == 0 ? "Get for free" : "Buy"}</button>
+                                                                                                                <button type="button" className="btn btn-warning" style={{ color: 'white', height: 40, margin: 'auto', borderColor: 'transparent' }} onClick={() => {
+                                                                                                                    setConfirmModal(item)
+                                                                                                                }}>{item.price == 0 ? "Get for free" : "Buy"}</button>
                                                                                                                 :
                                                                                                                 <>
-                                                                                                                    <button type="button" className="btn btn-warning" style={{ color: 'white', height: 40, margin: 'auto 12px 0 0', borderColor: 'transparent !important' }} disabled={true}>Buy</button>
+                                                                                                                    <button type="button" className="btn btn-warning" style={{ color: 'white', height: 40, margin: 'auto', borderColor: 'transparent' }} disabled={true}>Buy</button>
                                                                                                                     <label>Not enough coins</label>
                                                                                                                 </>
                                                                                                         )
@@ -259,7 +271,6 @@ export default function ShopPage({ user, url }) {
                                                                         </tbody>
                                                                     </table>
                                                                 </div>
-
                                                             </div>
                                                         </div>
                                                     </div>
@@ -278,7 +289,7 @@ export default function ShopPage({ user, url }) {
                                                 <div className="card-body">
                                                     <h3><b>Top Up Assistants Coins</b></h3>
                                                     {
-                                                        items && coins != null && setSelected ?
+                                                        (items && coins != null && setSelected) ?
                                                             <div className={"pt-3"}>
                                                                 <div className="form-group">
                                                                     <label htmlFor="exampleFormControlSelect2">Currency</label>
@@ -351,108 +362,105 @@ export default function ShopPage({ user, url }) {
                                                             :
                                                             <h1>Loading...</h1>
                                                     }
-
-
-
-                                                    <div id="confirmModal" className="modal" style={{ display: confirmModal ? 'block' : 'none' }} onClick={(event) => {
-                                                        if (event.target.id == "confirmModal") {
-                                                            setConfirmModal(null)
-                                                        }
-                                                    }}>
-                                                        {
-                                                            confirmModal?.name &&
-                                                            <div className="modal-content" style={{ borderRadius: 15 }}>
-                                                                <div className="card card-rounded">
-                                                                    <div className="card-body">
-                                                                        <h3><b>Confirm Purchase</b></h3>
-
-                                                                        <hr />
-
-                                                                        <h4><b>{confirmModal.name}</b></h4>
-                                                                        <h6>{confirmModal.description}</h6>
-
-                                                                        <hr />
-
-                                                                        <h6>Cost: <b>{confirmModal.price}</b></h6>
-                                                                        <h6>Your AC coins after purchase: <b>{coins} - {confirmModal.price} = {Number(coins) - confirmModal.price}</b></h6>
-
-                                                                        <div className={"d-flex"} style={{}}>
-                                                                            <div style={{ paddingTop: 15 }}>
-                                                                                <button type="button"
-                                                                                    className="btn btn-primary btn-icon-text"
-                                                                                    onClick={() => buyDigitalItem(confirmModal.id)}
-                                                                                    style={{ color: 'white', height: '50px', fontSize: '16px', justifyContent: 'center', display: 'flex', borderColor: 'transparent !important' }}
-                                                                                >
-                                                                                    Purchase
-                                                                                </button>
-                                                                            </div>
-                                                                            <div style={{ paddingTop: 15 }}>
-                                                                                <button type="button"
-                                                                                    className="btn btn-danger btn-icon-text"
-                                                                                    onClick={() => setConfirmModal(null)}
-                                                                                    style={{ color: 'white', height: '50px', fontSize: '16px', justifyContent: 'center', display: 'flex', borderColor: 'transparent !important' }}
-                                                                                >
-                                                                                    Cancel
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        }
-                                                    </div>
-
-                                                    <div id="itemBoughtModal" className="modal" style={{ display: itemBought ? 'block' : 'none' }} onClick={(event) => {
-                                                        if (event.target.id == "itemBoughtModal") {
-                                                            setItemBought(null)
-                                                        }
-                                                    }}>
-                                                        {
-                                                            itemBought?.name &&
-                                                            <div className="modal-content" style={{ borderRadius: 15 }}>
-                                                                <div className="card card-rounded">
-                                                                    <div className="card-body">
-                                                                        <h3><b>You have bought an item</b></h3>
-
-                                                                        <hr />
-
-                                                                        <h4><b>{itemBought.name}</b></h4>
-                                                                        <h6>{itemBought.description}</h6>
-
-                                                                        <hr />
-
-                                                                        <div className={"d-flex"} style={{}}>
-
-                                                                            {
-                                                                                itemBought.aho?.type === 'redirect' &&
-                                                                                <div style={{ paddingTop: 15 }}>
-                                                                                    <button type="button"
-                                                                                        className="btn btn-info btn-icon-text"
-                                                                                        onClick={() => Router.push(itemBought.aho.url)}
-                                                                                        style={{ color: 'white', height: '50px', fontSize: '16px', justifyContent: 'center', display: 'flex', borderColor: 'transparent !important' }}
-                                                                                    >
-                                                                                        View
-                                                                                    </button>
-                                                                                </div>
-                                                                            }
-                                                                            <div style={{ paddingTop: 15 }}>
-                                                                                <button type="button"
-                                                                                    className="btn btn-primary btn-icon-text"
-                                                                                    onClick={() => setItemBought(null)}
-                                                                                    style={{ color: 'white', height: '50px', fontSize: '16px', justifyContent: 'center', display: 'flex', borderColor: 'transparent !important' }}
-                                                                                >
-                                                                                    Okay
-                                                                                </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        }
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div id="confirmModal" className="modal" style={{ display: confirmModal ? 'block' : 'none' }} onClick={(event) => {
+                                        if (event.target.id == "confirmModal") {
+                                            setConfirmModal(null)
+                                        }
+                                    }}>
+                                        {
+                                            (confirmModal?.name && coins != null) &&
+                                            <div className="modal-content" style={{ borderRadius: 15 }}>
+                                                <div className="card card-rounded">
+                                                    <div className="card-body">
+                                                        <h3><b>Confirm Purchase</b></h3>
+
+                                                        <hr />
+
+                                                        <h4><b>{confirmModal.name}</b></h4>
+                                                        <h6>{confirmModal.description}</h6>
+
+                                                        <hr />
+
+                                                        <h6>Cost: <b>{confirmModal.price}</b></h6>
+                                                        <h6>Your AC coins after purchase: <b>{coins} - {confirmModal.price} = {Number(coins) - confirmModal.price}</b></h6>
+
+                                                        <div className={"d-flex"} style={{}}>
+                                                            <div style={{ paddingTop: 15 }}>
+                                                                <button type="button"
+                                                                    className="btn btn-primary btn-icon-text"
+                                                                    onClick={() => buyDigitalItem(confirmModal.id)}
+                                                                    style={{ color: 'white', height: '50px', fontSize: '16px', justifyContent: 'center', display: 'flex', borderColor: 'transparent !important' }}
+                                                                >
+                                                                    Purchase
+                                                                </button>
+                                                            </div>
+                                                            <div style={{ paddingTop: 15 }}>
+                                                                <button type="button"
+                                                                    className="btn btn-danger btn-icon-text"
+                                                                    onClick={() => setConfirmModal(null)}
+                                                                    style={{ color: 'white', height: '50px', fontSize: '16px', justifyContent: 'center', display: 'flex', borderColor: 'transparent !important' }}
+                                                                >
+                                                                    Cancel
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+
+                                    <div id="itemBoughtModal" className="modal" style={{ display: itemBought ? 'block' : 'none' }} onClick={(event) => {
+                                        if (event.target.id == "itemBoughtModal") {
+                                            setItemBought(null)
+                                        }
+                                    }}>
+                                        {
+                                            itemBought?.name &&
+                                            <div className="modal-content" style={{ borderRadius: 15 }}>
+                                                <div className="card card-rounded">
+                                                    <div className="card-body">
+                                                        <h3><b>You have bought an item</b></h3>
+
+                                                        <hr />
+
+                                                        <h4><b>{itemBought.name}</b></h4>
+                                                        <h6>{itemBought.description}</h6>
+
+                                                        <hr />
+
+                                                        <div className={"d-flex"} style={{}}>
+
+                                                            {
+                                                                itemBought.aho?.type === 'redirect' &&
+                                                                <div style={{ paddingTop: 15 }}>
+                                                                    <button type="button"
+                                                                        className="btn btn-info btn-icon-text"
+                                                                        onClick={() => Router.push(itemBought.aho.url)}
+                                                                        style={{ color: 'white', height: '50px', fontSize: '16px', justifyContent: 'center', display: 'flex', borderColor: 'transparent !important' }}
+                                                                    >
+                                                                        View
+                                                                    </button>
+                                                                </div>
+                                                            }
+                                                            <div style={{ paddingTop: 15 }}>
+                                                                <button type="button"
+                                                                    className="btn btn-primary btn-icon-text"
+                                                                    onClick={() => setItemBought(null)}
+                                                                    style={{ color: 'white', height: '50px', fontSize: '16px', justifyContent: 'center', display: 'flex', borderColor: 'transparent !important' }}
+                                                                >
+                                                                    Okay
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
                                     </div>
                                 </div>
                             </div>
