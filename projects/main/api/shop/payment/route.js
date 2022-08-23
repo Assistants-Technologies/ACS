@@ -16,6 +16,7 @@ const stripe = new Stripe((process.env.DEVELOPMENT_CHANNEL === "TRUE" || process
 const ShopPayment = require('../../../../../models/Shop/payment')
 const CheckoutSession = require('../../../../../models/Shop/checkoutSession')
 const User = require('../../../../../models/user')
+const Partnership = require('../../../../../models/partnership')
 
 router.get('/create', async (req, res) => {
     if(!req.session?.user){
@@ -24,7 +25,14 @@ router.get('/create', async (req, res) => {
             message: "Not authenticated"
         })
     }
-    const { items: itemsFromQuery, currency } = req?.query;
+    const { items: itemsFromQuery, currency, referral_code } = req?.query;
+
+    let partner_user
+    if(referral_code){
+        partner_user = await Partnership.findOne({
+            user_partnership_id: referral_code
+        })
+    }
 
     const currenciesList = Object.keys(paymentTypes);
     if(!currenciesList.includes(currency)) {
@@ -99,6 +107,7 @@ router.get('/create', async (req, res) => {
 
     await CheckoutSession.create({
         user: req.session.user._id,
+        partner_supported: partner_user ? partner_user.user : undefined,
         item_type: 'item',
         session_data: session,
         items_ids: itemsList,
