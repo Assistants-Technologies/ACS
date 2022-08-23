@@ -3,7 +3,7 @@ const {
     Schema
 } = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
-// branch test
+
 const userSchema = new Schema({
     account_access_token: {
         type: String,
