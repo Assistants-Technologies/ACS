@@ -69,10 +69,8 @@ router.route('/')
                 if(!sub)break
 
                 const user_from_sub = await DiscordDashboard.findOne({'plan.subscription.id': sub})
-                if(!user_from_sub){
-                    console.log('no user from sub')
-                    break
-                }
+                if(!user_from_sub)console.log('no user from sub')
+                if(!user_from_sub) break
 
                 const SessionSubscription = await CheckoutSession.findOne({
                     _id: user_from_sub.session._id
