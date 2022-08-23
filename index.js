@@ -33,7 +33,7 @@ const createApp = () => {
             server.use(vhost(vhostHost ? `${vhostHost}.${domain}` : domain, vhostApp))
         }
 
-        server.listen(3000)
+        server.listen(process.env.PORT)
     }else{
         for (const vhostName of vhostList) {
             const vhost = require(`./projects/${vhostName}/vhost.js`).vhost({next_app, next_handle, client})
