@@ -84,6 +84,13 @@ const vhost = ({next_app, next_handle, client}) => {
 
     app.use('/api', apiLimiter, APIRoute)
 
+    app.use((req,res,next)=>{
+        const {referral_code} = req.query
+        if(referral_code)req.session.referral_code = referral_code
+
+        next()
+    })
+
     app.use('/admin', require('./admin'))
 
     app.get('/', (req,res)=>{
@@ -162,7 +169,8 @@ const vhost = ({next_app, next_handle, client}) => {
 
         return next_app.render(req, res, '/shop', {
             url: req.url,
-            user: req.session.user
+            user: req.session.user,
+            preloadedReferralCode: req.session?.referral_code || null
         })
     })
 
