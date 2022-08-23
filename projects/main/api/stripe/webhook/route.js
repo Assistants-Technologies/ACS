@@ -27,6 +27,7 @@ const ShopPayment = require('../../../../../models/Shop/payment')
 const CheckoutSession = require('../../../../../models/Shop/checkoutSession')
 const DiscordDashboard = require('../../../../../models/discordDashboard')
 const User = require('../../../../../models/user')
+const Partnership = require('../../../../../models/partnership')
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET
 
@@ -88,9 +89,32 @@ router.route('/')
 
                 if(SessionAsyncData.session_finished_data)break
 
+                let partner_user_async
+                if(SessionAsyncData.partner_supported){
+                    partner_user = await Partnership.findOne({
+                        user: SessionAsyncData.partner_supported
+                    })
+                }
+
                 if(SessionAsyncData.item_type == 'item'){
                     for(const item of SessionAsyncData.items_ids) {
                         await items.find(e=>e.id==item).assign_item({ session: checkoutAsyncIntent, user_id: SessionAsyncData.user })
+                        if(partner_user_async){
+                            partner_user_async.user_partnership_actions.push({
+                                action_type: "purchase",
+                                action_target: {
+                                    target_type: "item",
+                                    target_id: items.find(e=>e.id==item).id,
+                                    target_currency: checkoutAsyncIntent.currency.toUpperCase(),
+                                    target_price: checkoutAsyncIntent.amount_subtotal,
+                                },
+                                action_checkout_session_id: SessionAsyncData._id,
+                            })
+                        }
+                    }
+
+                    if(partner_user_async){
+                        await partner_user.save()
                     }
 
                     SessionAsyncData.session_finished_data = checkoutAsyncIntent
@@ -119,9 +143,32 @@ router.route('/')
 
                 if(SessionData.session_finished_data)break
 
+                let partner_user
+                if(SessionData.partner_supported){
+                    partner_user = await Partnership.findOne({
+                        user: SessionData.partner_supported
+                    })
+                }
+
                 if(SessionData.item_type == 'item'){
                     for(const item of SessionData.items_ids) {
                         await items.find(e=>e.id==item).assign_item({ session: checkoutIntent, user_id: SessionData.user })
+                        if(partner_user){
+                            partner_user.user_partnership_actions.push({
+                                action_type: "purchase",
+                                action_target: {
+                                    target_type: "item",
+                                    target_id: items.find(e=>e.id==item).id,
+                                    target_currency: checkoutIntent.currency.toUpperCase(),
+                                    target_price: checkoutIntent.amount_subtotal,
+                                },
+                                action_checkout_session_id: SessionData._id,
+                            })
+                        }
+                    }
+
+                    if(partner_user){
+                        await partner_user.save()
                     }
 
                     SessionData.session_finished_data = checkoutIntent
@@ -134,11 +181,12 @@ router.route('/')
 
                     SessionData.session_finished_data = checkoutIntent
                     await SessionData.save()
-                }
-                try{
-                    client.guilds.cache.get(process.env.DISCORD_GUILD_ID).channels.cache.get(process.env.DISCORD_LOGS_CHANNEL_ID).send(`Subscription created for ${SessionData.user} using instant payment`)
-                }catch(err){
-                    console.log(err)
+
+                    try{
+                        client.guilds.cache.get(process.env.DISCORD_GUILD_ID).channels.cache.get(process.env.DISCORD_LOGS_CHANNEL_ID).send(`Subscription created for ${SessionData.user} using instant payment`)
+                    }catch(err){
+                        console.log(err)
+                    }
                 }
 
                 break

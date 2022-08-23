@@ -10,5 +10,6 @@ router.use('/user', require('./user/route'))
 router.use('/discord-dashboard', require('./discord-dashboard/route'))
 
 router.use('/stripe', require('./stripe/route'))
+router.use('/partnership', require('./partnership/route'))
 
 module.exports = router

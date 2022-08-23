@@ -10,6 +10,12 @@ const checkoutSessionSchema = new Schema(
             ref: 'User',
             required: true,
         },
+        partner_supported: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: false,
+            sparse: true
+        },
         item_type: {
             type: String,
             default: 'item', // item or subscription
