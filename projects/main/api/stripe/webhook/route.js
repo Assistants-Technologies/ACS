@@ -66,11 +66,15 @@ router.route('/')
             case 'invoice.paid':
                 const invoiceIntent = event.data.object
                 const sub = invoiceIntent.subscription
-                if(!sub)break
+
+                const sub_info = await stripe.subscriptions.retrieve(sub)
+                if(!sub_info)break
+
+                if(sub_info.current_period_start == sub_info.start_date)break
 
                 const user_from_sub = await DiscordDashboard.findOne({'plan.subscription.id': sub})
                 if(!user_from_sub)console.log('no user from sub')
-                if(!user_from_sub) break
+                if(!user_from_sub)break
 
                 const SessionSubscription = await CheckoutSession.findOne({
                     _id: user_from_sub.session._id
