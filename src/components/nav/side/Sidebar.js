@@ -81,6 +81,18 @@ export default function Sidebar ({ user }) {
                     </a>
                 </li>
 
+                <li className="nav-item nav-category">Partnership</li>
+
+                <li className={`nav-item${asPath.startsWith('/partnership')?' active':''}`}>
+                    <a className="nav-link" href="/partnership">
+                        <i className="mdi mdi-human-handsup menu-icon" />
+                        <span className="menu-title">Partnership Program</span>
+                    </a>
+                </li>
+
+
+
+
 
                 {
                     user?.username ?
