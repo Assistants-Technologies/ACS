@@ -1,7 +1,7 @@
 import React from 'react'
 import Router from 'next/router'
 
-export default function LoginForm({ parameter, setParameter, password, setPassword, loginSubmitted, setMethod, setError, error, back_redirect }) {
+export default function LoginForm({ parameter, setParameter, password, setPassword, loginSubmitted, setMethod, setError, error }) {
     return (
         <div className="col-lg-4 mx-auto">
             <div className="auth-form-light text-left py-5 px-4 px-sm-5">
@@ -52,7 +52,7 @@ export default function LoginForm({ parameter, setParameter, password, setPasswo
                         <button
                             type="button"
                             className="btn btn-block btn-facebook auth-form-btn"
-                            onClick={()=>Router.push(`/api/auth/discord/authorize?back_redirect=${back_redirect || '/'}`)}
+                            onClick={()=>Router.push(`/api/auth/discord/authorize`)}
                             style={{marginRight:2,background: '#7289d9'}}
                         >
                             <img src="images/discord-icon.png" style={{width:25,paddingRight:5}}/>
@@ -62,7 +62,7 @@ export default function LoginForm({ parameter, setParameter, password, setPasswo
                             type="button"
                             className="btn btn-block btn-facebook auth-form-btn"
                             style={{background:'#1DA1F2',marginLeft:2}}
-                            onClick={()=>Router.push(`/api/auth/twitter/authorize?back_redirect=${back_redirect || '/'}`)}
+                            onClick={()=>Router.push(`/api/auth/twitter/authorize`)}
                         >
                             <img src="images/twitterlogo.png" style={{width:25,paddingRight:5}}/>
                             Continue using Twitter

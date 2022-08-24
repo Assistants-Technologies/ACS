@@ -142,14 +142,16 @@ const vhost = ({next_app, next_handle, client}) => {
     })
 
     app.get('/auth', (req,res) => {
-        const { back_redirect } = req?.query
+        const {back_redirect, redirect_back} = req.query
+        if(back_redirect || redirect_back){
+            req.session.back_redirect = back_redirect || redirect_back
+        }
+        const back_redirect_n = req.session.back_redirect
 
-        if(req.session?.user)return res.status(401).redirect(back_redirect || '/')
-
-        req.session.back_redirect = back_redirect || '/'
+        if(req.session?.user)return res.status(401).redirect(back_redirect_n)
         return next_app.render(req, res, '/auth', {
             url: req.url,
-            back_redirect: back_redirect || '/'
+            back_redirect: back_redirect_n
         })
     })
 
@@ -198,7 +200,7 @@ const vhost = ({next_app, next_handle, client}) => {
 
     app.get('/dashboard', (req,res)=>{
         if(!req.session.user)
-            return res.redirect('/auth?back_redirect=/dashboard')
+            return res.redirect('/auth')
 
         return next_app.render(req, res, '/dashboard', {
             url: req.url,
@@ -279,6 +281,15 @@ const vhost = ({next_app, next_handle, client}) => {
                 updatedAt: new Date(ProjectData.updatedAt).toLocaleDateString(),
             },
         })
+    })
+
+    app.get('/partnership', async (req, res) => {
+        if(!req.session.user)
+            return res.redirect('/auth?back_redirect=/partnership')
+            return next_app.render(req, res, '/partnership', {
+                url: req.url,
+                user: req.session.user,
+            })
     })
 
     app.use(express.static(path.join(__dirname, './public'), ))

@@ -10,10 +10,11 @@ import RegisterForm from '../components/auth/RegisterForm'
 import IsBeta from '../isBeta'
 
 export async function getServerSideProps(context) {
+    console.log('cqbr', context.query.back_redirect)
     return {
         props: {
             url: context.query.url.split('?')[0],
-            back_redirect: context.query.back_redirect,
+            back_redirect: context.query.back_redirect || '/',
         },
     }
 }
@@ -26,8 +27,6 @@ export default function AuthPage ({ url, back_redirect }) {
             ud_s += '../'
         }
     }
-
-    const router = useRouter()
 
     const [method, setMethod] = React.useState('login')
 
@@ -125,8 +124,6 @@ export default function AuthPage ({ url, back_redirect }) {
                                         setMethod={setMethod}
                                         error={error}
                                         setError={setError}
-
-                                        back_redirect={back_redirect}
                                     />
                                     :
                                     <RegisterForm
@@ -142,8 +139,6 @@ export default function AuthPage ({ url, back_redirect }) {
                                         setMethod={setMethod}
                                         error={error}
                                         setError={setError}
-
-                                        back_redirect={back_redirect}
                                     />
                             }
                         </div>
