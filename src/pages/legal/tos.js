@@ -52,6 +52,7 @@ export default function TestPage ({ user, url }) {
                 />
                 <link rel="stylesheet" href={`${ud_s}js/select.dataTables.min.css`} />
                 <link rel="stylesheet" href={`${ud_s}css/vertical-layout-light/style.css`} />
+                <script type="text/javascript" dangerouslySetInnerHTML={{ __html: `!function(){var e=document.createElement("script");e.type="text/javascript",e.src="https://global.ketchcdn.com/web/v2/config/assistantscenter/website_smart_tag/boot.js",e.defer=e.async=!0,document.getElementsByTagName("head")[0].appendChild(e),window.semaphore=window.semaphore||[]}();` }}></script>
                 {
                     IsBeta ?
                         <link rel="shortcut icon" href={`${ud_s}images/favicon.png`} />

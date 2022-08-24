@@ -89,6 +89,7 @@ export default function ShopPage ({ user, url, connections, query, email }) {
                 href={`${ud_s}vendors/datatables.net-bs4/dataTables.bootstrap4.css`}
             />
             <link rel="stylesheet" href={`${ud_s}js/select.dataTables.min.css`} />
+            <script type="text/javascript" dangerouslySetInnerHTML={{ __html: `!function(){var e=document.createElement("script");e.type="text/javascript",e.src="https://global.ketchcdn.com/web/v2/config/assistantscenter/website_smart_tag/boot.js",e.defer=e.async=!0,document.getElementsByTagName("head")[0].appendChild(e),window.semaphore=window.semaphore||[]}();` }}></script>
             <link rel="stylesheet" href={`${ud_s}css/vertical-layout-light/style.css`} />
             {
                     IsBeta ?
