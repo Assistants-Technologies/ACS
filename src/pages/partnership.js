@@ -236,7 +236,7 @@ background-color: rgba(0,0,0,0.4);
                                                 <div className="card card-rounded">
                                                     <div className="card-body">
                                                         <h4 className="card-title" style={{color:"red"}}>The data on this site is confidential</h4>
-                                                        <p style={{fontSize:16}}>Keep in mind that all data available on this site is confidential, and ubulling it may end up blocking access to the Partnership Program.</p>
+                                                        <p style={{fontSize:16}}>Keep in mind that all data available on this site is confidential, and making it public it may end up blocking access to the Partnership Program.</p>
                                                     </div>
                                                 </div>
                                             </div>

@@ -148,7 +148,7 @@ const vhost = ({next_app, next_handle, client}) => {
         }
         const back_redirect_n = req.session.back_redirect
 
-        if(req.session?.user)return res.status(401).redirect(back_redirect)
+        if(req.session?.user)return res.status(401).redirect(back_redirect_n)
         return next_app.render(req, res, '/auth', {
             url: req.url,
             back_redirect: back_redirect_n
