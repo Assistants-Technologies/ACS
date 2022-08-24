@@ -28,9 +28,7 @@ router.get('/authorize', async(req,res)=>{
         url,
         codeVerifier,
         state,
-        back_redirect: req.session.back_redirect || req.query.back_redirect || '/',
     }
-    req.session.back_redirect = null
     await req.session.save()
     res.redirect(url)
 })
@@ -44,16 +42,15 @@ router.get('/connect', async(req,res)=>{
             url,
             codeVerifier,
             state,
-            back_redirect: req.session.back_redirect || req.query.back_redirect || '/',
         }
-    req.session.back_redirect = null
     await req.session.save()
     res.redirect(url)
 })
 
 router.get('/callback', (req, res) => {
+    const back_redirect = req.session.back_redirect
     const { state, code } = req.query
-    const { url, codeVerifier, state: sessionState, back_redirect, mode } = req.session.oauth_twitter
+    const { url, codeVerifier, state: sessionState,  mode } = req.session.oauth_twitter
     req.session.oauth_twitter = null
 
     if (!codeVerifier || !state || !sessionState || !code) {

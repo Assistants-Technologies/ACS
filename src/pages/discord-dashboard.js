@@ -28,7 +28,7 @@ export default function TestPage ({ user, url }) {
         }
     }
 
-    const title = `${IsBeta ? 'BETA | ' : ''}Assistants Center - iscord Dashboard v3`
+    const title = `${IsBeta ? 'BETA | ' : ''}Assistants Center - Discord Dashboard v3`
 
     return (
         <>
