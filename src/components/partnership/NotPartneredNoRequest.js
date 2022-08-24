@@ -85,7 +85,7 @@ export default function NotPartneredNoRequest({
 
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">What should your partner code look like? Use 4-15 characters</label>
-                                    <input type="email" 
+                                    <input type="text" 
                                         class="form-control" 
                                         id="exampleInputEmail1" 
                                         placeholder="Partner code"
