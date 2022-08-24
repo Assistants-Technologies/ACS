@@ -109,6 +109,7 @@ router.post('/apply', async (req,res)=>{
         user: req.session.user._id,
         about: about,
         code_requested: code_requested,
+        email
     })
 
     return res.send({error:false})
