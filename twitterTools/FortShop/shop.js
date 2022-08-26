@@ -9,7 +9,8 @@ const moment = require("moment")
 const date = moment().format("dddd, MMMM Do YYYY")
 const path = require('path')
 
-const { CanvasCompress } = require('canvas-compress')
+const {imagemin} = require('imagemin')
+const imageminPngquant = require('imagemin-pngquant')
 
 module.exports = {
 	/**
@@ -213,21 +214,16 @@ module.exports = {
 		}
 
 		// Gen buf
-		const buf = canvas.toBuffer("image/png");
+		let buf = canvas.toBuffer("image/png");
 
-		const compressor = new CanvasCompress({
-			type: CanvasCompress.MIME.PNG,
-			width: canvas.width*0.8,
-			height: canvas.height*0.8,
-			quality: 0.8,
-		});
+		buf = await imagemin.buffer(buf, {
+			plugins: [
+				imageminPngquant()
+			]
+		})
 
-		const { source, result } = await compressor.process(buf)
-		const { blob, width, height } = result
-		return blob
-
-		/*// Return path
-		return buf;*/
+		// Return path
+		return buf;
 	},
 
 	/**
