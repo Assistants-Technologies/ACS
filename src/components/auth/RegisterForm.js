@@ -1,7 +1,7 @@
 import React from 'react'
 import Router from 'next/router'
 
-export default function RegisterForm({ username, setUsername, email, setEmail, password, setPassword, registerSubmitted, setMethod, setError, error, back_redirect }) {
+export default function RegisterForm({ username, setUsername, email, setEmail, password, setPassword, registerSubmitted, setMethod, setError, error, }) {
     const [ppTos, setPpTos] = React.useState(false)
     
     return (

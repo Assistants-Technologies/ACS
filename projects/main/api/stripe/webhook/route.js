@@ -118,6 +118,7 @@ router.route('/')
                                     target_currency: checkoutAsyncIntent.currency.toUpperCase(),
                                     target_price: checkoutAsyncIntent.amount_subtotal,
                                 },
+                                action_date: new Date(),
                                 action_checkout_session_id: SessionAsyncData._id,
                             })
                         }
@@ -172,6 +173,7 @@ router.route('/')
                                     target_currency: checkoutIntent.currency.toUpperCase(),
                                     target_price: checkoutIntent.amount_subtotal,
                                 },
+                                action_date: new Date(),
                                 action_checkout_session_id: SessionData._id,
                             })
                         }

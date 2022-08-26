@@ -28,9 +28,7 @@ router.get('/authorize', async(req,res)=>{
         url,
         codeVerifier,
         state,
-        back_redirect: req.session.back_redirect || req.query.back_redirect || '/',
     }
-    req.session.back_redirect = null
     await req.session.save()
     res.redirect(url)
 })
@@ -44,16 +42,15 @@ router.get('/connect', async(req,res)=>{
             url,
             codeVerifier,
             state,
-            back_redirect: req.session.back_redirect || req.query.back_redirect || '/',
         }
-    req.session.back_redirect = null
     await req.session.save()
     res.redirect(url)
 })
 
 router.get('/callback', (req, res) => {
+    const back_redirect = req.session.back_redirect
     const { state, code } = req.query
-    const { url, codeVerifier, state: sessionState, back_redirect, mode } = req.session.oauth_twitter
+    const { url, codeVerifier, state: sessionState,  mode } = req.session.oauth_twitter
     req.session.oauth_twitter = null
 
     if (!codeVerifier || !state || !sessionState || !code) {
@@ -96,10 +93,7 @@ router.get('/callback', (req, res) => {
                     }
                 }
             }else{
-                if(user){
-                    if(user._id == req.session.user._id){
-                        return res.redirect('/profile?error=Requested Twitter account is already connected with your ACS account.')
-                    }
+                if(user && (user._id != req.session.user._id)){
                     return res.redirect('/profile?error=Requested Twitter account is already connected to another ACS account.')
                 }else{
                     const ThisUser = await User.findOne({
@@ -124,7 +118,7 @@ router.get('/callback', (req, res) => {
                     refresh_token: CryptoJS.AES.encrypt(refreshToken, process.env.TWITTER_ENCODE_KEY).toString()
                 })
             }
-            return res.redirect(back_redirect)
+            return res.redirect(decodeURI(back_redirect))
         })
         .catch((e) => {
             res.status(403).send('Invalid verifier or access tokens!')

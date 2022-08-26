@@ -10,10 +10,11 @@ import RegisterForm from '../components/auth/RegisterForm'
 import IsBeta from '../isBeta'
 
 export async function getServerSideProps(context) {
+    console.log('cqbr', context.query.back_redirect)
     return {
         props: {
             url: context.query.url.split('?')[0],
-            back_redirect: context.query.back_redirect,
+            back_redirect: context.query.back_redirect || '/',
         },
     }
 }
@@ -26,8 +27,6 @@ export default function AuthPage ({ url, back_redirect }) {
             ud_s += '../'
         }
     }
-
-    const router = useRouter()
 
     const [method, setMethod] = React.useState('login')
 
@@ -88,6 +87,7 @@ export default function AuthPage ({ url, back_redirect }) {
                 content="width=device-width, initial-scale=1, shrink-to-fit=no"
             />
             <title>{title}</title>
+            <script type="text/javascript" dangerouslySetInnerHTML={{ __html: `!function(){var e=document.createElement("script");e.type="text/javascript",e.src="https://global.ketchcdn.com/web/v2/config/assistantscenter/website_smart_tag/boot.js",e.defer=e.async=!0,document.getElementsByTagName("head")[0].appendChild(e),window.semaphore=window.semaphore||[]}();` }}></script>
             <link rel="stylesheet" href={`${ud_s}vendors/feather/feather.css`} />
             <link
                 rel="stylesheet"
@@ -125,8 +125,6 @@ export default function AuthPage ({ url, back_redirect }) {
                                         setMethod={setMethod}
                                         error={error}
                                         setError={setError}
-
-                                        back_redirect={back_redirect}
                                     />
                                     :
                                     <RegisterForm
@@ -142,8 +140,6 @@ export default function AuthPage ({ url, back_redirect }) {
                                         setMethod={setMethod}
                                         error={error}
                                         setError={setError}
-
-                                        back_redirect={back_redirect}
                                     />
                             }
                         </div>

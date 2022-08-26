@@ -25,9 +25,7 @@ router.get('/authorize', async(req,res)=>{
     });
     req.session.oauth_discord = {
         mode: 'authorize',
-        back_redirect: req.session.back_redirect || req.query.back_redirect || '/',
     }
-    req.session.back_redirect = null
     await req.session.save()
     res.redirect(url)
 })
@@ -40,16 +38,15 @@ router.get('/connect', async(req,res)=>{
     });
     req.session.oauth_discord = {
         mode: 'connect',
-        back_redirect: req.session.back_redirect || req.query.back_redirect || '/',
     }
-    req.session.back_redirect = null
     await req.session.save()
     res.redirect(url)
 })
 
 router.get('/callback', async(req,res)=>{
+    const back_redirect = req.session.back_redirect
     const { code } = req.query;
-    const { mode, back_redirect } = req.session.oauth_discord;
+    const { mode  } = req.session.oauth_discord
     req.session.oauth_discord = null;
     if (!code || !mode) {
         return res.redirect('/?error=' + 'You denied the app or your session expired!');
@@ -116,7 +113,7 @@ router.get('/callback', async(req,res)=>{
         }
     }
 
-    return res.redirect(back_redirect)
+    return res.redirect(decodeURI(back_redirect))
 })
 
 module.exports = router
