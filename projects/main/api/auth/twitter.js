@@ -118,7 +118,7 @@ router.get('/callback', (req, res) => {
                     refresh_token: CryptoJS.AES.encrypt(refreshToken, process.env.TWITTER_ENCODE_KEY).toString()
                 })
             }
-            return res.redirect(back_redirect)
+            return res.redirect(decodeURI(back_redirect))
         })
         .catch((e) => {
             res.status(403).send('Invalid verifier or access tokens!')

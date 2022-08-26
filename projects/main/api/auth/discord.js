@@ -113,7 +113,7 @@ router.get('/callback', async(req,res)=>{
         }
     }
 
-    return res.redirect(back_redirect)
+    return res.redirect(decodeURI(back_redirect))
 })
 
 module.exports = router
