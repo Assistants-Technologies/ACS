@@ -1038,6 +1038,13 @@ caniuse-lite@^1.0.30001332, caniuse-lite@^1.0.30001370:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001373.tgz#2dc3bc3bfcb5d5a929bec11300883040d7b4b4be"
   integrity sha512-pJYArGHrPp3TUqQzFYRmP/lwJlj8RCbVe3Gd3eJQkAV8SAC6b19XS9BjMvRdvaS8RMkaTN8ZhoHP6S1y8zzwEQ==
 
+canvas-compress@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.yarnpkg.com/canvas-compress/-/canvas-compress-1.1.5.tgz#cf134433ddaf699ed3724d835fdf7621f6ccb877"
+  integrity sha512-/PKXbSVT94Qb3/OsCXab/eOy9W02ExavwTmlJPW7IJWxmATUj4HtpdGxM9omyV0QUMd8aaNujy8n/1ttb87kqQ==
+  dependencies:
+    exif-js "^2.1.1"
+
 canvas@^2.9.3:
   version "2.9.3"
   resolved "https://registry.yarnpkg.com/canvas/-/canvas-2.9.3.tgz#8723c4f970442d4cdcedba5221579f9660a58bdb"
@@ -1983,6 +1990,11 @@ events@^3.2.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/events/-/events-3.3.0.tgz#31a95ad0a924e2d2c419a813aeb2c4e878ea7400"
   integrity sha512-mQw+2fkQbALzQ7V0MY0IqdnXNOeTtP4r0lN9z7AAawCXgqea7bDii20AYrIBrFd/Hx0M2Ocz6S111CaFkUcb0Q==
+
+exif-js@^2.1.1:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/exif-js/-/exif-js-2.3.0.tgz#9d10819bf571f873813e7640241255ab9ce1a814"
+  integrity sha512-1Og9pAzG2FZRVlaavH8bB8BTeHcjMdJhKmeQITkX+uLRCD0xPtKAdZ2clZmQdJ56p9adXtJ8+jwrGp/4505lYg==
 
 expand-template@^2.0.3:
   version "2.0.3"

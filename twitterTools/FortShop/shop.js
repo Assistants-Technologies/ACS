@@ -9,6 +9,8 @@ const moment = require("moment")
 const date = moment().format("dddd, MMMM Do YYYY")
 const path = require('path')
 
+const { CanvasCompress } = require('canvas-compress')
+
 module.exports = {
 	/**
 	 * Generates the shop image in a design similar to the in-game design.
@@ -213,8 +215,19 @@ module.exports = {
 		// Gen buf
 		const buf = canvas.toBuffer("image/png");
 
-		// Return path
-		return buf;
+		const compressor = new CanvasCompress({
+			type: CanvasCompress.MIME.PNG,
+			width: canvas.width*0.8,
+			height: canvas.height*0.8,
+			quality: 0.8,
+		});
+
+		const { source, result } = await compressor.process(buf)
+		const { blob, width, height } = result
+		return blob
+
+		/*// Return path
+		return buf;*/
 	},
 
 	/**
