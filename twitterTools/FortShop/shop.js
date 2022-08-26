@@ -16,7 +16,7 @@ module.exports = {
 	 * Generates the shop image in a design similar to the in-game design.
 	 */
 	async generateShop(shop, watermark="Use code ASSISTANTS") {
-		const {imagemin} = await import('imagemin')
+		const imagemin = await import('imagemin')
 
 		// Font
 		registerFont(path.join(__dirname, "./assets/fonts/BurbankBigRegularBlack.otf"), {
@@ -219,7 +219,7 @@ module.exports = {
 		// Gen buf
 		let buf = canvas.toBuffer("image/png");
 
-		buf = await imagemin.buffer(buf, {
+		buf = await imagemin.default.buffer(buf, {
 			plugins: [
 				imageminPngquant()
 			]
