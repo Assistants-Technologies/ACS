@@ -228,10 +228,11 @@ module.exports = {
 			cw = Math.round((chBefore/4096)/cw)
 		}
 
+		console.log(cw, ch)
+
 		buf = await imagemin.default.buffer(buf, {
 			plugins: [
 				imageminGm.resize({ width: cw, height: ch, gravity: 'Center' }),
-				imageminPngquant()
 			]
 		}).catch(console.error)
 
