@@ -219,15 +219,18 @@ module.exports = {
 		// Gen buf
 		let buf = canvas.toBuffer("image/png");
 
-		if(canvas.height > 4096){
-			let canvasHeightBefore = canvas.height
-			canvas.height = 4096
-			canvas.width = Math.round((canvasHeightBefore/4096)/canvasWidth)
+		let cw = canvas.width
+		let ch = canvas.height
+
+		if(ch > 4096){
+			let chBefore = canvas.height
+			ch = 4096
+			cw = Math.round((chBefore/4096)/cw)
 		}
 
 		buf = await imagemin.default.buffer(buf, {
 			plugins: [
-				imageminGm.resize({ width: canvas.width>4096?, height: 250, gravity: 'Center' }),
+				imageminGm.resize({ width: cw, height: ch, gravity: 'Center' }),
 				imageminPngquant()
 			]
 		}).catch(console.error)
