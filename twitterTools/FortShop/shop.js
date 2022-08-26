@@ -9,7 +9,6 @@ const moment = require("moment")
 const date = moment().format("dddd, MMMM Do YYYY")
 const path = require('path')
 
-const imagemin = await import('imagemin')
 const imageminPngquant = require('imagemin-pngquant')
 
 module.exports = {
@@ -17,6 +16,8 @@ module.exports = {
 	 * Generates the shop image in a design similar to the in-game design.
 	 */
 	async generateShop(shop, watermark="Use code ASSISTANTS") {
+		const imagemin = await import('imagemin')
+		
 		// Font
 		registerFont(path.join(__dirname, "./assets/fonts/BurbankBigRegularBlack.otf"), {
 			family: "Burbank Big Regular",
