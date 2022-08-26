@@ -9,7 +9,7 @@ const moment = require("moment")
 const date = moment().format("dddd, MMMM Do YYYY")
 const path = require('path')
 
-const imagemin = require('imagemin')
+const imagemin = await import('imagemin')
 const imageminPngquant = require('imagemin-pngquant')
 
 module.exports = {
