@@ -17,7 +17,7 @@ module.exports = {
 	/**
 	 * Generates the shop image in a design similar to the in-game design.
 	 */
-	async generateShop(shop, watermark="via Assistants Center") {
+	async generateShop(shop, watermark="via Assistants Center Twitter Tools") {
 		const imagemin = await import('imagemin')
 
 		// Font
@@ -52,7 +52,7 @@ module.exports = {
 		const canvasHeight = (keys.length * 1200) + 1000;
 		const canvasWidth = bigwidth;
 
-		const canvas = createCanvas(Number(canvasWidth), Number(canvasHeight));
+		const canvas = createCanvas(Number(canvasWidth<3850?canvasWidth:canvasWidth), Number(canvasHeight));
 		const ctx = canvas.getContext("2d");
 
 		// Starting points
