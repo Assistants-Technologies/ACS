@@ -93,10 +93,7 @@ router.get('/callback', (req, res) => {
                     }
                 }
             }else{
-                if(user){
-                    if(user._id == req.session.user._id){
-                        return res.redirect('/profile?error=Requested Twitter account is already connected with your ACS account.')
-                    }
+                if(user && (user._id != req.session.user._id)){
                     return res.redirect('/profile?error=Requested Twitter account is already connected to another ACS account.')
                 }else{
                     const ThisUser = await User.findOne({
