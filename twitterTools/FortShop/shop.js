@@ -9,6 +9,8 @@ const moment = require("moment")
 const date = moment().format("dddd, MMMM Do YYYY")
 const path = require('path')
 
+const ImageminGm = require('imagemin-gm')
+const imageminGm = new ImageminGm()
 const imageminPngquant = require('imagemin-pngquant')
 
 module.exports = {
@@ -214,16 +216,21 @@ module.exports = {
 			}
 		}
 
-		console.log("ok, optimizing now")
-
 		// Gen buf
 		let buf = canvas.toBuffer("image/png");
 
+		if(canvas.height > 4096){
+			let canvasHeightBefore = canvas.height
+			canvas.height = 4096
+			canvas.width = Math.round((canvasHeightBefore/4096)/canvasWidth)
+		}
+
 		buf = await imagemin.default.buffer(buf, {
 			plugins: [
+				imageminGm.resize({ width: canvas.width>4096?, height: 250, gravity: 'Center' }),
 				imageminPngquant()
 			]
-		})
+		}).catch(console.error)
 
 		// Return path
 		return buf;

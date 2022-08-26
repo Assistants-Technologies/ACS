@@ -45,6 +45,7 @@
     "font-awesome": "4.7.0",
     "gulp-sourcemaps": "^2.6.3",
     "imagemin": "^8.0.1",
+    "imagemin-gm": "^2.0.2",
     "imagemin-pngquant": "^9.0.2",
     "inputmask": "^4.0.8",
     "ion-rangeslider": "^2.3.0",
