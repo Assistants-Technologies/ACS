@@ -17,7 +17,7 @@ module.exports = {
 	/**
 	 * Generates the shop image in a design similar to the in-game design.
 	 */
-	async generateShop(shop, watermark="Use code ASSISTANTS") {
+	async generateShop(shop, watermark="via Assistants Center") {
 		const imagemin = await import('imagemin')
 
 		// Font
@@ -228,20 +228,18 @@ module.exports = {
 			cw = Math.round(cw/(chBefore/4096))
 		}
 
-		console.log(cw, ch)
-
 		buf = await imagemin.default.buffer(buf, {
 			plugins: [
 				imageminGm.resize({ width: cw, height: ch, gravity: 'Center' }),
 			]
-		}).catch(console.error)
+		})
 
 		// Return path
 		return buf;
 	},
 
 	/**
-	 * Get's the current shop items and formats them.
+	 * Gets the current shop items and formats them.
 	 */
 	async getShopItems(apiKey, language) {
 		const shop = {};
