@@ -225,7 +225,7 @@ module.exports = {
 		if(ch > 4096){
 			let chBefore = canvas.height
 			ch = 4096
-			cw = Math.round((chBefore/4096)/cw)
+			cw = Math.round(cw/(chBefore/4096))
 		}
 
 		console.log(cw, ch)
