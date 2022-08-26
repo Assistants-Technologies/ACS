@@ -17,7 +17,7 @@ export default function NavbarMenu ({ user, uds }) {
     React.useEffect(()=>{
         updateText()
         setInterval(updateText, 60000)
-    }, []);
+    }, [])
 
     return (
         <nav className="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">

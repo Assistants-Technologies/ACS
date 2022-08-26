@@ -97,7 +97,18 @@ const vhost = ({next_app, next_handle, client}) => {
         return res.redirect('/dashboard')
         /*return next_app.render(req, res, '/index', {
             url: req.url,
+            user: req.session.user,
         })*/
+    })
+
+    app.get('/twitter-tools/daily-shop', (req,res)=>{
+        if(!req.session.user)
+            return res.redirect('/auth?back_redirect=/twitter-tools/daily-shop')
+
+        return next_app.render(req, res, '/twitter-tools/daily-shop', {
+            url: req.url,
+            user: req.session.user,
+        })
     })
 
     app.get('/privacy-policy', (req,res)=>{

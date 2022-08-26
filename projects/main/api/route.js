@@ -7,7 +7,9 @@ router.use('/admin', require('./admin/route'))
 router.use('/dbd-stats', require('./dbd-stats/route'))
 router.use('/shop', require('./shop/route'))
 router.use('/user', require('./user/route'))
+
 router.use('/discord-dashboard', require('./discord-dashboard/route'))
+router.use('/twitter-tools', require('./twitter-tools/route'))
 
 router.use('/stripe', require('./stripe/route'))
 router.use('/partnership', require('./partnership/route'))

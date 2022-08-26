@@ -1,10 +1,10 @@
-import React from 'react';
-import Head from 'next/head';
+import React from 'react'
+import Head from 'next/head'
 
 import Script from 'next/script'
 
-import PageBody from "../../components/content/PageBody";
-import Scripts from "../../components/content/Scripts";
+import PageBody from "../../components/content/PageBody"
+import Scripts from "../../components/content/Scripts"
 
 import IsBeta from '../../isBeta'
 
