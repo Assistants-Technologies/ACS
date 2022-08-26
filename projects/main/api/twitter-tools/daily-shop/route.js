@@ -15,7 +15,7 @@ router.route('/image')
             'Content-Type': 'image/png',
             'Content-Length': shopBuff.length
         })
-        res.send(shopBuff)
+        res.end(shopBuff)
     })
 
 router.route('/')
