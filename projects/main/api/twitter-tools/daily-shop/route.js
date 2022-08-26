@@ -5,19 +5,6 @@ const DailyShop = require('../../../../../models/TwitterTools/dailyShop')
 
 const { generateShop, getShopItems } = require("../../../../../twitterTools/FortShop/shop")
 
-router.route('/image')
-    .get(async(req,res)=>{
-        const { lang="pl" } = req.query
-        const items = await getShopItems(process.env.FNAPIIO_APIKEY, lang)
-        const shopBuff = await generateShop(items)
-
-        res.writeHead(200, {
-            'Content-Type': 'image/png',
-            'Content-Length': shopBuff.length
-        })
-        res.end(shopBuff)
-    })
-
 router.route('/')
     .get(async(req,res)=>{
         if(!req.session?.user)
