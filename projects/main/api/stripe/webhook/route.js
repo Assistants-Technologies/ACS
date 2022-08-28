@@ -117,7 +117,7 @@ User: ${CheckoutDataFromSub.user}
 Reason: ${reason}
 Item: ${SubscriptionItemFound.name}
 Paid: ${invoiceIntent.amount_paid/100}
-Currency: ${invoiceIntent.currency}
+Currency: ${invoiceIntent.currency.toUpperCase()}
 Supported creator: ${partner_user_sub?.user || "Any"}
 \`\`\`
 `)
@@ -184,7 +184,7 @@ Supported creator: ${partner_user_sub?.user || "Any"}
 User: ${SessionAsyncData.user}
 Items: ${SessionAsyncData.items_ids.join(", ")}
 Paid: ${checkoutAsyncIntent.amount_subtotal/100}
-Currency: ${checkoutAsyncIntent.amount_subtotal}
+Currency: ${checkoutAsyncIntent.currency.toUpperCase()}
 Supported creator: ${partner_user?.user || "Any"}
 \`\`\`
 `)
