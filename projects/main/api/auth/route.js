@@ -52,8 +52,8 @@ router.route('/plain/login')
         if(!parameter || !password)
             return res.send({error:true,message: "Request not full."})
         
-        if(parameter.length < 5 || parameter.length > 25)
-            return res.send({error:true,message: "Parameter should be min 5 and max 25 characters"})
+        if(parameter.length < 5 || parameter.length > 45)
+            return res.send({error:true,message: "Parameter should be min 5 and max 45 characters"})
 
         if(password.length < 6 || password.length > 35)
             return res.send({error: true, message: "Password should be min 6 and max 35 characters"})
@@ -93,9 +93,12 @@ router.route('/plain/register')
         
         if(!validateEmail(email))
             return res.send({error:true,message: "Email is not valid"})
-        
-        if(email.length < 5 || email.length > 25 || username.length < 5 || username.length > 25)
-            return res.send({error:true,message: "Email and username should be min 5 and max 25 characters"})
+
+        if(username.length < 5 || username.length > 25)
+            return res.send({error:true,message: "Username should be min 5 and max 25 characters"})
+
+        if(email.length < 5 || email.length > 45)
+            return res.send({error:true,message: "Email should be min 5 and max 45 characters"})
         
         if(password.length < 6 || password.length > 35)
             return res.send({error: true, message: "Password should be min 6 and max 35 characters"})

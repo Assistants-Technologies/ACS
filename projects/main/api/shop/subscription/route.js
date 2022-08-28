@@ -106,7 +106,11 @@ router.route('/create/:subscription_id')
             ],
             success_url: Subscription.success_url,
             cancel_url: Subscription.cancel_url,
-            metadata: {'subscription_id': req.params.subscription_id, 'checkout_metadata_key': checkout_metadata_key }
+            subscription_data: {
+                metadata: {
+                    "checkout_metadata_key": checkout_metadata_key
+                },
+            },
           })
 
           await CheckoutSession.create({

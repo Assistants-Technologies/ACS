@@ -1,3 +1,8 @@
+global.__models = __dirname + '/models/'
+global.__configs = __dirname + '/configs/'
+global.__mailer = __dirname + '/mailer/'
+
+
 require('dotenv').config({})
 const DEVELOPMENT_CHANNEL = process.env.DEVELOPMENT_CHANNEL === "TRUE";
 

@@ -6,7 +6,7 @@ import { format } from 'date-fns'
 import { TailSpin } from  'react-loader-spinner'
 import Router from "next/router"
 
-export default function DiscordDashboardProjectTab () {
+export default function DiscordDashboardProjectTab ({ subscriptionInfo }) {
     const [loading, setLoading] = React.useState(true)
     const [userProjects, setUserProjects] = React.useState([])
     const [displayModal, setDisplayModal] = React.useState(false)
@@ -50,9 +50,17 @@ export default function DiscordDashboardProjectTab () {
             <div className="card card-rounded">
                 <div className="card-body">
                     <h4 className="card-title" style={{fontWeight: 'bolder'}}>Your Discord Dashboard v3 Projects</h4>
-                    <p className="card-description">
-                        You can have up to 1 project. <a href="#" style={{color:'gold', fontWeight:'bold', textDecoration:'none'}}>Discord-Dashboard Premium Plan</a> allows you to have up to 10 projects.
-                    </p>
+                    {
+                        subscriptionInfo?.type == "premium"
+                        ?
+                        <p className="card-description">
+                            You can have up to 4 projects thanks to your <a href="src/components/dbd-v3/DiscordDashboardProjectTab#" style={{color:'gold', fontWeight:'bold', textDecoration:'none'}}>Discord-Dashboard Premium Plan</a>.
+                        </p>
+                            :
+                        <p className="card-description">
+                            You can have up to 1 project. <a href="src/components/dbd-v3/DiscordDashboardProjectTab#" style={{color:'gold', fontWeight:'bold', textDecoration:'none'}}>Discord-Dashboard Premium Plan</a> allows you to have up to 4 projects.
+                        </p>
+                    }
                     <div className="table-responsive">
                         <table className="table">
                             <thead>
@@ -115,8 +123,8 @@ export default function DiscordDashboardProjectTab () {
                                     </>
                             }
                         </div>
-                        <div>
-                            <p className="card-description">
+                        <div style={{paddingTop:15}}>
+                            <p style={{textDecoration:'none',fontSize:14}} className="card-description">
                             Not interested in Discord-Dashboard v3? Move to <a href="/discord-dashboard/v2" style={{fontWeight:'bold', textDecoration:'none'}}>Discord-Dashboard v2 Licenses</a> page
                             </p>
                         </div>

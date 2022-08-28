@@ -6,7 +6,7 @@ import PageBody from "../components/content/PageBody"
 import Scripts from "../components/content/Scripts"
 
 import FeaturedTab from "../components/row/FeaturedTab"
-import DiscordDashboardProjectTab from "../components/row/DiscordDashboardProjectTab"
+import DiscordDashboardProjectTab from "../components/dbd-v3/DiscordDashboardProjectTab"
 import StatsRow from "../components/stats/StatsRow"
 import ViewsStats from "../components/dbd-stats/Views"
 
@@ -124,8 +124,6 @@ export default function TestPage ({ user, project, url }) {
                                     <ViewsStats project={project}/>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                 </div>
