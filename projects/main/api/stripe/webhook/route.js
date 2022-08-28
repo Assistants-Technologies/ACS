@@ -113,6 +113,7 @@ router.route('/')
 `${(process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE") ? 
     "[BETA]" : "[PRODUCTION]"} New invoice payment.
 \`\`\`
+User: ${CheckoutDataFromSub.user}
 Reason: ${reason}
 Item: ${SubscriptionItemFound.name}
 Paid: ${invoiceIntent.amount_paid/100}
@@ -180,6 +181,7 @@ Supported creator: ${partner_user_sub?.user || "Any"}
                                 `${(process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE") ?
                                     "[BETA]" : "[PRODUCTION]"} New async payment.
 \`\`\`
+User: ${SessionAsyncData.user}
 Items: ${SessionAsyncData.items_ids.join(", ")}
 Paid: ${checkoutAsyncIntent.amount_subtotal/100}
 Currency: ${checkoutAsyncIntent.amount_subtotal}
@@ -232,6 +234,7 @@ Supported creator: ${partner_user?.user || "Any"}
                                 `${(process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE") ?
                                     "[BETA]" : "[PRODUCTION]"} New instant payment.
 \`\`\`
+User: ${SessionData.user}
 Items: ${SessionData.items_ids.join(", ")}
 Paid: ${checkoutIntent.amount_subtotal/100}
 Currency: ${checkoutIntent.currency.toUpperCase()}
