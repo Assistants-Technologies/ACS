@@ -95,6 +95,7 @@ router.route('/')
                     })
                 }else break
 
+
                 CheckoutDataFromSub.session_finished_data = invoiceIntent
                 await CheckoutDataFromSub.save()
 
@@ -104,6 +105,22 @@ router.route('/')
                         user: CheckoutDataFromSub.partner_supported
                     })
                 }
+
+                try {
+                    client.guilds.cache.get(process.env.DISCORD_GUILD_ID)
+                        .channels.cache.get(process.env.DISCORD_LOGS_CHANNEL_ID)
+                        .send(
+`${(process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE") ? 
+    "[BETA]" : "[PRODUCTION]"} New invoice payment.
+\`\`\`
+Reason: ${reason}
+Item: ${SubscriptionItemFound.name}
+Paid: ${invoiceIntent.amount_paid/100}
+Currency: ${invoiceIntent.currency}
+Supported creator: ${partner_user_sub?.user || "Any"}
+\`\`\`
+`)
+                }catch{}
 
                 if(partner_user_sub){
                     partner_user_sub.user_partnership_actions.push({
@@ -156,6 +173,21 @@ router.route('/')
                         await partner_user.save()
                     }
 
+                    try {
+                        client.guilds.cache.get(process.env.DISCORD_GUILD_ID)
+                            .channels.cache.get(process.env.DISCORD_LOGS_CHANNEL_ID)
+                            .send(
+                                `${(process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE") ?
+                                    "[BETA]" : "[PRODUCTION]"} New async payment.
+\`\`\`
+Items: ${SessionAsyncData.items_ids.join(", ")}
+Paid: ${checkoutAsyncIntent.amount_subtotal/100}
+Currency: ${checkoutAsyncIntent.amount_subtotal}
+Supported creator: ${partner_user?.user || "Any"}
+\`\`\`
+`)
+                    }catch{}
+
                     SessionAsyncData.session_finished_data = checkoutAsyncIntent
                     await SessionAsyncData.save()
                 }
@@ -192,6 +224,21 @@ router.route('/')
                             })
                         }
                     }
+
+                    try {
+                        client.guilds.cache.get(process.env.DISCORD_GUILD_ID)
+                            .channels.cache.get(process.env.DISCORD_LOGS_CHANNEL_ID)
+                            .send(
+                                `${(process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE") ?
+                                    "[BETA]" : "[PRODUCTION]"} New instant payment.
+\`\`\`
+Items: ${SessionData.items_ids.join(", ")}
+Paid: ${checkoutIntent.amount_subtotal/100}
+Currency: ${checkoutIntent.currency.toUpperCase()}
+Supported creator: ${partner_user?.user || "Any"}
+\`\`\`
+`)
+                    }catch{}
 
                     if(partner_user){
                         await partner_user.save()
