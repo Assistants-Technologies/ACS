@@ -16,8 +16,8 @@ module.exports = (dev) => [
         description: "DBD Premium Plan",
         prices: {
             "PLN": dev ? "price_1LYrcuKWxgCmg6SfjRPulIh4" : "price_1LZXxYKWxgCmg6SfnmPaZyyP",
-            "EUR": dev ? "price_1LYrcuKWxgCmg6SfjRPulIh4" : "price_1LZXyRKWxgCmg6Sfih75TwL5",
-            "USD": dev ? "price_1LYrcuKWxgCmg6SfjRPulIh4" : "price_1LZXy6KWxgCmg6SfPP5sA2PP",
+            "EUR": dev ? "price_1LYrcuKWxgCmg6SfjRPulIh4" : "price_1LbQprKWxgCmg6Sf80BlqBOU",
+            "USD": dev ? "price_1LYrcuKWxgCmg6SfjRPulIh4" : "price_1LbQqFKWxgCmg6Sfe6HkU1cL",
             "GBP": dev ? "price_1LYrcuKWxgCmg6SfjRPulIh4" : "price_1LZXz3KWxgCmg6SfiDfijCvm"
         },
         prices_display: {

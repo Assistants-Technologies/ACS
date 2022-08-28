@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const {items, paymentTypes} = require('../../../../../configs/items')((process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE"))
+const {items, paymentTypes} = require(__configs + 'items')((process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE"))
 
 const { Stripe } = require('stripe');
 const stripe = new Stripe((process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE") ? process.env.STRIPE_SK_DEV : process.env.STRIPE_SK_LIVE, {
@@ -21,13 +21,13 @@ client.guilds.fetch(process.env.DISCORD_GUILD_ID).then(guild=>{
     guild.channels.fetch(process.env.DISCORD_LOGS_CHANNEL_ID)
 })
 
-const SubscriptionItems = require('../../../../../configs/subscriptionItems')(process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE")
+const SubscriptionItems = require(__configs + '/subscriptionItems')(process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE")
 
-const ShopPayment = require('../../../../../models/Shop/payment')
-const CheckoutSession = require('../../../../../models/Shop/checkoutSession')
-const DiscordDashboard = require('../../../../../models/discordDashboard')
-const User = require('../../../../../models/user')
-const Partnership = require('../../../../../models/partnership')
+const ShopPayment = require(__models + 'Shop/payment')
+const CheckoutSession = require(__models + 'Shop/checkoutSession')
+const DiscordDashboard = require(__models + 'discordDashboard')
+const User = require(__models + 'user')
+const Partnership = require(__models + 'partnership')
 
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET
 
@@ -66,31 +66,77 @@ router.route('/')
             case 'invoice.paid':
                 const invoiceIntent = event.data.object
                 const sub = invoiceIntent.subscription
+                if(!sub)break
+
+                const reason = invoiceIntent.billing_reason
+                if(!reason)break
 
                 const sub_info = await stripe.subscriptions.retrieve(sub)
                 if(!sub_info)break
 
-                if(sub_info.current_period_start == sub_info.start_date)break
-
-                const user_from_sub = await DiscordDashboard.findOne({'plan.subscription.id': sub})
-                if(!user_from_sub)console.log('no user from sub')
-                if(!user_from_sub)break
-
-                const SessionSubscription = await CheckoutSession.findOne({
-                    _id: user_from_sub.session._id
+                const CheckoutDataFromSub = await CheckoutSession.findOne({
+                    checkout_metadata_key: sub_info.metadata.checkout_metadata_key,
                 })
-                if(!SessionSubscription?.session_finished_data)break
+                if(!CheckoutDataFromSub)break
 
-                try{
-                    client.guilds.cache.get(process.env.DISCORD_GUILD_ID).channels.cache.get(process.env.DISCORD_LOGS_CHANNEL_ID).send(`Subscription renewed for ${SessionSubscription.user}`)
-                }catch(err){
-                    console.log(err)
+                const SubscriptionItemFound = SubscriptionItems.find(sub=>sub.id==CheckoutDataFromSub.subscription_id)
+                if(!SubscriptionItemFound)break
+
+                if(reason == 'subscription_create') {
+                    await SubscriptionItemFound.subscriptionPaid({
+                        subscription: sub_info,
+                        user_id: CheckoutDataFromSub.user,
+                        session: CheckoutDataFromSub,
+                    })
+                }else if(reason == 'subscription_cycle') {
+                    await SubscriptionItemFound.subscriptionRenewed({
+                        subscription: sub_info,
+                        user_id: CheckoutDataFromSub.user,
+                    })
+                }else break
+
+
+                CheckoutDataFromSub.session_finished_data = invoiceIntent
+                await CheckoutDataFromSub.save()
+
+                let partner_user_sub
+                if(CheckoutDataFromSub.partner_supported){
+                    partner_user_sub = await Partnership.findOne({
+                        user: CheckoutDataFromSub.partner_supported
+                    })
                 }
 
-                const SubscriptionItem = SubscriptionItems.find(sub=>sub.id==SessionSubscription.subscription_id)
-                const subscription_stripe = await stripe.subscriptions.retrieve(sub)
+                try {
+                    client.guilds.cache.get(process.env.DISCORD_GUILD_ID)
+                        .channels.cache.get(process.env.DISCORD_LOGS_CHANNEL_ID)
+                        .send(
+`${(process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE") ? 
+    "[BETA]" : "[PRODUCTION]"} New invoice payment.
+\`\`\`
+User: ${CheckoutDataFromSub.user}
+Reason: ${reason}
+Item: ${SubscriptionItemFound.name}
+Paid: ${invoiceIntent.amount_paid/100}
+Currency: ${invoiceIntent.currency.toUpperCase()}
+Supported creator: ${partner_user_sub?.user || "Any"}
+\`\`\`
+`)
+                }catch{}
 
-                await SubscriptionItem.subscriptionRenewed({ user_id: SessionSubscription.user, subscription: subscription_stripe })
+                if(partner_user_sub){
+                    partner_user_sub.user_partnership_actions.push({
+                        action_type: "purchase",
+                        action_target: {
+                            target_type: "subscription",
+                            target_id: SubscriptionItemFound.id,
+                            target_currency: invoiceIntent.currency.toUpperCase(),
+                            target_price: invoiceIntent.amount_paid,
+                        },
+                        action_date: new Date(),
+                        action_checkout_session_id: CheckoutDataFromSub._id,
+                    })
+                }
+
                 break
             case 'checkout.session.async_payment_succeeded':
                 const checkoutAsyncIntent = event.data.object
@@ -128,22 +174,24 @@ router.route('/')
                         await partner_user.save()
                     }
 
+                    try {
+                        client.guilds.cache.get(process.env.DISCORD_GUILD_ID)
+                            .channels.cache.get(process.env.DISCORD_LOGS_CHANNEL_ID)
+                            .send(
+                                `${(process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE") ?
+                                    "[BETA]" : "[PRODUCTION]"} New async payment.
+\`\`\`
+User: ${SessionAsyncData.user}
+Items: ${SessionAsyncData.items_ids.join(", ")}
+Paid: ${checkoutAsyncIntent.amount_subtotal/100}
+Currency: ${checkoutAsyncIntent.currency.toUpperCase()}
+Supported creator: ${partner_user?.user || "Any"}
+\`\`\`
+`)
+                    }catch{}
+
                     SessionAsyncData.session_finished_data = checkoutAsyncIntent
                     await SessionAsyncData.save()
-                }else if(SessionAsyncData.item_type == 'subscription'){
-                    const SubscriptionItem = SubscriptionItems.find(sub=>sub.id==SessionAsyncData.subscription_id)
-                    const subscription_stripe = await stripe.subscriptions.retrieve(checkoutAsyncIntent.subscription)
-
-                    await SubscriptionItem.subscriptionPaid({ user_id: SessionAsyncData.user, session: SessionAsyncData, subscription: subscription_stripe })
-
-                    SessionAsyncData.session_finished_data = checkoutAsyncIntent
-                    await SessionAsyncData.save()
-
-                    try{
-                        client.guilds.cache.get(process.env.DISCORD_GUILD_ID).channels.cache.get(process.env.DISCORD_LOGS_CHANNEL_ID).send(`Subscription created for ${SessionAsyncData.user} using async payment`)
-                    }catch(err){
-                        console.log(err)
-                    }
                 }
                 break
             case 'checkout.session.completed':
@@ -179,26 +227,28 @@ router.route('/')
                         }
                     }
 
+                    try {
+                        client.guilds.cache.get(process.env.DISCORD_GUILD_ID)
+                            .channels.cache.get(process.env.DISCORD_LOGS_CHANNEL_ID)
+                            .send(
+                                `${(process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE") ?
+                                    "[BETA]" : "[PRODUCTION]"} New instant payment.
+\`\`\`
+User: ${SessionData.user}
+Items: ${SessionData.items_ids.join(", ")}
+Paid: ${checkoutIntent.amount_subtotal/100}
+Currency: ${checkoutIntent.currency.toUpperCase()}
+Supported creator: ${partner_user?.user || "Any"}
+\`\`\`
+`)
+                    }catch{}
+
                     if(partner_user){
                         await partner_user.save()
                     }
 
                     SessionData.session_finished_data = checkoutIntent
                     await SessionData.save()
-                }else if(SessionData.item_type == 'subscription'){
-                    const SubscriptionItem = SubscriptionItems.find(sub=>sub.id==SessionData.subscription_id)
-                    const subscription_stripe = await stripe.subscriptions.retrieve(checkoutIntent.subscription)
-
-                    await SubscriptionItem.subscriptionPaid({ user_id: SessionData.user, session: SessionData, subscription: subscription_stripe })
-
-                    SessionData.session_finished_data = checkoutIntent
-                    await SessionData.save()
-
-                    try{
-                        client.guilds.cache.get(process.env.DISCORD_GUILD_ID).channels.cache.get(process.env.DISCORD_LOGS_CHANNEL_ID).send(`Subscription created for ${SessionData.user} using instant payment`)
-                    }catch(err){
-                        console.log(err)
-                    }
                 }
 
                 break
