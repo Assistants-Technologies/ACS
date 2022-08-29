@@ -4,6 +4,11 @@ const DiscordDashboard = mongoose.model('DiscordDashboard',
     new mongoose.Schema({
         user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', sparse: true, default: null, unique: true },
         projects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'DBDProject', sparse: true, default: null }],
+        canceled: {
+            type: Boolean,
+            default: null,
+            sparse: true,
+        },
         plan: {
             plan_type: {
                 type: String,

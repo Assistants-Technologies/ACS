@@ -13,6 +13,7 @@ module.exports.UserLicenseStatus = async (user_id) => {
 
     return {
         type: DBD_Data?.plan?.plan_type ?? "free",
+        canceled: DBD_Data?.canceled,
         active_until: DBD_Data?.plan?.active_until ?? undefined,
     }
 }
