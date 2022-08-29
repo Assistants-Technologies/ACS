@@ -54,11 +54,11 @@ export default function DiscordDashboardProjectTab ({ subscriptionInfo }) {
                         subscriptionInfo?.type == "premium"
                         ?
                         <p className="card-description">
-                            You can have up to 4 projects thanks to your <a href="src/components/dbd-v3/DiscordDashboardProjectTab#" style={{color:'gold', fontWeight:'bold', textDecoration:'none'}}>Discord-Dashboard Premium Plan</a>.
+                            You can have up to 4 project instances thanks to your <a href="src/components/dbd-v3/DiscordDashboardProjectTab#" style={{color:'gold', fontWeight:'bold', textDecoration:'none'}}>Discord-Dashboard Premium Plan</a>.
                         </p>
                             :
                         <p className="card-description">
-                            You can have up to 1 project. <a href="src/components/dbd-v3/DiscordDashboardProjectTab#" style={{color:'gold', fontWeight:'bold', textDecoration:'none'}}>Discord-Dashboard Premium Plan</a> allows you to have up to 4 projects.
+                            You can have up to 1 project instance. <a href="src/components/dbd-v3/DiscordDashboardProjectTab#" style={{color:'gold', fontWeight:'bold', textDecoration:'none'}}>Discord-Dashboard Premium Plan</a> allows you to have up to 4 project instances.
                         </p>
                     }
                     <div className="table-responsive">
