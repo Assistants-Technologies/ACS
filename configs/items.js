@@ -4,7 +4,26 @@ module.exports = (dev) => {
     return {
         items: [
             {
-                name: "1000 Coins",
+                name: "300 Coins",
+                id: "300_coins",
+                prices: {
+                    "PLN": dev ? "price_1LSQQ8KWxgCmg6SfIv0BYxJt" : "price_1LcYfmKWxgCmg6SfwYLgoQE5",
+                    "EUR": dev ? "price_1LSQQ8KWxgCmg6SfIv0BYxJt" : "price_1LcYgEKWxgCmg6Sf8Ui51a8E",
+                    "USD": dev ? "price_1LSQQ8KWxgCmg6SfIv0BYxJt" : "price_1LcYeaKWxgCmg6Sf3ykscAJj",
+                    "GBP": dev ? "price_1LSQQ8KWxgCmg6SfIv0BYxJt" : "price_1LcYg5KWxgCmg6SfZV7sp5Pm"
+                },
+                assign_item: async ({ session, user_id }) => {
+                    const user = await User.findOne({_id: user_id})
+
+                    const coins = user.coins
+                    user.coins = coins + 300
+                    await user.save()
+
+                    return true
+                }
+            },
+            {
+                name: "1.000 Coins",
                 id: "1000_coins",
                 prices: {
                     "PLN": dev ? "price_1LSQQ8KWxgCmg6SfIv0BYxJt" : "price_1LSQiXKWxgCmg6Sf7WI0H5mA",
@@ -23,7 +42,7 @@ module.exports = (dev) => {
                 }
             },
             {
-                name: "3000 Coins",
+                name: "3.000 Coins",
                 id: "3000_coins",
                 prices: {
                     "PLN": dev ? "price_1LSQXnKWxgCmg6SfQdTRx4dK" : "price_1LSQkrKWxgCmg6Sfag2zWMaR",
@@ -42,7 +61,7 @@ module.exports = (dev) => {
                 }
             },
             {
-                name: "20000 Coins",
+                name: "20.000 Coins",
                 id: "20000_coins",
                 prices: {
                     "PLN": dev ? "price_1LSQYvKWxgCmg6Sfa3acqhnF" : "price_1LSQmWKWxgCmg6Sf4xeoK6rm",
@@ -61,7 +80,7 @@ module.exports = (dev) => {
                 }
             },
             {
-                name: "30000 Coins",
+                name: "30.000 Coins",
                 id: "30000_coins",
                 prices: {
                     "PLN": dev ? "price_1LSQa4KWxgCmg6SfwUjwesc0" : "price_1LSQoLKWxgCmg6SfvUvOHXmw",

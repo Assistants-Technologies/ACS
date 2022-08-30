@@ -98,6 +98,11 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
         return true
     }
 
+    const getAhoInfo = async (item_id) => {
+        const res = await axios.get(`/api/shop/digital-items/aho-info/${item_id}`)
+        return res.data.info
+    }
+ 
     const title = `${IsBeta ? 'BETA | ' : ''}Assistants Center - Digital Features Shop`
 
     return (
@@ -246,6 +251,8 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                                                             </td>
                                                                                             <td style={{ textAlign: 'center' }}>
                                                                                                 {
+                                                                                                    
+
                                                                                                     item.owns ?
                                                                                                         (
                                                                                                             item.aho?.type === 'redirect' ?
@@ -255,7 +262,9 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                                                                                 :
                                                                                                                 item.aho?.type === 'modal' ?
                                                                                                                     <>
-                                                                                                                        <button type="button" className="btn btn-info" style={{ color: 'white', height: 40, margin: 'auto', borderColor: 'transparent' }} onClick={() => setAhoModal(item.aho.html)}>View</button>
+                                                                                                                        <button type="button" className="btn btn-info" style={{ color: 'white', height: 40, margin: 'auto', borderColor: 'transparent' }} onClick={() => {
+                                                                                                                                getAhoInfo(item.id).then(info=>setAhoModal({ ...item.aho.html, info }))
+                                                                                                                        }}>View</button>
                                                                                                                     </>
                                                                                                                     :
                                                                                                                     <>
@@ -298,12 +307,13 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                             setAhoModal(null)
                                         }
                                     }}>
-                                        {ahoModal &&
-                                            <div className="modal-content" style={{borderRadius: 15}}>
+                                            {
+                                                ahoModal &&
+                                                <div className="modal-content" style={{borderRadius: 15}}>
                                                 <div className="card card-rounded">
                                                     <div className="card-body">
                                                         <div dangerouslySetInnerHTML={{ __html: ahoModal?.content }}/>
-                                                        <script dangerouslySetInnerHTML={{ __html: ahoModal?.script }} />
+                                                        <p>Your license number is: {ahoModal.info}</p>
                                                         <div style={{ paddingTop: 15 }}>
                                                             <button type="button"
                                                                     className="btn btn-info btn-icon-text"
@@ -315,7 +325,8 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>}
+                                            </div>
+                                            }
                                     </div>
 
                                     <div id="coinsShopModal" className="modal" style={{ display: displayCoinsShop ? 'block' : 'none' }} onClick={(event) => {
@@ -327,6 +338,7 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                             <div className="card card-rounded">
                                                 <div className="card-body">
                                                     <h3><b>Top Up Assistants Coins</b></h3>
+                                                    <p style={{fontSize:16}}>The more you buy, the less you pay!</p>
                                                     {
                                                         (items && coins != null && setSelected) ?
                                                             <div className={"pt-3"}>
@@ -500,7 +512,7 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                                             className="btn btn-info btn-icon-text"
                                                                             onClick={() => {
                                                                                 setItemBought(null)
-                                                                                setAhoModal(itemBought.aho.html)
+                                                                                getAhoInfo(itemBought.id).then(info=>setAhoModal({ ...itemBought.aho.html, info }))
                                                                             }}
                                                                             style={{ color: 'white', height: '50px', fontSize: '16px', justifyContent: 'center', display: 'flex', borderColor: 'transparent !important' }}
                                                                     >
