@@ -17,3 +17,5 @@ src/isBeta.js
 projects/auth
 mailer/config.js
 .vscode
+projects/main/api/discord-dashboard/softui/
+configs/digitalItems.js

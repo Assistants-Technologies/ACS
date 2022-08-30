@@ -74,6 +74,7 @@ const userSchema = new Schema({
         type: Boolean,
         default: false,
     },
+    productLicenses: { type: Array, default: [] },
     OpenSource: {
         payment_id: {
             type: String,
