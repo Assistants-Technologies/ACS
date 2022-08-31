@@ -10,6 +10,34 @@ for(const category of digital_items) {
     digital_items_line = [...category.categoryItems, ...digital_items_line]
 }
 
+router.get('/aho-info/:item_id', async (req, res) => {
+    if(!req.session?.user){
+        return res.status(400).json({
+            error:true,
+            message: "Not authenticated"
+        })
+    }
+
+    const item = digital_items_line.find(e=>e.id==req.params.item_id)
+    if(!item)
+        return res.status(404).json({
+            error: true,
+            message: "Item not found"
+        })
+
+    if(item.aho.type != "modal")
+        return res.status(404).json({
+            error: true,
+            message: "Item type not equal to modal"
+        })
+    
+    const info = await item.aho.getInfo({ user_id: req.session.user._id })
+    return res.send({
+        error: false,
+        info
+    })
+})
+
 router.get('/get', async (req, res) => {
     if(!req.session?.user){
         return res.status(400).json({

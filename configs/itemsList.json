@@ -13,8 +13,19 @@
   },
   "coinsPacks": [
     {
+      "id": "300_coins",
+      "name": "300 Coins",
+      "symbol": "300",
+      "prices": {
+        "USD": "2.00",
+        "EUR": "2.00",
+        "GBP": "1.80",
+        "PLN": "9.00"
+      }
+    },
+    {
       "id": "1000_coins",
-      "name": "1000 Coins",
+      "name": "1.000 Coins",
       "symbol": "1000",
       "prices": {
         "USD": "5.00",
@@ -25,7 +36,7 @@
     },
     {
       "id": "3000_coins",
-      "name": "3000 Coins",
+      "name": "3.000 Coins",
       "symbol": "3000",
       "prices": {
         "USD": "10.00",
@@ -36,7 +47,7 @@
     },
     {
       "id": "20000_coins",
-      "name": "20000 Coins",
+      "name": "20.000 Coins",
       "symbol": "20000",
       "prices": {
         "USD": "45.00",
@@ -47,7 +58,7 @@
     },
     {
       "id": "30000_coins",
-      "name": "30000 Coins",
+      "name": "30.000 Coins",
       "symbol": "30000",
       "prices": {
         "USD": "55.00",
