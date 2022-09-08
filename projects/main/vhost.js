@@ -94,11 +94,10 @@ const vhost = ({next_app, next_handle, client}) => {
     app.use('/admin', require('./admin'))
 
     app.get('/', (req,res)=>{
-        return res.redirect('/dashboard')
-        /*return next_app.render(req, res, '/index', {
+        return next_app.render(req, res, '/landing', {
             url: req.url,
             user: req.session.user,
-        })*/
+        })
     })
 
     app.get('/twitter-tools/daily-shop', (req,res)=>{

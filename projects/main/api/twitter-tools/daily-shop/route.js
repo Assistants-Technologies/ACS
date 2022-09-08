@@ -3,7 +3,7 @@ const router = express.Router()
 
 const DailyShop = require('../../../../../models/TwitterTools/dailyShop')
 
-const { generateShop, getShopItems } = require("../../../../../twitterTools/FortShop/shop")
+/*const { generateShop, getShopItems } = require("../../../../../twitterTools/FortShop/shop")*/
 
 router.route('/')
     .get(async(req,res)=>{
