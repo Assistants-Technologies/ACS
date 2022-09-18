@@ -44,6 +44,14 @@ export default function TestPage ({ user, url }) {
                     name="viewport"
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                 />
+
+                <Script
+                    crossOrigin="anonymous"
+                    async="true"
+                    strategy="beforeInteractive"
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3673520795587574"
+                />
+
                 <script type="text/javascript" dangerouslySetInnerHTML={{ __html: `!function(){var e=document.createElement("script");e.type="text/javascript",e.src="https://global.ketchcdn.com/web/v2/config/assistantscenter/website_smart_tag/boot.js",e.defer=e.async=!0,document.getElementsByTagName("head")[0].appendChild(e),window.semaphore=window.semaphore||[]}();` }}></script>
                 <title>{title}</title>
                 <link rel="stylesheet" href={`${ud_s}vendors/feather/feather.css`} />

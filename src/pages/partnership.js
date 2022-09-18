@@ -91,6 +91,14 @@ export default function TestPage ({ user, url }) {
                     name="viewport"
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                 />
+
+                <Script
+                    crossOrigin="anonymous"
+                    async="true"
+                    strategy="beforeInteractive"
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3673520795587574"
+                />
+
                 <title>{title}</title>
                 <link rel="stylesheet" href={`${ud_s}vendors/feather/feather.css`} />
                 <link rel="stylesheet" href={`${ud_s}vendors/mdi/css/materialdesignicons.min.css`}/>
