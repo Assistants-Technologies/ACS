@@ -3,11 +3,6 @@ import LandingNavbar from "../components/nav/top/LandingNavbar"
 import Head from 'next/head'
 import IsBeta from "../isBeta"
 
-import "animate.css"
-import dynamic from "next/dynamic";
-
-import ScrollAnimation from "react-animate-on-scroll"
-
 export async function getServerSideProps(context) {
     return {
         props: {
@@ -16,7 +11,6 @@ export async function getServerSideProps(context) {
         },
     }
 }
-
 
 export default function LandingPage ({ user, url }) {
     const ud = (url.split("/").length - 1)
@@ -29,125 +23,101 @@ export default function LandingPage ({ user, url }) {
 
     const title = 'Assistants Center'
 
-    return <>
-        <Head>
+    return (
+        <div>
             <meta charSet="utf-8" />
-            <meta
-                name="viewport"
-                content="width=device-width, initial-scale=1, shrink-to-fit=no"
-            />
-            <title>{title}</title>
-            <link rel="stylesheet" href={`${ud_s}vendors/feather/feather.css`} />
-            <link rel="stylesheet" href={`${ud_s}vendors/mdi/css/materialdesignicons.min.css`}/>
-            <link rel="stylesheet" href={`${ud_s}vendors/ti-icons/css/themify-icons.css`} />
-            <link rel="stylesheet" href={`${ud_s}vendors/typicons/typicons.css`} />
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+            <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+            <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-            <link
-                rel="stylesheet"
-                href={`${ud_s}vendors/simple-line-icons/css/simple-line-icons.css`}
-            />
-            <link rel="stylesheet" href={`${ud_s}vendors/css/vendor.bundle.base.css`} />
-            <link
-                rel="stylesheet"
-                href={`${ud_s}vendors/datatables.net-bs4/dataTables.bootstrap4.css`}
-            />
-            <link rel="stylesheet" href={`${ud_s}js/select.dataTables.min.css`} />
-            <script type="text/javascript" dangerouslySetInnerHTML={{ __html: `!function(){var e=document.createElement("script");e.type="text/javascript",e.src="https://global.ketchcdn.com/web/v2/config/assistantscenter/website_smart_tag/boot.js",e.defer=e.async=!0,document.getElementsByTagName("head")[0].appendChild(e),window.semaphore=window.semaphore||[]}();` }}></script>
-            <link rel="stylesheet" href={`${ud_s}css/vertical-layout-light/style.css`} />
+            <title>Assistants Center</title>
+            <style dangerouslySetInnerHTML={{__html: "\n      @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');\n      body {\n        font-family: 'Poppins', sans-serif;\n      }\n\n      .gradient-text {\n        background-color: red;\n\n        background-image: linear-gradient(45deg, #6230bd 40%, #f01de2 60%);\n\n        background-size: 100%;\n        background-repeat: repeat;\n\n        -webkit-background-clip: text;\n        -webkit-text-fill-color: transparent;\n        -moz-background-clip: text;\n        -moz-text-fill-color: transparent;\n\n        font-size: 88px;\n      }\n\n      @media (max-width: 450px) {\n        .gradient-text {\n          font-size: 62px;\n        }\n      }\n\n\n      @media (max-width: 300px) {\n        .gradient-text {\n          font-size: 52px;\n        }\n      }\n    " }} />
+
             {
                 IsBeta ?
                     <link rel="shortcut icon" href={`${ud_s}images/favicon.png`} />
                     :
                     <link rel="shortcut icon" href={`${ud_s}favicon.png`} />
             }
-            <link  rel="stylesheet" href={`${ud_s}mycss/my_dark_css.css`}/>
-            <style>{`
-@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-body {
-  font-family: 'Poppins', sans-serif;
-}
 
-.gradient-text {
-  background-color: red;
-  
-  background-image: linear-gradient(45deg, #6230bd 40%, #f01de2 60%);
-  
-  background-size: 100%;
-  background-repeat: repeat;
+            <link rel="stylesheet" crossOrigin="anonymous" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" />
+            <link href={`${ud_s}landing/assets/css/theme.min.css`} rel="stylesheet" />
+            <link href={`${ud_s}landing/vendors/swiper/swiper-bundle.min.css`} rel="stylesheet" />
 
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent; 
-  -moz-background-clip: text;
-  -moz-text-fill-color: transparent;
-  
-  font-size: 88px;
-}
+            <style>
+                {`
+                .btn-secondary {
+                    background-color: #312396;
+                }
+                
+                .btn-secondary:hover {
+                    background-color: #2e15e8;
+                }
+               `}
+            </style>
 
-@media (max-width: 450px) {
-    .gradient-text {
-        font-size: 62px;
-    }
-}
-
-
-@media (max-width: 300px) {
-    .gradient-text {
-        font-size: 52px;
-    }
-}
-
-            `}</style>
-        </Head>
-        <LandingNavbar/>
-        <div style={{
-            height:'80vh',
-            width:'100%',
-            display:"flex",
-            flexDirection:"column",
-            justifyContent: "center",
-            alignContent:"center",
-            textAlign: "center",
-            paddingLeft: '10px',
-            paddingRight: '10px'
-        }}>
-            <h1 style={{fontWeight:800}} className={"gradient-text"}>
-                <ScrollAnimation animateIn="fadeIn">
-                    Let us solve<br/><i>the problem</i>.
-                </ScrollAnimation>
-            </h1>
+            <main className="main" id="top">
+                <nav className="navbar navbar-light sticky-top" data-navbar-darken-on-scroll={900}>
+                    <div className="container pt-2"><a className="navbar-brand" href="/" /><div><a className="navbar-brand" href="/" /><a className="navbar-brand brand-logo" href="/"><b style={{color: '#2f15eb'}}>Assist<span style={{color: '#e7e6ed'}}>ants</span></b></a><a className="navbar-brand brand-logo-mini" href="/" /></div>
+                        <div className="navbar-nav ms-auto"><a href="/dashboard" className="btn btn-secondary">Dashboard</a></div>
+                    </div>
+                </nav>
+                {/* ============================================*/}
+                {/* <section> begin ============================*/}
+                <section className="mt-6">
+                    <div className="container">
+                        <div style={{width: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignContent: 'center', textAlign: 'center', paddingLeft: '10px', paddingRight: '10px'}}>
+                            <h1 style={{fontSize: '40px'}}>Assistants Center</h1>
+                            <h1 style={{fontWeight: 800}} className="gradient-text">
+                                Let us solve
+                                <br />
+                                <i>the problem</i>
+                                .
+                            </h1>
+                        </div>
+                    </div>{/* end of .container*/}
+                </section>{/* <section> close ============================*/}
+                {/* ============================================*/}
+                {/* ============================================*/}
+                {/* <section> begin ============================*/}
+                <section>
+                    <div className="container">
+                        <div className="text-center text-xl-start">
+                            <div className="p-5 bg-primary rounded-3 d-flex flex-column justify-content-xl-between flex-xl-row">
+                                <div className="py-3">
+                                    <h4 className="opacity-50 ls-2 lh-base fw-medium">READY TO START</h4>
+                                    <h2 className="mt-3 fs-4 fs-sm-7 latter-sp-3 lh-base fw-semi-bold">Start your adventure now! </h2>
+                                </div>
+                                <div className="flex-center d-flex"><a href="/dashboard" className="btn btn-info">Dashboard <span className="fas fa-arrow-right" /></a></div>
+                            </div>
+                        </div>
+                    </div>{/* end of .container*/}
+                </section>{/* <section> close ============================*/}
+                {/* ============================================*/}
+                {/* ============================================*/}
+                {/* <section> begin ============================*/}
+                <section className="bg-secondary">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-xl-3 text-center text-xl-start"><a href="https://twitter.com/assistantsga" target="_blank"><img className="footer-img me-xl-5 me-3" src={`${ud_s}landing/assets/img/gallery/twitter-line1.svg`} alt="twitter" style={{width: '20px', height: '20px'}} /></a></div>
+                            <div className="col-xl-4 pt-2 pt-xl-0">
+                                <p className="mb-0 text-center text-xl-end"><a className="text-300 text-decoration-none footer-link" href="/tos"> Terms &amp; conditon </a><a className="text-300 text-decoration-none footer-link ps-4" href="/pp">Privacy Policy </a></p>
+                            </div>
+                            <div className="col-xl-5 pt-2 pt-xl-0 text-center text-xl-end">
+                                <p className="mb-0">Copyright © 2022 Assistants Center. All rights reserved.</p>
+                            </div>
+                        </div>
+                    </div>{/* end of .container*/}
+                </section>{/* <section> close ============================*/}
+                {/* ============================================*/}
+            </main>{/* ===============================================*/}
+            {/*    End of Main Content*/}
+            {/* ===============================================*/}
+            {/* ===============================================*/}
+            {/*    JavaScripts*/}
+            {/* ===============================================*/}
+            <link rel="preconnect" href="https://fonts.gstatic.com" />
+            <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
+            <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400&display=swap" rel="stylesheet" />
         </div>
-        <div style={{
-            height:'80vh',
-            width:'100%',
-            display:"flex",
-            flexDirection:"column",
-            justifyContent: "center",
-            alignContent:"center",
-            textAlign: "center",
-            paddingLeft: '10px',
-            paddingRight: '10px'
-        }}>
-            <h1 style={{fontWeight:800}} className={"gradient-text"}>
-                <ScrollAnimation animateIn="fadeIn">
-                    Let us solve<br/><i>the problem</i>.
-                </ScrollAnimation>
-            </h1>
-        </div>
-            <div style={{
-                height:'80vh',
-                width:'100%',
-                display:"flex",
-                flexDirection:"column",
-                justifyContent: "center",
-                alignContent:"center",
-                textAlign: "center",
-                paddingLeft: '10px',
-                paddingRight: '10px',
-            }} className={"animate__animated animate__bounce"}>
-                <h1 style={{fontWeight:800}} className={"gradient-text"}>
-                        Let us solve<br/><i>the problem</i>.
-                </h1>
-            </div>
-    </>
+    );
 }
