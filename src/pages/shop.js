@@ -281,7 +281,7 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                                                                                 :
                                                                                                                 <>
                                                                                                                     <button type="button" className="btn btn-warning" style={{ color: 'white', height: 40, margin: 'auto', borderColor: 'transparent' }} disabled={true}>Buy</button>
-                                                                                                                    <label>Not enough coins</label>
+                                                                                                                    <br/><label style={{paddingTop:3}}>Not enough coins</label>
                                                                                                                 </>
                                                                                                         )
                                                                                                 }
