@@ -69,6 +69,14 @@ export default function ShopPage ({ user, url, connections, query, email }) {
     return (
         user?.username ?         <>
         <Head>
+
+            <Script
+                crossOrigin="anonymous"
+                async="true"
+                strategy="beforeInteractive"
+                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3673520795587574"
+            />
+
             <meta charSet="utf-8" />
             <meta
                 name="viewport"
