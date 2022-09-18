@@ -58,7 +58,7 @@ export default function LandingPage ({ user, url }) {
             <main className="main" id="top">
                 <nav className="navbar navbar-light sticky-top" data-navbar-darken-on-scroll={900}>
                     <div className="container pt-2"><a className="navbar-brand" href="/" /><div><a className="navbar-brand" href="/" /><a className="navbar-brand brand-logo" href="/"><b style={{color: '#2f15eb'}}>Assist<span style={{color: '#e7e6ed'}}>ants</span></b></a><a className="navbar-brand brand-logo-mini" href="/" /></div>
-                        <div className="navbar-nav ms-auto"><a href="/dashboard?redirect_back=/dashboard" className="btn btn-secondary">Dashboard</a></div>
+                        <div className="navbar-nav ms-auto"><a href="/auth?redirect_back=/dashboard" className="btn btn-secondary">Dashboard</a></div>
                     </div>
                 </nav>
                 {/* ============================================*/}
@@ -87,7 +87,7 @@ export default function LandingPage ({ user, url }) {
                                     <h4 className="opacity-50 ls-2 lh-base fw-medium">READY TO START</h4>
                                     <h2 className="mt-3 fs-4 fs-sm-7 latter-sp-3 lh-base fw-semi-bold">Start your adventure now! </h2>
                                 </div>
-                                <div className="flex-center d-flex"><a href="/dashboard?redirect_back=/dashboard" className="btn btn-info">Dashboard <span className="fas fa-arrow-right" /></a></div>
+                                <div className="flex-center d-flex"><a href="/auth?redirect_back=/dashboard" className="btn btn-info">Dashboard <span className="fas fa-arrow-right" /></a></div>
                             </div>
                         </div>
                     </div>{/* end of .container*/}
