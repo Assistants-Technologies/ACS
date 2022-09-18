@@ -173,9 +173,9 @@
   }
 
   // Connected Slider
-  if ($("#skipstep-connect").length) {
+  if ($("#skipstep-stripe-connect").length) {
     $(function() {
-      var skipSlider = document.getElementById('skipstep-connect');
+      var skipSlider = document.getElementById('skipstep-stripe-connect');
       noUiSlider.create(skipSlider, {
         connect: true,
         range: {
@@ -204,9 +204,9 @@
       });
     });
   }
-  if ($("#skipstep-connect-3").length) {
+  if ($("#skipstep-stripe-connect-3").length) {
     $(function() {
-      var skipSlider = document.getElementById('skipstep-connect-3');
+      var skipSlider = document.getElementById('skipstep-stripe-connect-3');
       noUiSlider.create(skipSlider, {
         connect: true,
         range: {

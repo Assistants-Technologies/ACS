@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 
+router.use('/stripe-connect', require('./stripe-connect/route'))
+
 router.use('/project', require('./project/route'))
 router.use('/license', require('./license/route'))
 

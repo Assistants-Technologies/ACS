@@ -6,9 +6,11 @@ import PageBody from "../components/content/PageBody"
 import Scripts from "../components/content/Scripts"
 
 import FeaturedTab from "../components/row/FeaturedTab"
-import DiscordDashboardProjectTab from "../components/row/DiscordDashboardProjectTab"
+import DiscordDashboardProjectTab from "../components/dbd-v3/DiscordDashboardProjectTab"
 
 import IsBeta from '../isBeta'
+import DbdPremiumManage from "../components/dbd-v3/DbdPremiumManage";
+import axios from "axios";
 
 export async function getServerSideProps(context) {
     return {
@@ -27,6 +29,14 @@ export default function TestPage ({ user, url }) {
             ud_s += '../'
         }
     }
+
+    const [subscriptionInfo, setSubscriptionInfo] = React.useState(null)
+
+    React.useEffect(()=>{
+        axios.get('/api/discord-dashboard/license/status/session').then(res=>{
+            setSubscriptionInfo(res.data.license_status)
+        })
+    }, [])
 
     const title = `${IsBeta ? 'BETA | ' : ''}Assistants Center - Discord Dashboard v3`
 
@@ -122,8 +132,11 @@ export default function TestPage ({ user, url }) {
                                     background={'url("https://cdn.assistantscenter.com/l4smwhnd")'}
                                 />*/}
 
-                                <DiscordDashboardProjectTab/>
+                                <DbdPremiumManage user={user} subscriptionInfo={subscriptionInfo}/>
 
+                                <DiscordDashboardProjectTab subscriptionInfo={subscriptionInfo}/>
+
+                                {/*
                                 <div className="row flex-grow">
                                     <div className="col-12 grid-margin stretch-card">
                                         <div className="card card-rounded table-darkBGImg" style={{background:"url('https://cdn.assistantscenter.com/l4snvbcn')",backgroundSize:'cover !important',backgroundRepeat:'no-repeat'}}>
@@ -140,6 +153,7 @@ export default function TestPage ({ user, url }) {
                                         </div>
                                     </div>
                                 </div>
+                                */}
                             </div>
 
                         </div>

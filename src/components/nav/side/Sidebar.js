@@ -57,22 +57,24 @@ export default function Sidebar ({ user }) {
                         </ul>
                     </div>
                 </li>
-                {/*<li className="nav-item">
+
+
+                {/*
+                <li className={`nav-item${asPath.startsWith('/twitter-tools')?' active':''}`}>
                     <a className="nav-link" data-bs-toggle="collapse" href="#form-elements2" aria-expanded="false"
                        aria-controls="form-elements2">
                         <i className="menu-icon mdi mdi-twitter"></i>
                         <span className="menu-title">Twitter Tools</span>
                         <i className="menu-arrow"></i>
                     </a>
-                    <div className="collapse" id="form-elements2">
+                    <div className={`collapse ${asPath.startsWith('/twitter-tools')?' show':''}`}  id="form-elements2">
                         <ul className="nav flex-column sub-menu">
-                            <li className="nav-item"><a className="nav-link" href="pages/forms/basic_elements.html">Projects</a></li>
-                            <li className="nav-item"><a className="nav-link" href="pages/forms/basic_elements.html">Documentation</a></li>
-                            <li className="nav-item"><a className="nav-link" href="pages/forms/basic_elements.html">Tutorial</a></li>
+                            <li className="nav-item"><a className={`nav-link${asPath.startsWith('/twitter-tools/daily-shop')?' active':''}`} href="/twitter-tools/daily-shop">Fortnite Daily Shop</a></li>
                         </ul>
                     </div>
-                </li>*/
-                }
+                </li>
+                */}
+
 
                 <li className="nav-item">
                     <a className="nav-link" href="https://upload.assistantscenter.com" target={"_blank"}>

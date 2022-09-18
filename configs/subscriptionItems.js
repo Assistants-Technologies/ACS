@@ -9,15 +9,16 @@ const { Client, GatewayIntentBits } = require('discord.js')
 const client = new Client({ intents: [ GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages ] })
 client.login(process.env.DISCORD_BOT_TOKEN)
 
-module.exports = (dev) => [
+module.exports = (dev, stripe) => [
     {
         id: 'dbd_premium',
         name: "Discord-Dashboard Premium Plan",
         description: "DBD Premium Plan",
+        url: '/discord-dashboard',
         prices: {
             "PLN": dev ? "price_1LYrcuKWxgCmg6SfjRPulIh4" : "price_1LZXxYKWxgCmg6SfnmPaZyyP",
-            "EUR": dev ? "price_1LYrcuKWxgCmg6SfjRPulIh4" : "price_1LZXyRKWxgCmg6Sfih75TwL5",
-            "USD": dev ? "price_1LYrcuKWxgCmg6SfjRPulIh4" : "price_1LZXy6KWxgCmg6SfPP5sA2PP",
+            "EUR": dev ? "price_1LYrcuKWxgCmg6SfjRPulIh4" : "price_1LbQprKWxgCmg6Sf80BlqBOU",
+            "USD": dev ? "price_1LYrcuKWxgCmg6SfjRPulIh4" : "price_1LbQqFKWxgCmg6Sfe6HkU1cL",
             "GBP": dev ? "price_1LYrcuKWxgCmg6SfjRPulIh4" : "price_1LZXz3KWxgCmg6SfiDfijCvm"
         },
         prices_display: {
@@ -33,6 +34,8 @@ module.exports = (dev) => [
             if(!UserDBDPremium)UserDBDPremium = await DiscordDashboard.create({
                 user: user_id
             })
+
+            UserDBDPremium.canceled = false
 
             UserDBDPremium.plan = {
                 plan_type: 'premium',
@@ -50,6 +53,8 @@ module.exports = (dev) => [
                 user: user_id
             })
 
+            UserDBDPremium.canceled = false
+
             UserDBDPremium.plan = {
                 plan_type: 'premium',
                 active_until: new Date(subscription.current_period_end*1000+172800000),
@@ -63,8 +68,22 @@ module.exports = (dev) => [
                 user: user_id
             })
             if(!UserDBDPremium)return true
-            if(UserDBDPremium.plan?.plan_type == "premium")
+            if(UserDBDPremium.plan?.plan_type == "premium" && (new Date(UserDBDPremium.plan.active_until) > new Date()))
                 return "Your plan is still valid."
+            return true
+        },
+        cancelSubscription: async ({ user_id }) => {
+            const UserDBDPremium = await DiscordDashboard.findOne({
+                user: user_id
+            })
+            if(!UserDBDPremium)return true
+            try{
+                await stripe.subscriptions.cancel(UserDBDPremium.plan.subscription.id)
+            }catch{
+                return "Subscription couldn't be found. Please contact billing support at billing@assistantscenter.com"
+            }
+            UserDBDPremium.canceled = true
+            await UserDBDPremium.save()
             return true
         },
         success_url: process.env.STRIPE_DBD_PREMIUM_SUCCESS_URL,

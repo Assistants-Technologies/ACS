@@ -94,10 +94,20 @@ const vhost = ({next_app, next_handle, client}) => {
     app.use('/admin', require('./admin'))
 
     app.get('/', (req,res)=>{
-        return res.redirect('/dashboard')
-        /*return next_app.render(req, res, '/index', {
+        return next_app.render(req, res, '/landing', {
             url: req.url,
-        })*/
+            user: req.session.user,
+        })
+    })
+
+    app.get('/twitter-tools/daily-shop', (req,res)=>{
+        if(!req.session.user)
+            return res.redirect('/auth?back_redirect=/twitter-tools/daily-shop')
+
+        return next_app.render(req, res, '/twitter-tools/daily-shop', {
+            url: req.url,
+            user: req.session.user,
+        })
     })
 
     app.get('/privacy-policy', (req,res)=>{
@@ -238,14 +248,6 @@ const vhost = ({next_app, next_handle, client}) => {
             user: req.session.user,
             licenses,
         })
-    })
-
-    app.get('/discord-dashboard/v3', async (req, res) => {
-        if(!req.session.user)
-        return res.redirect('/auth?back_redirect=/discord-dashboard')
-    
-        if(!req.session.user.admin)
-            return res.status(403).send()
     })
 
     app.get('/discord-dashboard/project/:projectId', async (req,res)=>{

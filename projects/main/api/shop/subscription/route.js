@@ -23,7 +23,7 @@ const { Client, GatewayIntentBits } = require('discord.js')
 const client = new Client({ intents: [ GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages ] })
 client.login(process.env.DISCORD_BOT_TOKEN)
 
-const SubscriptionItems = require('../../../../../configs/subscriptionItems')(process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE")
+const SubscriptionItems = require('../../../../../configs/subscriptionItems')(process.env.DEVELOPMENT_CHANNEL === "TRUE" || process.env.BETA_CHANNEL === "TRUE", stripe)
 
 router.route('/')
     .get(async(req,res)=>{
@@ -50,14 +50,34 @@ router.route('/cancel')
         return res.redirect(`/discord-dashboard?session_id=${session_id}&action=canceled`)
     })
 
-router.route('/create/:subscription_id')
+router.route('/plan/cancel/:subscription_id')
+    .get(async(req,res)=>{
+        if(!req.session.user)
+            return res.send({error:true,message:"You are not logged in."})
+
+        const Subscription = SubscriptionItems.find(sub=>sub.id==req.params.subscription_id)
+        if(!Subscription)
+            return res.send({error:true,message:"Subscription not valid."})
+
+        const can_start = await Subscription.canStart({ user_id: req.session.user._id })
+        if(can_start == true)
+            return res.redirect(`${Subscription.url}?error=${can_start}`)
+
+        const canceled = await Subscription.cancelSubscription({ user_id: req.session.user._id })
+        if(canceled != true)
+            return res.redirect(`${Subscription.url}?error=${canceled}`)
+
+        return res.redirect(`${Subscription.url}?success=true`)
+    })
+
+router.route('/plan/create/:subscription_id')
     .get(async(req,res)=>{
         if(!req.session.user)
             return res.send({error:true,message:"You are not logged in."})
         
         const Subscription = SubscriptionItems.find(sub=>sub.id==req.params.subscription_id)
         if(!Subscription)
-            return res.send({error:true,message:"Subscription not valid"})
+            return res.send({error:true,message:"Subscription not valid."})
 
         
         const { currency = "EUR" } = req?.query;
@@ -106,7 +126,11 @@ router.route('/create/:subscription_id')
             ],
             success_url: Subscription.success_url,
             cancel_url: Subscription.cancel_url,
-            metadata: {'subscription_id': req.params.subscription_id, 'checkout_metadata_key': checkout_metadata_key }
+            subscription_data: {
+                metadata: {
+                    "checkout_metadata_key": checkout_metadata_key
+                },
+            },
           })
 
           await CheckoutSession.create({
@@ -117,7 +141,10 @@ router.route('/create/:subscription_id')
             checkout_metadata_key
           })
 
-        res.redirect(303, session.url)
+        res.send({
+            error: false,
+            url: session.url
+        })
     })
 
 module.exports = router

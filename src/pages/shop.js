@@ -80,6 +80,8 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
 
     const [itemBought, setItemBought] = React.useState(null)
 
+    const [ahoModal, setAhoModal] = React.useState(null)
+
     const buyDigitalItem = async (item_id) => {
         try {
             const res = await axios.post(`/api/shop/digital-items/buy/${item_id}`)
@@ -96,6 +98,11 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
         return true
     }
 
+    const getAhoInfo = async (item_id) => {
+        const res = await axios.get(`/api/shop/digital-items/aho-info/${item_id}`)
+        return res.data.info
+    }
+ 
     const title = `${IsBeta ? 'BETA | ' : ''}Assistants Center - Digital Features Shop`
 
     return (
@@ -244,6 +251,8 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                                                             </td>
                                                                                             <td style={{ textAlign: 'center' }}>
                                                                                                 {
+                                                                                                    
+
                                                                                                     item.owns ?
                                                                                                         (
                                                                                                             item.aho?.type === 'redirect' ?
@@ -251,10 +260,17 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                                                                                     <button type="button" className="btn btn-info" style={{ color: 'white', height: 40, margin: 'auto', borderColor: 'transparent' }} onClick={() => Router.push(item.aho.url)}>View</button>
                                                                                                                 </>
                                                                                                                 :
-                                                                                                                <>
-                                                                                                                    <button type="button" className="btn btn-warning" style={{ color: 'white', height: 40, margin: 'auto', borderColor: 'transparent' }} disabled={true}>Buy</button>
-                                                                                                                    <label>Already owned</label>
-                                                                                                                </>
+                                                                                                                item.aho?.type === 'modal' ?
+                                                                                                                    <>
+                                                                                                                        <button type="button" className="btn btn-info" style={{ color: 'white', height: 40, margin: 'auto', borderColor: 'transparent' }} onClick={() => {
+                                                                                                                                getAhoInfo(item.id).then(info=>setAhoModal({ ...item.aho.html, info }))
+                                                                                                                        }}>View</button>
+                                                                                                                    </>
+                                                                                                                    :
+                                                                                                                    <>
+                                                                                                                        <button type="button" className="btn btn-warning" style={{ color: 'white', height: 40, margin: 'auto', borderColor: 'transparent' }} disabled={true}>Buy</button>
+                                                                                                                        <label>Already owned</label>
+                                                                                                                    </>
                                                                                                         )
                                                                                                         :
                                                                                                         (
@@ -265,7 +281,7 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                                                                                 :
                                                                                                                 <>
                                                                                                                     <button type="button" className="btn btn-warning" style={{ color: 'white', height: 40, margin: 'auto', borderColor: 'transparent' }} disabled={true}>Buy</button>
-                                                                                                                    <label>Not enough coins</label>
+                                                                                                                    <br/><label style={{paddingTop:3}}>Not enough coins</label>
                                                                                                                 </>
                                                                                                         )
                                                                                                 }
@@ -285,6 +301,34 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                         })
                                     }
 
+                                    <div id="ahoModal" className="modal"
+                                         style={{display: ahoModal ? 'block' : 'none'}} onClick={(event) => {
+                                        if (event.target.id == "ahoModal") {
+                                            setAhoModal(null)
+                                        }
+                                    }}>
+                                            {
+                                                ahoModal &&
+                                                <div className="modal-content" style={{borderRadius: 15}}>
+                                                <div className="card card-rounded">
+                                                    <div className="card-body">
+                                                        <div dangerouslySetInnerHTML={{ __html: ahoModal?.content }}/>
+                                                        <p>Your license number is: {ahoModal.info}</p>
+                                                        <div style={{ paddingTop: 15 }}>
+                                                            <button type="button"
+                                                                    className="btn btn-info btn-icon-text"
+                                                                    onClick={() => setAhoModal(null)}
+                                                                    style={{ color: 'white', height: '50px', fontSize: '16px', justifyContent: 'center', display: 'flex', borderColor: 'transparent !important' }}
+                                                            >
+                                                                {ahoModal?.button_text || 'Okay'}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            }
+                                    </div>
+
                                     <div id="coinsShopModal" className="modal" style={{ display: displayCoinsShop ? 'block' : 'none' }} onClick={(event) => {
                                         if (event.target.id == "coinsShopModal") {
                                             setDisplayCoinsShop(false)
@@ -294,6 +338,7 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                             <div className="card card-rounded">
                                                 <div className="card-body">
                                                     <h3><b>Top Up Assistants Coins</b></h3>
+                                                    <p style={{fontSize:16}}>The more you buy, the less you pay!</p>
                                                     {
                                                         (items && coins != null && setSelected) ?
                                                             <div className={"pt-3"}>
@@ -455,6 +500,21 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                                         className="btn btn-info btn-icon-text"
                                                                         onClick={() => Router.push(itemBought.aho.url)}
                                                                         style={{ color: 'white', height: '50px', fontSize: '16px', justifyContent: 'center', display: 'flex', borderColor: 'transparent !important' }}
+                                                                    >
+                                                                        View
+                                                                    </button>
+                                                                </div>
+                                                            }
+                                                            {
+                                                                itemBought.aho?.type === 'modal' &&
+                                                                <div style={{ paddingTop: 15 }}>
+                                                                    <button type="button"
+                                                                            className="btn btn-info btn-icon-text"
+                                                                            onClick={() => {
+                                                                                setItemBought(null)
+                                                                                getAhoInfo(itemBought.id).then(info=>setAhoModal({ ...itemBought.aho.html, info }))
+                                                                            }}
+                                                                            style={{ color: 'white', height: '50px', fontSize: '16px', justifyContent: 'center', display: 'flex', borderColor: 'transparent !important' }}
                                                                     >
                                                                         View
                                                                     </button>

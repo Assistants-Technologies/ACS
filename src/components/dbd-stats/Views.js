@@ -1,21 +1,20 @@
 import React from 'react'
-import Script from 'next/script'
-import { WorldMap } from 'react-svg-worldmap'
 import axios from 'axios'
+
+import dynamic from "next/dynamic"
+
+const WorldMap = dynamic(() => import('react-svg-worldmap'))
 
 const CountryViews = ({project}) => {
     const [data, setData] = React.useState(null)
 
     React.useEffect(() => {
-        const exec = async () => {
-            const res = await axios.get('/api/discord-dashboard/project/views/total/countries/'+project._id)
-            console.log(res.data)
+        axios.get('/api/discord-dashboard/project/views/total/countries/'+project._id).then(res=>{
             let resData = Object.keys(res.data.countryData).map((country,idx) => {
                 return { country, value: Object.values(res.data.countryData)[idx] }
             })
             setData(resData)
-        }
-        exec()
+        })
     }, [])
 
     return (
@@ -49,6 +48,7 @@ const Comparison = ({project}) => {
 
     React.useEffect(()=>{
         if(!data)return
+        if(typeof document == 'undefined') return
         const graphGradient = document.getElementById("performaneLine").getContext('2d');
         const graphGradient2 = document.getElementById("performaneLine").getContext('2d');
         const saleGradientBg = graphGradient.createLinearGradient(5, 0, 5, 100);
@@ -130,7 +130,6 @@ const Comparison = ({project}) => {
 }
 
 export default function ViewsStats ({ project }) {
-    console.log('project2,', project)
     const data = [
         { country: "cn", value: 1389 },
         { country: "pl", value: 1289 },
@@ -170,15 +169,19 @@ export default function ViewsStats ({ project }) {
                             <div className="chartjs-wrapper mt-5">
                                 <div className="chartjs-size-monitor">
                                     <div className="chartjs-size-monitor-expand">
-                                        <div className="" />
+                                        <div>
+                                        </div>
                                     </div>
                                     <div className="chartjs-size-monitor-shrink">
-                                        <div className="" />
+                                        <div>
+                                        </div>
                                     </div>
                                 </div>
-                                {
-                                    (typeof document !== 'undefined') ? <Comparison project={project}/> : null
-                                }
+                                <div>
+                                    {
+                                        (typeof document !== 'undefined')  && data ? <Comparison project={project}/> : null
+                                    }
+                                </div>
                                 <canvas
                                     id="performaneLine"
                                     style={{ display: "block", height: 150, width: 658 }}
@@ -191,73 +194,72 @@ export default function ViewsStats ({ project }) {
                     </div>
                 </div>
             </div>
-
         </div>
-            <div className="col-lg-4 d-flex flex-column">
-                <div className="row flex-grow">
-                    <div className="col-md-6 col-lg-12 grid-margin stretch-card">
-                        <div className="card bg-primary card-rounded">
-                            <div className="card-body pb-0">
-                                <h4 className="card-title card-title-dash text-white mb-4">
-                                    Total Views Summary
-                                </h4>
-                                <div className="row">
-                                    <div className="col-sm-4">
-                                        <p className="status-summary-ight-white mb-1">Views</p>
-                                        <h2 className="text-white">357</h2>
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <p className="status-summary-ight-white mb-1">Users</p>
-                                        <h2 className="text-white">357</h2>
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <p className="status-summary-ight-white mb-1">Unique Views</p>
-                                        <h2 className="text-white">357</h2>
-                                    </div>
-                                    <div className="pt-3"></div>
+        <div className="col-lg-4 d-flex flex-column">
+            <div className="row flex-grow">
+                <div className="col-md-6 col-lg-12 grid-margin stretch-card">
+                    <div className="card bg-primary card-rounded">
+                        <div className="card-body pb-0">
+                            <h4 className="card-title card-title-dash text-white mb-4">
+                                Total Views Summary
+                            </h4>
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <p className="status-summary-ight-white mb-1">Views</p>
+                                    <h2 className="text-white">357</h2>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="row flex-grow">
-                    <div className="col-md-6 col-lg-12 grid-margin stretch-card">
-                        <div className="card bg-primary card-rounded">
-                            <div className="card-body pb-0">
-                                <h4 className="card-title card-title-dash text-white mb-4">
-                                    Total Views Summary
-                                </h4>
-                                <div className="row">
-                                    <div className="col-sm-4">
-                                        <p className="status-summary-ight-white mb-1">Views</p>
-                                        <h2 className="text-white">357</h2>
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <p className="status-summary-ight-white mb-1">Users</p>
-                                        <h2 className="text-white">357</h2>
-                                    </div>
-                                    <div className="col-sm-4">
-                                        <p className="status-summary-ight-white mb-1">Unique Views</p>
-                                        <h2 className="text-white">357</h2>
-                                    </div>
-                                    <div className="pt-3"></div>
+                                <div className="col-sm-4">
+                                    <p className="status-summary-ight-white mb-1">Users</p>
+                                    <h2 className="text-white">357</h2>
                                 </div>
+                                <div className="col-sm-4">
+                                    <p className="status-summary-ight-white mb-1">Unique Views</p>
+                                    <h2 className="text-white">357</h2>
+                                </div>
+                                <div className="pt-3"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="col-xxl-6 d-flex flex-column">
-                <div className="card card-rounded">
-                    <div className="card-body">
-                        <a><b>Views per countries</b></a>
-                        {(typeof window !== 'undefined') ?
-                            <CountryViews project={project}/>
-                            :null
-                        }
+            <div className="row flex-grow">
+                <div className="col-md-6 col-lg-12 grid-margin stretch-card">
+                    <div className="card bg-primary card-rounded">
+                        <div className="card-body pb-0">
+                            <h4 className="card-title card-title-dash text-white mb-4">
+                                Total Views Summary
+                            </h4>
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <p className="status-summary-ight-white mb-1">Views</p>
+                                    <h2 className="text-white">357</h2>
+                                </div>
+                                <div className="col-sm-4">
+                                    <p className="status-summary-ight-white mb-1">Users</p>
+                                    <h2 className="text-white">357</h2>
+                                </div>
+                                <div className="col-sm-4">
+                                    <p className="status-summary-ight-white mb-1">Unique Views</p>
+                                    <h2 className="text-white">357</h2>
+                                </div>
+                                <div className="pt-3"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div className="col-xxl-6 d-flex flex-column">
+            <div className="card card-rounded">
+                <div className="card-body">
+                    <a><b>Views per countries</b></a>
+                    {(typeof window !== 'undefined')  && data ?
+                        <CountryViews project={project}/>
+                        :null
+                    }
+                </div>
+            </div>
+        </div>
 
         </>
     )
