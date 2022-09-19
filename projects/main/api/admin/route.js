@@ -3,6 +3,8 @@ const router = express.Router()
 
 const User = require('../../../../models/user')
 
+router.use('/support/questions', require('./questions/route'))
+
 router.route('/users/list')
     .get(async(req,res) => {
         if(req.session?.user?.admin !== true)
