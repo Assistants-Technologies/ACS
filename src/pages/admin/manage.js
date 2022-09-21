@@ -53,8 +53,6 @@ export default function TestPage({ user, url, props }) {
             user_id,
             item_id,
             category_id
-        }).then (res => {
-            console.log(res.data)
         })
    
         getUsers()
