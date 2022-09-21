@@ -109,6 +109,12 @@ export default function Sidebar({ user }) {
                                     <span className="menu-title">User List</span>
                                 </a>
                             </li>
+                            <li className={`nav-item${asPath.startsWith('/admin/users/list') ? ' active' : ''}`}>
+                                <a className="nav-link" href="/admin/manage">
+                                    <i className="mdi mdi-human-handsup menu-icon" />
+                                    <span className="menu-title">User Management</span>
+                                </a>
+                            </li>
                         </>
                     )
                 }

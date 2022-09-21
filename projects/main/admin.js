@@ -52,5 +52,17 @@ router.get('/support/create', async (req, res) => {
     })
 })
 
+router.get('/manage', async (req, res) => {
+    if (!req.session?.user)
+        return res.redirect('/auth?back_redirect=user')
+    if (req.session?.user?.admin !== true)
+        return res.status(403).send()
+
+    req.next_app.render(req, res, '/admin/manage', {
+        url: req.url,
+        user: req.session.user,
+    })
+})
+
 
 module.exports = router
