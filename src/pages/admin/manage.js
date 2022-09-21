@@ -22,65 +22,62 @@ export async function getServerSideProps(context) {
 export default function TestPage({ user, url, props }) {
     let ud_s = '../'
 
-    const [currentSelection, setCurrentSelection] = useState('select')
-
-    const changeTab = (tab) => {
-        setCurrentSelection(tab)
-    }
-
     const title = `${IsBeta ? 'BETA | ' : ''}Assistants Center - Email system`
 
     const axios = require('axios');
 
     const [userDB, setUserDB] = useState(null);
-    const [users, setUsers] = React.useState(null)
-    const [items, setItems] = React.useState(null)
+    const [users, setUsers] = useState(null)
+    const [items, setItems] = useState(null)
 
-    const change = (e) => {
+    const getUser = async (e) => {
         const selectedUser = users.find(user => user.assistants_username === e.target.value)
         if (!selectedUser) return setUserDB(null);
         setUserDB(selectedUser)
+        getItems(selectedUser._id)
+    }
 
-        axios.post('/api/admin/items-owned', {
-            user_id: selectedUser._id
+    const assignItem = async ({ user_id, item_id, category_id }) => {
+        await axios.post('/api/discord-dashboard/license/assign', {
+            user_id,
+            item_id,
+            category_id
+        })
+        
+        getUsers()
+        getItems(user_id)
+    }
+
+    const revokeItem = async ({ user_id, item_id, category_id }) => {
+        await axios.post('/api/discord-dashboard/license/revoke', {
+            user_id,
+            item_id,
+            category_id
+        }).then (res => {
+            console.log(res.data)
+        })
+   
+        getUsers()
+        getItems(user_id)
+    }
+
+    const getItems = async (_id) => {
+        await axios.post('/api/admin/items-owned', {
+            user_id: _id
         }).then(res => {
-            console.log(res.data.items)
             setItems(res.data.items || [])
         })
     }
 
-    const addItem = async ({ user_id, item_id, category_id }) => {
-        console.log(user_id, item_id, category_id)
-        axios.post('/api/discord-dashboard/license/assign', {
-            user_id,
-            item_id,
-            category_id
-        }).then(async () => {
-            console.log("done")
-            await axios.get('/api/admin/users/list').then(res => {
-                setUsers(res.data?.users || [])
-            })
-        })
-    }
+    const getUsers = async () => {
+        axios.get('/api/admin/users/list').then(res => {
+            setUsers(res.data?.users || [])
 
-    const revokeItem = async ({ user_id, item_id, category_id }) => {
-        console.log(user_id, item_id, category_id)
-        axios.post('/api/discord-dashboard/license/revoke', {
-            user_id,
-            item_id,
-            category_id
-        }).then(async () => {
-            console.log("done")
-            await axios.get('/api/admin/users/list').then(res => {
-                setUsers(res.data?.users || [])
-            })
         })
     }
 
     React.useEffect(() => {
-        axios.get('/api/admin/users/list').then(res => {
-            setUsers(res.data?.users || [])
-        })
+        getUsers()
     }, [])
 
     return (
@@ -129,57 +126,90 @@ export default function TestPage({ user, url, props }) {
                                                 <div className="card-body">
                                                     <h3><b>Manage User</b></h3>
                                                     <hr />
-                                                    <>
-
-                                                        <input type="text" placeholder='username' onInput={e => change(e)} />
-
-                                                        <div>
-                                                            {
-                                                                userDB ?
-                                                                    <>
-                                                                        <h3 className='mt-3'>{userDB.assistants_username}</h3>
-                                                                        {
-                                                                            items ? items.map((category, index) => {
-                                                                                return (
-                                                                                    <>
-                                                                                        <h3 className='mt-4'>{category.categoryName}</h3>
-                                                                                        {
-                                                                                            category.categoryItems.map((item, index) => {
-                                                                                                return (
-                                                                                                    <>
-                                                                                                        <div className="d-flex" style={{ placeItems: "center", alignContent: "center", columnGap: "10px" }}>
-                                                                                                            <h6><b>{item.name}</b></h6>
-                                                                                                            <p style={{ marginTop: "auto", marginBottom: "auto" }}>{item.description}</p>
-                                                                                                            <p style={{ marginTop: "auto", marginBottom: "auto" }}>Price: {item.price}</p>
-                                                                                                            {
-                                                                                                                item.owns ? 
-                                                                                                                <button className="btn btn-primary" onClick={() => {
-                                                                                                                    addItem({ user_id: selectedUser._id, item_id: item.id, category_id: test.categoryId })
-                                                                                                                }}>Assign</button>
-                                                                                                                :
-                                                                                                                <button className="btn btn-danger" onClick={() => {
-                                                                                                                    revokeItem({ user_id: selectedUser._id, item_id: item.id, category_id: test.categoryId })
-                                                                                                                }}>Revoke</button>
-                                                                                                            }
-                                                                                                        </div>
-                                                                                                    </>
-                                                                                                )
-                                                                                            })
-                                                                                        }
-                                                                                    </>
-                                                                                )
-                                                                            })
-                                                                                : null
-                                                                        }
-                                                                    </>
-                                                                    : <h3>no user selected</h3>
-                                                            }
-                                                        </div>
-                                                    </>
+                                                    <input type="text" placeholder='username' onInput={e => getUser(e)} />
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
+                                    {
+                                        userDB ?
+                                            <>
+                                                {
+                                                    items && items.map((category, index) => {
+                                                        return (
+                                                            <>
+                                                                <div className="row mt-4">
+                                                                    <div className="col-sm-12">
+                                                                        <div className="card card-rounded" id={category.categoryName.toLowerCase().replace(/\s/g, '')}>
+                                                                            <div className="card-body">
+                                                                                <h3>{category.categoryName}</h3>
+                                                                                <div className="table-responsive">
+                                                                                    <table className="table table-striped">
+                                                                                        <thead>
+                                                                                            <tr>
+                                                                                                <th>
+                                                                                                </th>
+                                                                                                <th>
+                                                                                                </th>
+                                                                                                <th>
+                                                                                                </th>
+                                                                                                <th>
+                                                                                                </th>
+                                                                                            </tr>
+                                                                                        </thead>
+                                                                                        <tbody>
+                                                                                            {
+                                                                                                category.categoryItems &&
+                                                                                                category.categoryItems.map(item => {
+                                                                                                    return (
+                                                                                                        <tr>
+                                                                                                            <td className="py-1">
+                                                                                                                <img src={item.image} alt="image" />
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                <div>
+                                                                                                                    <h6>{item.name}</h6>
+                                                                                                                    <p>{item.description}</p>
+                                                                                                                </div>
+                                                                                                            </td>
+                                                                                                            <td>
+                                                                                                                Price: <b>{item.price}</b>
+                                                                                                            </td>
+                                                                                                            <td style={{ textAlign: 'center' }}>
+                                                                                                                {
+                                                                                                                    !item.owns ?
+                                                                                                                        <button type="button" onClick={async () => {
+                                                                                                                            if (confirm(`Are you sure you want to assign this item to ${userDB.assistants_username}?`)) {
+                                                                                                                                await assignItem({ user_id: userDB._id, item_id: item.id, category_id: category.categoryId })
+                                                                                                                            }
+                                                                                                                        }} className="btn btn-primary" style={{ color: 'white', height: 40, margin: 'auto', borderColor: 'transparent' }}>Assign</button>
+                                                                                                                        :
+                                                                                                                        <button type="button" onClick={async () => {
+                                                                                                                            if (confirm(`Are you sure you want to revoke this item from ${userDB.assistants_username}?`)) {
+                                                                                                                                await revokeItem({ user_id: userDB._id, item_id: item.id, category_id: category.categoryId })
+                                                                                                                            }
+                                                                                                                        }} className="btn btn-danger" style={{ color: 'white', height: 40, margin: 'auto', borderColor: 'transparent' }}>Revoke</button>
+                                                                                                                }
+                                                                                                            </td>
+                                                                                                        </tr>
+                                                                                                    )
+                                                                                                })
+                                                                                            }
+                                                                                        </tbody>
+                                                                                    </table>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </>
+                                                        )
+                                                    })
+                                                }
+                                            </> : null
+
+                                    }
+
                                 </div>
                             </div>
                         </div>

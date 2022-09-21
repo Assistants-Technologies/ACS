@@ -44,6 +44,76 @@ router.get('/status/session', async (req, res) => {
     return res.send({ error: false, license_status })
 })
 
+router.post('/revoke', async (req, res) => {
+    console.log("ran")
+
+    const { user_id, item_id, category_id } = req.body
+    if (!user_id) return res.send({ error: true, message: 'Missing user_id' })
+    if (!category_id || !item_id) return res.send({ error: true, message: 'Missing item information' })
+
+    const category = digitalItems.find(category => category.categoryId === category_id)
+
+    const item = category.categoryItems.find(item => item.id === item_id)
+    if (!item) 
+        return res.send({ error: true, message: "Item not found" })
+
+    const user = await User.findOne({ _id: user_id })
+    if (!user) return res.send({ error: true, message: 'User not found' })
+
+    if (category.categoryId === "dbd-license") {
+        if (item.id === `dbd_opensource_license`) {
+            await LicensesList.findOneAndRemove({ license_id: user.OpenSource.license_id })
+            await User.findOneAndUpdate({ _id: user_id }, { $set: { "OpenSource.license_id": null, "Production.payment_id": null, "Production.license_type": null, "Production.status": null } })
+        }
+        if (item.id === `dbd_personal_license`) {
+            await LicensesList.findOneAndRemove({ license_id: user.Personal.license_id })
+            await User.findOneAndUpdate({ _id: user_id }, { $set: { "Personal.license_id": null, "Production.payment_id": null, "Production.license_type": null, "Production.status": null } })
+        }
+        if (item.id === `dbd_production_license`) {
+            await LicensesList.findOneAndRemove({ license_id: user.Production.license_id })
+            await User.findOneAndUpdate({ _id: user_id }, { $set: { "Production.license_id": null, "Production.payment_id": null, "Production.license_type": null, "Production.status": null } })
+        }
+    } else {
+        await LicensesList.findOneAndRemove({ license_id: user.productLicenses.find(license => license.itemID === item.id).licenseID })
+        
+        await User.findOneAndUpdate({ _id: user_id },
+            {
+                $pull: {
+                    productLicenses: {
+                        itemID: item.id
+                    }
+                },
+            },
+            { safe: true, multi: false }
+        );
+    }
+    
+    return res.send({ error: false, message: 'License revoked' })
+})
+
+router.post('/assign', async (req, res) => {
+    const { user_id } = req.body
+    if (!user_id) return res.send({ error: true, message: 'Missing user_id' })
+
+    const reqCategory = req.body.category_id
+    const reqItem = req.body.item_id
+
+    const item = digitalItems.find(category => category.categoryId === reqCategory).categoryItems.find(item => item.id === reqItem)
+
+    if (!item) 
+        return res.send({ error: true, message: "Item not found" })
+
+    const verified = await item.assign_item({
+        Session: {
+            user: {
+                _id: user_id,
+            },
+        }
+    })
+
+    return res.send({ error: verified })
+})
+
 router.post('/regen/dbd', async (req, res) => {
     if (!req.session.user)
         return res.send({
