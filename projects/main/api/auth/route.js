@@ -17,7 +17,7 @@ Issuer.discover(process.env.ACS_PROVIDER).then(acs_issuer => {
 const User = require('../../../../models/user')
 
 router.get('/', (req, res) => {
-    const back_redirect = req.query.back_redirect || req.query.back_redirect || '/dashboard'
+    const back_redirect = req.query.back_redirect || req.query.redirect_back || '/dashboard'
     req.session.back_redirect = back_redirect
     const url = ACS_Client.authorizationUrl({
         scope: 'openid profile email',
