@@ -165,7 +165,7 @@ const vhost = ({next_app, next_handle, client}) => {
     })
 
     app.get('/auth', (req,res) => {
-        const back_redirect = req.query.back_redirect || '/dashboard'
+        const back_redirect = req.query.back_redirect || req.query.back_redirect || '/dashboard'
         req.session.back_redirect = back_redirect
         const url = ACS_Client.authorizationUrl({
             scope: 'openid profile email',
