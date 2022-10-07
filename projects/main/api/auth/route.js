@@ -25,6 +25,10 @@ router.get('/', (req, res) => {
     res.redirect(url)
 })
 
+router.get('/session/destroy', (req,res) => {
+    res.redirect(`${process.env.ACS_PROVIDER.replace('/oidc','')}/logout?back_redirect=${process.env.DOMAIN_URL}`)
+})
+
 router.get('/callback', async (req, res) => {
     const params = ACS_Client.callbackParams(req);
     const tokenSet = await ACS_Client.callback(process.env.ACS_REDIRECT_URI, params)
