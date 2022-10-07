@@ -4,6 +4,19 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo');
 const APIRoute = require('./api/route')
 
+const OIDC = require('openid-client')
+const { Issuer } = OIDC
+
+let ACS_Client;
+Issuer.discover(process.env.ACS_PROVIDER).then(acs_issuer => {
+    ACS_Client = new acs_issuer.Client({
+        client_id: process.env.ACS_CLIENT_ID,
+        client_secret: process.env.ACS_CLIENT_SECRET,
+        redirect_uris: [process.env.ACS_REDIRECT_URI],
+        response_types: ['code']
+    })
+})
+
 const rateLimit = require('express-rate-limit')
 const rateMongoStore = require('rate-limit-mongo')
 
@@ -152,17 +165,12 @@ const vhost = ({next_app, next_handle, client}) => {
     })
 
     app.get('/auth', (req,res) => {
-        const {back_redirect, redirect_back} = req.query
-        if(back_redirect || redirect_back){
-            req.session.back_redirect = back_redirect || redirect_back
-        }
-        const back_redirect_n = req.session.back_redirect
-
-        if(req.session?.user)return res.status(401).redirect(back_redirect_n)
-        return next_app.render(req, res, '/auth', {
-            url: req.url,
-            back_redirect: back_redirect_n
+        const back_redirect = req.query.back_redirect || req.query.redirect_back || '/dashboard'
+        req.session.back_redirect = back_redirect
+        const url = ACS_Client.authorizationUrl({
+            scope: 'openid profile email',
         })
+        res.redirect(url)
     })
 
     app.get('/blog/create', (req, res) => {
