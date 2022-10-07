@@ -30,25 +30,29 @@ router.get('/session/destroy', (req,res) => {
 })
 
 router.get('/callback', async (req, res) => {
-    const params = ACS_Client.callbackParams(req);
-    const tokenSet = await ACS_Client.callback(process.env.ACS_REDIRECT_URI, params)
+    try {
+        const params = ACS_Client.callbackParams(req);
+        const tokenSet = await ACS_Client.callback(process.env.ACS_REDIRECT_URI, params)
 
-    const user_info = await ACS_Client.userinfo(tokenSet.access_token)
+        const user_info = await ACS_Client.userinfo(tokenSet.access_token)
 
-    const user = await User.findOne({
-        _id: user_info.sub.replace("acc_", "")
-    })
+        const user = await User.findOne({
+            _id: user_info.sub.replace("acc_", "")
+        })
 
-    req.session.user = {
-        _id: user._id,
-        username: user.assistants_username,
-        email: user.email,
-        avatarURL: user.avatarURL,
-        admin: user.admin
+        req.session.user = {
+            _id: user._id,
+            username: user.assistants_username,
+            email: user.email,
+            avatarURL: user.avatarURL,
+            admin: user.admin
+        }
+        await req.session.save()
+
+        res.redirect(req.session.back_redirect || '/dashboard')
+    }catch(err){
+        return res.redirect(`/?error=${err.message}`)
     }
-    await req.session.save()
-
-    res.redirect(req.session.back_redirect || '/dashboard')
 })
 
 router.use('/discord', require('./discord'))
