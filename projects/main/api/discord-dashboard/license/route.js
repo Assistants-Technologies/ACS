@@ -45,7 +45,10 @@ router.get('/status/session', async (req, res) => {
 })
 
 router.post('/revoke', async (req, res) => {
-    console.log("ran")
+    if (!req.session?.user)
+        return res.status(403).send()
+    if (req.session?.user?.admin !== true)
+        return res.status(403).send()
 
     const { user_id, item_id, category_id } = req.body
     if (!user_id) return res.send({ error: true, message: 'Missing user_id' })
@@ -54,7 +57,7 @@ router.post('/revoke', async (req, res) => {
     const category = digitalItems.find(category => category.categoryId === category_id)
 
     const item = category.categoryItems.find(item => item.id === item_id)
-    if (!item) 
+    if (!item)
         return res.send({ error: true, message: "Item not found" })
 
     const user = await User.findOne({ _id: user_id })
@@ -75,7 +78,7 @@ router.post('/revoke', async (req, res) => {
         }
     } else {
         await LicensesList.findOneAndRemove({ license_id: user.productLicenses.find(license => license.itemID === item.id).licenseID })
-        
+
         await User.findOneAndUpdate({ _id: user_id },
             {
                 $pull: {
@@ -87,11 +90,16 @@ router.post('/revoke', async (req, res) => {
             { safe: true, multi: false }
         );
     }
-    
+
     return res.send({ error: false, message: 'License revoked' })
 })
 
 router.post('/assign', async (req, res) => {
+    if (!req.session?.user)
+        return res.status(403).send();
+    if (req.session?.user?.admin !== true)
+        return res.status(403).send();
+
     const { user_id } = req.body
     if (!user_id) return res.send({ error: true, message: 'Missing user_id' })
 
@@ -100,7 +108,7 @@ router.post('/assign', async (req, res) => {
 
     const item = digitalItems.find(category => category.categoryId === reqCategory).categoryItems.find(item => item.id === reqItem)
 
-    if (!item) 
+    if (!item)
         return res.send({ error: true, message: "Item not found" })
 
     const verified = await item.assign_item({
