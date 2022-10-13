@@ -30,7 +30,6 @@ export default function TestPage({ user, url }) {
 
     ud_s += '../'
 
-    const [users, setUsers] = React.useState(null)
     const [questions, setQuestions] = React.useState(null)
 
     function getQuestions() {
@@ -40,9 +39,6 @@ export default function TestPage({ user, url }) {
     }
 
     React.useEffect(() => {
-        axios.get('/api/admin/users/list').then(res => {
-            setUsers(res.data?.users || [])
-        });
         getQuestions();
     }, [])
 
@@ -119,8 +115,8 @@ export default function TestPage({ user, url }) {
                                                             <tr>
                                                                 <td>
                                                                     <div>
-                                                                        <h6>{question.query}</h6>
-                                                                        <p style={{ width: "40vw", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{question.answer}</p>
+                                                                        <h6>{question?.query}</h6>
+                                                                        <p style={{ width: "40vw", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{question?.answer}</p>
                                                                     </div>
                                                                 </td>
                                                                 <td>
@@ -129,7 +125,7 @@ export default function TestPage({ user, url }) {
                                                                 <td>
                                                                     <button className="btn btn-danger btn-sm" onClick={async () => {
                                                                         if (confirm(`Are you sure you want to delete the question "${safeQuery}"?`)) {
-                                                                            axios.post(`/api/admin/support/questions/edit/${question.id}/delete`)
+                                                                            axios.post(`/api/admin/support/questions/edit/${question?.id}/delete`)
                                                                             getQuestions();
                                                                         }
                                                                     }}>Delete</button>
