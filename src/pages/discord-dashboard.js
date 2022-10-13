@@ -21,7 +21,7 @@ export async function getServerSideProps(context) {
     }
 }
 
-export default function TestPage ({ user, url }) {
+export default function DiscordDashboardPage ({ user, url }) {
     const ud = (url.split("/").length - 1)
     let ud_s = ''
     if(ud != 1){

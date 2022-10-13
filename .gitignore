@@ -24,3 +24,4 @@ configs/digitalItems.js
 configs/digitalItems.js
 package-lock.json
 yarn.lock
+.fleet
