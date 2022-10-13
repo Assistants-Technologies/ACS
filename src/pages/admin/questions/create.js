@@ -30,12 +30,11 @@ export default function TestPage({ user, url, question }) {
 
     ud_s += '../'
 
-    const [users, setUsers] = React.useState(null)
-    const [questions, setQuestions] = React.useState(null)
     const [query, setQuery] = React.useState(null);
     const [answer, setAnswer] = React.useState(null);
 
     const handleSubmit = (event) => {
+        if (!query || !answer) return alert('No query or answer');
         axios.post(`/api/admin/support/questions/create`, {
             query,
             answer
@@ -44,11 +43,7 @@ export default function TestPage({ user, url, question }) {
     }
 
     React.useEffect(() => {
-        axios.get('/api/admin/users/list').then(res => {
-            setUsers(res.data?.users || [])
-        });
         axios.get('/api/admin/support/questions').then(res => {
-            setQuestions(res.data?.questions?.list?.find((x) => x.id == question) || [])
             setQuery(res.data?.questions?.list?.find((x) => x.id == question)?.query || [])
             setAnswer(res.data?.questions?.list?.find((x) => x.id == question)?.answer || [])
         });

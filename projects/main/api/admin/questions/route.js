@@ -17,6 +17,9 @@ router.use(async (req, res, next) => {
 });
 
 router.get('/', async (req, res) => {
+    if (req.session?.user?.admin !== true)
+        return res.status(403).send()
+
     const questions = await questionsList.findOne({
         search: 'search'
     });
@@ -25,6 +28,9 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/edit/:id/set', async function (req, res) {
+    if (req.session?.user?.admin !== true)
+        return res.status(403).send()
+
     const questionSchema = require(`${__models}/questionList`);
 
     const { id } = req.params;
@@ -37,7 +43,7 @@ router.post('/edit/:id/set', async function (req, res) {
             [`list.${id}.answer`]: answer
         }
     }, async (err, result) => {
-        if (err) 
+        if (err)
             return res.send({ error: true, message: 'Question not found' })
 
         res.redirect('/admin/support');
@@ -45,6 +51,9 @@ router.post('/edit/:id/set', async function (req, res) {
 });
 
 router.post('/edit/:id/delete', async function (req, res) {
+    if (req.session?.user?.admin !== true)
+        return res.status(403).send()
+
     const questionSchema = require(`${__models}/questionList`);
 
     const { id } = req.params;
@@ -65,15 +74,18 @@ router.post('/edit/:id/delete', async function (req, res) {
 });
 
 router.post('/create', async function (req, res) {
+    if (req.session?.user?.admin !== true)
+        return res.status(403).send()
+
     const { query, answer } = req.body;
-    if (!query || !answer) 
+    if (!query || !answer)
         return res.send({ error: true, message: 'Query or answer is empty' })
 
     const questionSchema = require(`${__models}/questionList`);
 
-    const questions = await questionSchema.findOne({search: 'search'})
+    const questions = await questionSchema.findOne({ search: 'search' })
 
-    await questionSchema.updateOne({search: 'search'}, {
+    await questionSchema.updateOne({ search: 'search' }, {
         $push: {
             list: {
                 query: req.body.query,
