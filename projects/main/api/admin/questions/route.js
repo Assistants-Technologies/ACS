@@ -74,6 +74,9 @@ router.post('/edit/:id/delete', async function (req, res) {
 });
 
 router.post('/create', async function (req, res) {
+    if (req.session?.user?.admin !== true)
+        return res.status(403).send()
+
     const { query, answer } = req.body;
     if (!query || !answer)
         return res.send({ error: true, message: 'Query or answer is empty' })
