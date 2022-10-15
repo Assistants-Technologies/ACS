@@ -17,6 +17,9 @@ router.use(async (req, res, next) => {
 });
 
 router.get('/', async (req, res) => {
+    if (req.session?.user?.admin !== true)
+        return res.status(403).send()
+
     const questions = await questionsList.findOne({
         search: 'search'
     });
@@ -25,31 +28,41 @@ router.get('/', async (req, res) => {
 })
 
 router.post('/edit/:id/set', async function (req, res) {
-    const questionSchema = require(`${__models}/questionList`);
+    if (req.session?.user?.admin !== true)
+        return res.status(403).send()
 
-    const { id } = req.params;
-    const { query, answer } = req.body;
-    if (!query || !answer || !id) return res.send({ error: true, message: 'No query or answer' });
+    if (!req.body?.query || !req.body?.answer)
+        return res.send({ error: true, message: 'No query or answer' })
 
-    questionSchema.updateOne({ search: 'search' }, {
-        $set: {
-            [`list.${id}.query`]: query,
-            [`list.${id}.answer`]: answer
-        }
-    }, async (err, result) => {
-        if (err) 
-            return res.send({ error: true, message: 'Question not found' })
+    const questions = await questionsList.findOne({
+        search: 'search'
+    });
 
-        res.redirect('/admin/support');
-    })
+    const question = questions.list.find((x) => x.id == req.params.id)
+    if (!question) return res.send({ error: true, message: 'Question not found' })
+
+    const array = questions.list
+
+    const index = array.findIndex(a => a.id === question.id);
+
+    array[index] = {
+        id: question.id,
+        query: req.body.query,
+        answer: req.body.answer
+    }
+
+    questions.list = array
+
+    await questions.save()
 });
 
 router.post('/edit/:id/delete', async function (req, res) {
-    const questionSchema = require(`${__models}/questionList`);
+    if (req.session?.user?.admin !== true)
+        return res.status(403).send()
 
     const { id } = req.params;
 
-    await questionSchema.findOneAndUpdate(
+    await questionsList.findOneAndUpdate(
         {
             search: 'search'
         },
@@ -65,15 +78,16 @@ router.post('/edit/:id/delete', async function (req, res) {
 });
 
 router.post('/create', async function (req, res) {
+    if (req.session?.user?.admin !== true)
+        return res.status(403).send()
+
     const { query, answer } = req.body;
-    if (!query || !answer) 
+    if (!query || !answer)
         return res.send({ error: true, message: 'Query or answer is empty' })
 
-    const questionSchema = require(`${__models}/questionList`);
+    const questions = await questionsList.findOne({ search: 'search' })
 
-    const questions = await questionSchema.findOne({search: 'search'})
-
-    await questionSchema.updateOne({search: 'search'}, {
+    await questionsList.updateOne({ search: 'search' }, {
         $push: {
             list: {
                 query: req.body.query,

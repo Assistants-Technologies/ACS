@@ -29,25 +29,25 @@ export default function TestPage({ user, url, question }) {
         }
     }
 
-    const [users, setUsers] = React.useState(null)
-    const [questions, setQuestions] = React.useState(null)
     const [query, setQuery] = React.useState(null);
     const [answer, setAnswer] = React.useState(null);
 
     const handleSubmit = (event) => {
+        event.preventDefault();
+        
+        if (!query || !answer) return alert('No query or answer');
         axios.post(`/api/admin/support/questions/edit/${question}/set`, {
             query,
             answer
+        }).then(res => {
+            if (res.data?.error === false)
+                window.location.href = '/admin/support'
+            else if (res.data?.error === true) return alert(res.data?.message)
         })
-        event.preventDefault();
     }
 
     React.useEffect(() => {
-        axios.get('/api/admin/users/list').then(res => {
-            setUsers(res.data?.users || [])
-        });
         axios.get('/api/admin/support/questions').then(res => {
-            setQuestions(res.data?.questions?.list?.find((x) => x.id == question) || [])
             setQuery(res.data?.questions?.list?.find((x) => x.id == question)?.query || [])
             setAnswer(res.data?.questions?.list?.find((x) => x.id == question)?.answer || [])
         });
@@ -63,8 +63,6 @@ export default function TestPage({ user, url, question }) {
     }, [])
 
     const title = `${IsBeta ? 'BETA | ' : ''}Assistants Center - Admin Users Management`
-
-
 
     return (
         <>
