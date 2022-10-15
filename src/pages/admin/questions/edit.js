@@ -42,7 +42,7 @@ export default function TestPage({ user, url, question }) {
         }).then(res => {
             if (res.data?.error === false)
                 window.location.href = '/admin/support'
-            else return alert(res.data?.message)
+            else if (res.data?.error === true) return alert(res.data?.message)
         })
     }
 
