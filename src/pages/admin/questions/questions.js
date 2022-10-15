@@ -109,10 +109,10 @@ export default function TestPage({ user, url }) {
                                                     questions &&
                                                     questions.list &&
                                                     questions.list.reverse().map(question => {
-
+                                                        if (!question) return null;
                                                         let safeQuery = question.query.replace(`"`, `'`).replace('`', `'`);
                                                         return (
-                                                            <tr>
+                                                            <tr key={question.id}>
                                                                 <td>
                                                                     <div>
                                                                         <h6>{question?.query}</h6>
@@ -125,7 +125,7 @@ export default function TestPage({ user, url }) {
                                                                 <td>
                                                                     <button className="btn btn-danger btn-sm" onClick={async () => {
                                                                         if (confirm(`Are you sure you want to delete the question "${safeQuery}"?`)) {
-                                                                            axios.post(`/api/admin/support/questions/edit/${question?.id}/delete`)
+                                                                            await axios.post(`/api/admin/support/questions/edit/${question?.id}/delete`)
                                                                             getQuestions();
                                                                         }
                                                                     }}>Delete</button>
