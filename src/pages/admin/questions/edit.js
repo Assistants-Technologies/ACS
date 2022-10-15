@@ -33,12 +33,17 @@ export default function TestPage({ user, url, question }) {
     const [answer, setAnswer] = React.useState(null);
 
     const handleSubmit = (event) => {
+        event.preventDefault();
+        
         if (!query || !answer) return alert('No query or answer');
         axios.post(`/api/admin/support/questions/edit/${question}/set`, {
             query,
             answer
+        }).then(res => {
+            if (res.data?.error === false)
+                window.location.href = '/admin/support'
+            else return alert(res.data?.message)
         })
-        event.preventDefault();
     }
 
     React.useEffect(() => {
