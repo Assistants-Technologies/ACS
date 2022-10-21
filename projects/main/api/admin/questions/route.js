@@ -56,8 +56,6 @@ router.post('/edit/:id/set', async function (req, res) {
 
     questions.list = array
 
-    console.log(match)
-
     await questions.save()
 
     return res.send({ error: false, message: 'Question updated' })
