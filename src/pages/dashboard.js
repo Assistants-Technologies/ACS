@@ -99,14 +99,12 @@ export default function TestPage ({ user, url }) {
                                     <FeaturedTab
                                         title={
                                             <>
-                                                <span className="fw-bold">Twitter Tools</span>{" "}
-                                                are back
+                                                <span className="fw-bold">Assistants Center Services</span>{" "}
                                             </>
                                         }
-                                        mt={30}
-                                        mb={30}
-                                        button_title={"Explore now"}
-                                        button_url={'/twitter-tools'}
+                                        subtitle={"Manage your tools from Assistants Center easier than ever before!"}
+                                        mt={60}
+                                        mb={60}
                                         background={'url("https://cdn.assistantscenter.com/l4smwhnd")'}
                                     />
                                 }

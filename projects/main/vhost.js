@@ -164,7 +164,26 @@ const vhost = ({next_app, next_handle, client}) => {
         res.redirect('/discord-dashboard/v2')
     })
 
-    app.get('/auth', (req,res) => {
+    const DEVELOPMENT_CHANNEL = process.env.DEVELOPMENT_CHANNEL === "TRUE"
+    const PROD_BUT_BETA = process.env.PROD_BUT_BETA === "TRUE"
+
+    app.get('/auth', async (req,res) => {
+        if(DEVELOPMENT_CHANNEL && !PROD_BUT_BETA){
+            const user = await User.findOne({
+                _id: process.env.LOCALHOST_DEFAULT_USER,
+            })
+
+            req.session.user = {
+                _id: user._id,
+                username: user.assistants_username,
+                email: user.email,
+                avatarURL: user.avatarURL,
+                admin: user.admin
+            }
+
+            return res.redirect('/dashboard')
+        }
+
         const back_redirect = req.query.back_redirect || req.query.redirect_back || '/dashboard'
         req.session.back_redirect = back_redirect
         const url = ACS_Client.authorizationUrl({
@@ -229,7 +248,7 @@ const vhost = ({next_app, next_handle, client}) => {
     app.get('/discord-dashboard', (req, res) => {
         if(!req.session.user)
             return res.redirect('/auth?back_redirect=/discord-dashboard')
-        
+
         if(!req.session.user.admin)
             return res.status(403).redirect('/discord-dashboard/v2')
 
@@ -261,7 +280,7 @@ const vhost = ({next_app, next_handle, client}) => {
     app.get('/discord-dashboard/project/:projectId', async (req,res)=>{
         if(!req.session.user)
         return res.redirect('/auth?back_redirect=/discord-dashboard')
-    
+
         if(!req.session.user.admin)
             return res.status(403).redirect('/discord-dashboard/v2')
 
