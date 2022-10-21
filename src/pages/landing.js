@@ -35,7 +35,10 @@ export default function LandingPage ({ user, url }) {
                 openGraph={{
                     title: "Assistants Center",
                     description: "Providing IT solutions on a large scale.",
-                    url: "https://assistantscenter.com/"
+                    url: "https://assistantscenter.com/",
+                    images: [{
+                        url: "https://cdn.assistantscenter.com/kxkwe7xd"
+                    }]
                 }}
             />
             <meta charSet="utf-8" />
