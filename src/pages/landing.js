@@ -3,6 +3,8 @@ import LandingNavbar from "../components/nav/top/LandingNavbar"
 import Head from 'next/head'
 import IsBeta from "../isBeta"
 
+import { NextSeo } from 'next-seo'
+
 export async function getServerSideProps(context) {
     return {
         props: {
@@ -26,7 +28,19 @@ export default function LandingPage ({ user, url }) {
     const title = 'Assistants Center'
 
     return (
-        <div>
+        <>
+            <NextSeo
+                title={"Assistants Center"}
+                description="Providing IT solutions on a large scale."
+                openGraph={{
+                    title: "Assistants Center",
+                    description: "Providing IT solutions on a large scale.",
+                    url: "https://assistantscenter.com/",
+                    images: [{
+                        url: "https://cdn.assistantscenter.com/kxkwe7xd"
+                    }]
+                }}
+            />
             <meta charSet="utf-8" />
             <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -38,7 +52,6 @@ export default function LandingPage ({ user, url }) {
                 src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3673520795587574"
             />
 
-            <title>Assistants Center</title>
             <style dangerouslySetInnerHTML={{__html: "\n      @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');\n      body {\n        font-family: 'Poppins', sans-serif;\n      }\n\n      .gradient-text {\n        background-color: red;\n\n        background-image: linear-gradient(45deg, #6230bd 40%, #f01de2 60%);\n\n        background-size: 100%;\n        background-repeat: repeat;\n\n        -webkit-background-clip: text;\n        -webkit-text-fill-color: transparent;\n        -moz-background-clip: text;\n        -moz-text-fill-color: transparent;\n\n        font-size: 88px;\n      }\n\n      @media (max-width: 450px) {\n        .gradient-text {\n          font-size: 62px;\n        }\n      }\n\n\n      @media (max-width: 300px) {\n        .gradient-text {\n          font-size: 52px;\n        }\n      }\n    " }} />
 
             {
@@ -127,6 +140,6 @@ export default function LandingPage ({ user, url }) {
             <link rel="preconnect" href="https://fonts.gstatic.com" />
             <link href="https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap" rel="stylesheet" />
             <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,200;1,300;1,400&display=swap" rel="stylesheet" />
-        </div>
+        </>
     );
 }
