@@ -31,6 +31,7 @@ export default function TestPage({ user, url, question }) {
 
     const [query, setQuery] = React.useState(null);
     const [answer, setAnswer] = React.useState(null);
+    const [match, setMatch] = React.useState(null);
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -38,7 +39,8 @@ export default function TestPage({ user, url, question }) {
         if (!query || !answer) return alert('No query or answer');
         axios.post(`/api/admin/support/questions/edit/${question}/set`, {
             query,
-            answer
+            answer,
+            match
         }).then(res => {
             if (res.data?.error === false)
                 window.location.href = '/admin/support'
@@ -50,6 +52,7 @@ export default function TestPage({ user, url, question }) {
         axios.get('/api/admin/support/questions').then(res => {
             setQuery(res.data?.questions?.list?.find((x) => x.id == question)?.query || [])
             setAnswer(res.data?.questions?.list?.find((x) => x.id == question)?.answer || [])
+            setMatch(res.data?.questions?.list?.find((x) => x.id == question)?.match || 50)
         });
         setTimeout(() => {
             $("textarea").each(function () {
@@ -124,6 +127,8 @@ export default function TestPage({ user, url, question }) {
                                                     />
                                                     <label>Answer</label>
                                                     <textarea style={{ wordSpacing: "1px", lineHeight: "15px" }} className='form-control' type="text" name="answer" onChange={(e) => setAnswer(e.target.value)} value={answer} ></textarea>
+                                                    <label>Accuracy</label>
+                                                    <input type="number" min={1} max={100} className='form-control' value={match} onChange={(e) => setMatch(e.target.value)}></input>
                                                     <input className='btn btn-primary text-white mt-3' type="submit" />
                                                 </div>
                                             </div>
