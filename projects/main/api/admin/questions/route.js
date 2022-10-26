@@ -31,7 +31,9 @@ router.post('/edit/:id/set', async function (req, res) {
     if (req.session?.user?.admin !== true)
         return res.status(403).send()
 
-    if (!req.body?.query || !req.body?.answer)
+    const { query, answer, match } = req.body
+
+    if (!query || !answer)
         return res.send({ error: true, message: 'No query or answer' })
 
     const questions = await questionsList.findOne({
@@ -47,13 +49,16 @@ router.post('/edit/:id/set', async function (req, res) {
 
     array[index] = {
         id: question.id,
-        query: req.body.query,
-        answer: req.body.answer
+        query,
+        answer,
+        match: match ? parseInt(match) : 50
     }
 
     questions.list = array
 
     await questions.save()
+
+    return res.send({ error: false, message: 'Question updated' })
 });
 
 router.post('/edit/:id/delete', async function (req, res) {
@@ -81,7 +86,7 @@ router.post('/create', async function (req, res) {
     if (req.session?.user?.admin !== true)
         return res.status(403).send()
 
-    const { query, answer } = req.body;
+    const { query, answer, match } = req.body;
     if (!query || !answer)
         return res.send({ error: true, message: 'Query or answer is empty' })
 
@@ -90,9 +95,10 @@ router.post('/create', async function (req, res) {
     await questionsList.updateOne({ search: 'search' }, {
         $push: {
             list: {
-                query: req.body.query,
-                answer: req.body.answer,
+                query,
+                answer,
                 id: (parseInt(questions.list.reverse()[0].id) + 1).toString(),
+                match: parseInt(match) || 50
             },
         }
     }, { new: true })
