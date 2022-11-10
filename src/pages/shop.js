@@ -71,9 +71,18 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
     }
 
     React.useEffect(() => {
-        fetchCoins()
-        fetchItems()
-        fetchDigitalItems()
+        fetchCoins();
+        fetchItems();
+        fetchDigitalItems();
+
+        const push = () => {
+            if(!window.adsbygoogle?.loaded){
+                return setTimeout(push, 100)
+            }
+            (window.adsbygoogle || []).push({});
+        }
+
+        push()
     }, [])
 
     const [confirmModal, setConfirmModal] = React.useState(null)
@@ -202,14 +211,6 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                             </h6>
                                                         </div>
                                                         <button type="button" className="btn btn-warning" style={{ color: 'white', height: 40, borderColor: 'transparent !important' }} onClick={() => setDisplayCoinsShop(true)}>Top up coins</button>
-                                                    </div>
-
-                                                    <div className={"pt-2"}>
-                                                        <ins className="adsbygoogle"
-                                                             style={{display: 'block'}}
-                                                             data-ad-format="autorelaxed"
-                                                             data-ad-client="ca-pub-3673520795587574"
-                                                             data-ad-slot="6516761795"></ins>
                                                     </div>
                                                 </div>
                                             </div>
@@ -543,6 +544,30 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                 </div>
                                             </div>
                                         }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="row">
+                    <div className="col-sm-12">
+                        <div className="home-tab">
+                            <div className="tab-content" id="content-featured">
+                                <div className="tab-pane fade show active" id="featured">
+                                    <div className="row">
+                                        <div className="col-sm-12">
+                                            <div className="card card-rounded">
+                                                <div className="card-body">
+                                                    <ins className="adsbygoogle"
+                                                         style={{display:'block'}}
+                                                         data-ad-format="autorelaxed"
+                                                         data-ad-client="ca-pub-3673520795587574"
+                                                         data-ad-slot="6516761795"></ins>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
