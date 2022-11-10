@@ -102,20 +102,13 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
         const res = await axios.get(`/api/shop/digital-items/aho-info/${item_id}`)
         return res.data.info
     }
- 
+
     const title = `${IsBeta ? 'BETA | ' : ''}Assistants Center - Digital Features Shop`
 
     return (
         <>
             <Head>
                 <meta charSet="utf-8" />
-
-                <Script
-                    crossOrigin="anonymous"
-                    async="true"
-                    strategy="beforeInteractive"
-                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3673520795587574"
-                />
 
                 <meta
                     name="viewport"
@@ -210,6 +203,17 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                         </div>
                                                         <button type="button" className="btn btn-warning" style={{ color: 'white', height: 40, borderColor: 'transparent !important' }} onClick={() => setDisplayCoinsShop(true)}>Top up coins</button>
                                                     </div>
+
+                                                    <div className={"pt-2"}>
+                                                        <amp-ad width="100vw" height="320"
+                                                                type="adsense"
+                                                                data-ad-client="ca-pub-3673520795587574"
+                                                                data-ad-slot="6516761795"
+                                                                data-auto-format="mcrspv"
+                                                                data-full-width="">
+                                                            <div overflow=""></div>
+                                                        </amp-ad>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -217,7 +221,7 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                     {
                                         (digitalItems && coins != null) &&
                                         digitalItems.map((category,idx) => {
-                                            if(idx == digitalItems.length)setElementsLoaded(true) 
+                                            if(idx == digitalItems.length)setElementsLoaded(true)
                                             return (
                                                 <div className="row mt-4">
                                                     <div className="col-sm-12">
@@ -259,7 +263,7 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                                                             </td>
                                                                                             <td style={{ textAlign: 'center' }}>
                                                                                                 {
-                                                                                                    
+
 
                                                                                                     item.owns ?
                                                                                                         (

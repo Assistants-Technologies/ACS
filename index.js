@@ -1,6 +1,7 @@
 global.__models = __dirname + '/models/'
 global.__configs = __dirname + '/configs/'
 global.__mailer = __dirname + '/mailer/'
+global.__main_utils = __dirname + '/projects/main/utils/'
 
 
 require('dotenv').config({})

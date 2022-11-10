@@ -3,7 +3,7 @@ const {
     Schema
 } = require('mongoose')
 
-const viewSchema = new Schema(
+const authSchema = new Schema(
     {
         project_id: {
             type: mongoose.Schema.Types.ObjectId,
@@ -13,11 +13,6 @@ const viewSchema = new Schema(
         ip: {
             type: String,
             required: true,
-        },
-        website_url: {
-            type: String,
-            required: true,
-            default: 'UNKNOWN',
         },
         user_id: {
             type: String,
@@ -35,6 +30,6 @@ const viewSchema = new Schema(
     }
 )
 
-const DBDProjectStatsView = mongoose.model('DBDProjectStatsView', viewSchema)
+const DBDProjectAuthSuccess = mongoose.model('DBDProjectAuthSuccess', authSchema)
 
-module.exports = DBDProjectStatsView
+module.exports = DBDProjectAuthSuccess

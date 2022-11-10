@@ -69,7 +69,7 @@ router.post('/create', async(req,res)=>{
         project_id: NewProject._id,
     })
 })
-
+/*
 router.get('/views/total/countries/:projectId', async (req,res)=>{
     const projectId = req.params.projectId
     if(!req.session?.user?._id) return res.json({
@@ -195,5 +195,5 @@ router.get('/views/comparison/:projectId', async(req,res)=>{
         dates
     })
 })
-
+*/
 module.exports = router

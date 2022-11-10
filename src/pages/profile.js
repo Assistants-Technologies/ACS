@@ -70,13 +70,6 @@ export default function ShopPage ({ user, url, connections, query, email }) {
         user?.username ?         <>
         <Head>
 
-            <Script
-                crossOrigin="anonymous"
-                async="true"
-                strategy="beforeInteractive"
-                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3673520795587574"
-            />
-
             <meta charSet="utf-8" />
             <meta
                 name="viewport"
@@ -258,7 +251,7 @@ background-color: rgba(0,0,0,0.4);
                                                         <p><b><i>Note:</i></b> You can only see the token after it has been generated. If you come back here because you lost the token, you must generate it again.</p>
                                                     </div>
                                                 </div>
-                                                
+
                                             </div>
                                         </div>
                                     </div>

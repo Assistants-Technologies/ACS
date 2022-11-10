@@ -1,5 +1,7 @@
 import App, { AppContext } from 'next/app'
 import { GoogleAnalytics, usePageViews } from "nextjs-google-analytics"
+import Script from "next/script";
+import React from "react";
 
 function MyApp({ Component, pageProps }) {
   usePageViews({ gaMeasurementId: "G-8CGP8663C1" })
@@ -7,6 +9,12 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <GoogleAnalytics gaMeasurementId={"G-8CGP8663C1"} />
+      <Script id="Adsense-id" data-ad-client="ca-pub-3673520795587574"
+              async strategy="afterInteractive"
+              onError={ (e) => { console.error('Script failed to load', e) }}
+              src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
+      />
+        <Script async strategy="afterInteractive" custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"/>
       <Component {...pageProps} />
     </>
   )

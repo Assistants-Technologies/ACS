@@ -43,14 +43,6 @@ export default function DiscordDashboardPage ({ user, url }) {
     return (
         <>
             <Head>
-
-                <Script
-                    crossOrigin="anonymous"
-                    async="true"
-                    strategy="beforeInteractive"
-                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3673520795587574"
-                />
-
                 <meta charSet="utf-8" />
                 <meta
                     name="viewport"

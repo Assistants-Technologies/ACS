@@ -82,7 +82,8 @@ export default function AuthPage ({ url, back_redirect }) {
     return (
         <>
             <Script
-                crossOrigin="anonymous"
+                id="Adsense-id"
+                data-ad-client="ca-pub-3673520795587574"
                 async="true"
                 strategy="beforeInteractive"
                 src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3673520795587574"
