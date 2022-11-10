@@ -205,14 +205,11 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                     </div>
 
                                                     <div className={"pt-2"}>
-                                                        <amp-ad width="100vw" height="320"
-                                                                type="adsense"
-                                                                data-ad-client="ca-pub-3673520795587574"
-                                                                data-ad-slot="6516761795"
-                                                                data-auto-format="mcrspv"
-                                                                data-full-width="">
-                                                            <div overflow=""></div>
-                                                        </amp-ad>
+                                                        <ins className="adsbygoogle"
+                                                             style="display:block"
+                                                             data-ad-format="autorelaxed"
+                                                             data-ad-client="ca-pub-3673520795587574"
+                                                             data-ad-slot="6516761795"></ins>
                                                     </div>
                                                 </div>
                                             </div>
