@@ -206,7 +206,7 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
 
                                                     <div className={"pt-2"}>
                                                         <ins className="adsbygoogle"
-                                                             style="display:block"
+                                                             style={{display: 'block'}}
                                                              data-ad-format="autorelaxed"
                                                              data-ad-client="ca-pub-3673520795587574"
                                                              data-ad-slot="6516761795"></ins>
