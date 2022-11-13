@@ -14,9 +14,30 @@ module.exports = {
                         id: "dbd_opensource_license",
                         image: "https://cdn.assistantscenter.com/l6yvtyo6",
                         aho: {
+                            type: 'modal',
+                            html: {
+                                content: `
+                                <div className="modal-header">
+                                    <h3 className="modal-title" id="exampleModalLabel">OpenSource DBD v2 License</h3>
+                                </div>
+                                <div className="modal-body">
+                                    <p>This license is for the OpenSource DBD v2 project. It is free to use and can be used by anyone.</p>
+                                    
+                                    <hr/>
+                                    
+                                    <a id="license"></a>
+                                </div>
+                            `,
+                            },
+                            getInfo: async ({ user_id }) => {
+                                const user = await User.findOne({ _id: user_id })
+                                return user?.OpenSource?.license_id
+                            }
+                        },
+                       /*aho: {
                             type: 'redirect',
                             url: '/discord-dashboard/v2'
-                        },
+                        },*/
                         name: "OpenSource DBD v2 License",
                         description: "This license is for the OpenSource DBD v2 project. It is free to use and can be used by anyone.",
                         price: 0,
@@ -45,15 +66,36 @@ module.exports = {
                             })
 
                             return true
-                        }
+                        },
                     },
                     {
                         id: "dbd_personal_license",
                         image: "https://cdn.assistantscenter.com/l6yvtyo6",
                         aho: {
+                            type: 'modal',
+                            html: {
+                                content: `
+                                <div className="modal-header">
+                                    <h3 className="modal-title" id="exampleModalLabel">Personal DBD v2 License</h3>
+                                </div>
+                                <div className="modal-body">
+                                    <p>This license is for the Personal DBD v2 project. It allows profit-making from the project.</p>
+                                    
+                                    <hr/>
+                                    
+                                    <a id="license"></a>
+                                </div>
+                            `,
+                            },
+                            getInfo: async ({ user_id }) => {
+                                const user = await User.findOne({ _id: user_id })
+                                return user?.Personal?.license_id
+                            }
+                        },
+                        /*aho: {
                             type: 'redirect',
                             url: '/discord-dashboard/v2'
-                        },
+                        },*/
                         name: "Personal DBD v2 License",
                         description: "This license is for the Personal DBD v2 project. It allows profit-making from the project.",
                         price: 1000,
@@ -88,9 +130,30 @@ module.exports = {
                         id: "dbd_production_license",
                         image: "https://cdn.assistantscenter.com/l6yvtyo6",
                         aho: {
+                            type: 'modal',
+                            html: {
+                                content: `
+                                <div className="modal-header">
+                                    <h3 className="modal-title" id="exampleModalLabel">Production DBD v2 License</h3>
+                                </div>
+                                <div className="modal-body">
+                                    <p>This license is for the Personal DBD v2 project. It allows profit-making from the project. It can be shared with friends.</p>
+                                    
+                                    <hr/>
+                                    
+                                    <a id="license"></a>
+                                </div>
+                            `,
+                            },
+                            getInfo: async ({ user_id }) => {
+                                const user = await User.findOne({ _id: user_id })
+                                return user?.Production?.license_id
+                            }
+                        },
+                        /*aho: {
                             type: 'redirect',
                             url: '/discord-dashboard/v2'
-                        },
+                        },*/
                         name: "Production DBD v2 License",
                         description: "This license is for the Personal DBD v2 project. It allows profit-making from the project. It can be shared with friends.",
                         price: 10000,

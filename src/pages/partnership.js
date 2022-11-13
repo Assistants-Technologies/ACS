@@ -65,8 +65,8 @@ export default function TestPage ({ user, url }) {
 
     const postSubmit = async () => {
         const res = await axios.post('/api/partnership/apply', {
-            about: aboutYou, 
-            code_requested: partnerCode, 
+            about: aboutYou,
+            code_requested: partnerCode,
             email: partnerEmail
         })
 
@@ -90,13 +90,6 @@ export default function TestPage ({ user, url }) {
                 <meta
                     name="viewport"
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
-                />
-
-                <Script
-                    crossOrigin="anonymous"
-                    async="true"
-                    strategy="beforeInteractive"
-                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3673520795587574"
                 />
 
                 <title>{title}</title>
@@ -190,28 +183,28 @@ background-color: rgba(0,0,0,0.4);
                                     {
                                         (partnerData && partnerData.partnered == false && (partnerData.request_status ? (partnerData.request_status?.confirmed != null && partnerData.request_status?.confirmed != true) : true))
                                         &&
-                                        <NotPartneredNoRequest 
+                                        <NotPartneredNoRequest
                                         postSubmit={postSubmit}
                                         validateEmail={validateEmail}
-                                        
+
                                         active={active}
                                         setActive={setActive}
-                                    
+
                                         submitError={submitError}
                                         setSubmitError={setSubmitError}
-                                    
+
                                         partnerData={partnerData}
                                         setPartnerData={setPartnerData}
-                                    
+
                                         displaySubmit={displaySubmit}
                                         setDisplaySubmit={setDisplaySubmit}
-                                    
+
                                         partnerCode={partnerCode}
                                         setPartnerCode={setPartnerCode}
-                                    
+
                                         partnerEmail={partnerEmail}
                                         setPartnerEmail={setPartnerEmail}
-                                    
+
                                         aboutYou={aboutYou}
                                         setAboutYou={setAboutYou}
                                     />

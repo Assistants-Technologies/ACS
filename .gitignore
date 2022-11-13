@@ -23,3 +23,5 @@ projects/main/api/discord-dashboard/softui/addons/
 configs/digitalItems.js
 configs/digitalItems.js
 package-lock.json
+yarn.lock
+.fleet

@@ -145,7 +145,7 @@ export default function TestPage ({ user, url }) {
                       data-id="e2088df5-25ea-aec9-83d4-6284f5a7e043"
                       data-type="question"
                     >
-                      December 26, 2021
+                      October 21, 2022
                     </bdt>
                   </strong>
                 </span>
@@ -4055,11 +4055,11 @@ export default function TestPage ({ user, url }) {
                     data-type="question"
                   >
                     <a
-                      href="https://node.assistants.ga/privacy-policy/"
+                      href="https://assistantscenter.com/pp"
                       target="_blank"
                       data-custom-class="link"
                     >
-                      https://node.assistants.ga/privacy-policy/
+                      https://assistantscenter.com/pp
                     </a>
                   </bdt>
                 </b>

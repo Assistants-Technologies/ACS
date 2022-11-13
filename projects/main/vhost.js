@@ -4,6 +4,19 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo');
 const APIRoute = require('./api/route')
 
+const OIDC = require('openid-client')
+const { Issuer } = OIDC
+
+let ACS_Client;
+Issuer.discover(process.env.ACS_PROVIDER).then(acs_issuer => {
+    ACS_Client = new acs_issuer.Client({
+        client_id: process.env.ACS_CLIENT_ID,
+        client_secret: process.env.ACS_CLIENT_SECRET,
+        redirect_uris: [process.env.ACS_REDIRECT_URI],
+        response_types: ['code']
+    })
+})
+
 const rateLimit = require('express-rate-limit')
 const rateMongoStore = require('rate-limit-mongo')
 
@@ -151,18 +164,32 @@ const vhost = ({next_app, next_handle, client}) => {
         res.redirect('/discord-dashboard/v2')
     })
 
-    app.get('/auth', (req,res) => {
-        const {back_redirect, redirect_back} = req.query
-        if(back_redirect || redirect_back){
-            req.session.back_redirect = back_redirect || redirect_back
-        }
-        const back_redirect_n = req.session.back_redirect
+    const DEVELOPMENT_CHANNEL = process.env.DEVELOPMENT_CHANNEL === "TRUE"
+    const PROD_BUT_BETA = process.env.PROD_BUT_BETA === "TRUE"
 
-        if(req.session?.user)return res.status(401).redirect(back_redirect_n)
-        return next_app.render(req, res, '/auth', {
-            url: req.url,
-            back_redirect: back_redirect_n
+    app.get('/auth', async (req,res) => {
+        if(DEVELOPMENT_CHANNEL && !PROD_BUT_BETA){
+            const user = await User.findOne({
+                _id: process.env.LOCALHOST_DEFAULT_USER,
+            })
+
+            req.session.user = {
+                _id: user._id,
+                username: user.assistants_username,
+                email: user.email,
+                avatarURL: user.avatarURL,
+                admin: user.admin
+            }
+
+            return res.redirect('/dashboard')
+        }
+
+        const back_redirect = req.query.back_redirect || req.query.redirect_back || '/dashboard'
+        req.session.back_redirect = back_redirect
+        const url = ACS_Client.authorizationUrl({
+            scope: 'openid profile email',
         })
+        res.redirect(url)
     })
 
     app.get('/blog/create', (req, res) => {
@@ -221,7 +248,7 @@ const vhost = ({next_app, next_handle, client}) => {
     app.get('/discord-dashboard', (req, res) => {
         if(!req.session.user)
             return res.redirect('/auth?back_redirect=/discord-dashboard')
-        
+
         if(!req.session.user.admin)
             return res.status(403).redirect('/discord-dashboard/v2')
 
@@ -253,7 +280,7 @@ const vhost = ({next_app, next_handle, client}) => {
     app.get('/discord-dashboard/project/:projectId', async (req,res)=>{
         if(!req.session.user)
         return res.redirect('/auth?back_redirect=/discord-dashboard')
-    
+
         if(!req.session.user.admin)
             return res.status(403).redirect('/discord-dashboard/v2')
 

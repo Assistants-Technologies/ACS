@@ -45,13 +45,6 @@ export default function TestPage ({ user, url }) {
                     content="width=device-width, initial-scale=1, shrink-to-fit=no"
                 />
 
-                <Script
-                    crossOrigin="anonymous"
-                    async="true"
-                    strategy="beforeInteractive"
-                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3673520795587574"
-                />
-
                 <script type="text/javascript" dangerouslySetInnerHTML={{ __html: `!function(){var e=document.createElement("script");e.type="text/javascript",e.src="https://global.ketchcdn.com/web/v2/config/assistantscenter/website_smart_tag/boot.js",e.defer=e.async=!0,document.getElementsByTagName("head")[0].appendChild(e),window.semaphore=window.semaphore||[]}();` }}></script>
                 <title>{title}</title>
                 <link rel="stylesheet" href={`${ud_s}vendors/feather/feather.css`} />
@@ -99,14 +92,12 @@ export default function TestPage ({ user, url }) {
                                     <FeaturedTab
                                         title={
                                             <>
-                                                <span className="fw-bold">Twitter Tools</span>{" "}
-                                                are back
+                                                <span className="fw-bold">Assistants Center Services</span>{" "}
                                             </>
                                         }
-                                        mt={30}
-                                        mb={30}
-                                        button_title={"Explore now"}
-                                        button_url={'/twitter-tools'}
+                                        subtitle={"Manage your tools from Assistants Center easier than ever before!"}
+                                        mt={60}
+                                        mb={60}
                                         background={'url("https://cdn.assistantscenter.com/l4smwhnd")'}
                                     />
                                 }

@@ -71,9 +71,18 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
     }
 
     React.useEffect(() => {
-        fetchCoins()
-        fetchItems()
-        fetchDigitalItems()
+        fetchCoins();
+        fetchItems();
+        fetchDigitalItems();
+
+        const push = () => {
+            if(!window.adsbygoogle?.loaded){
+                return setTimeout(push, 100)
+            }
+            (window.adsbygoogle || []).push({});
+        }
+
+        push()
     }, [])
 
     const [confirmModal, setConfirmModal] = React.useState(null)
@@ -102,20 +111,13 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
         const res = await axios.get(`/api/shop/digital-items/aho-info/${item_id}`)
         return res.data.info
     }
- 
+
     const title = `${IsBeta ? 'BETA | ' : ''}Assistants Center - Digital Features Shop`
 
     return (
         <>
             <Head>
                 <meta charSet="utf-8" />
-
-                <Script
-                    crossOrigin="anonymous"
-                    async="true"
-                    strategy="beforeInteractive"
-                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3673520795587574"
-                />
 
                 <meta
                     name="viewport"
@@ -217,7 +219,7 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                     {
                                         (digitalItems && coins != null) &&
                                         digitalItems.map((category,idx) => {
-                                            if(idx == digitalItems.length)setElementsLoaded(true) 
+                                            if(idx == digitalItems.length)setElementsLoaded(true)
                                             return (
                                                 <div className="row mt-4">
                                                     <div className="col-sm-12">
@@ -259,7 +261,7 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                                                             </td>
                                                                                             <td style={{ textAlign: 'center' }}>
                                                                                                 {
-                                                                                                    
+
 
                                                                                                     item.owns ?
                                                                                                         (
@@ -542,6 +544,30 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                 </div>
                                             </div>
                                         }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="row">
+                    <div className="col-sm-12">
+                        <div className="home-tab">
+                            <div className="tab-content" id="content-featured">
+                                <div className="tab-pane fade show active" id="featured">
+                                    <div className="row">
+                                        <div className="col-sm-12">
+                                            <div className="card card-rounded">
+                                                <div className="card-body">
+                                                    <ins className="adsbygoogle"
+                                                         style={{display:'block'}}
+                                                         data-ad-format="autorelaxed"
+                                                         data-ad-client="ca-pub-3673520795587574"
+                                                         data-ad-slot="6516761795"></ins>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

@@ -74,11 +74,12 @@
     "mongoose-unique-validator": "^3.1.0",
     "morris.js": "0.5.0",
     "next": "^12.1.6",
-    "next-seo": "^5.5.0",
+    "next-seo": "^5.8.0",
     "nextjs-google-analytics": "^2.0.0",
     "nodemailer": "^6.7.8",
     "nouislider": "^13.1.5",
     "oauth2-server": "^3.1.1",
+    "openid-client": "^5.1.10",
     "owl-carousel-2": "0.0.3",
     "perfect-scrollbar": "^1.4.0",
     "popper.js": "^1.15.0",
@@ -117,5 +118,8 @@
     "vhost": "^3.0.2",
     "webpack": "^5.73.0",
     "x-editable": "^1.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
   }
 }
