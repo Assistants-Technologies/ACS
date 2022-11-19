@@ -4,6 +4,9 @@ const session = require('express-session')
 const MongoStore = require('connect-mongo');
 const APIRoute = require('./api/route')
 
+const BlogPost = require(__models + '/Blog/posts')
+const BlogCategories = require(__models + '/Blog/categories')
+
 const OIDC = require('openid-client')
 const { Issuer } = OIDC
 
@@ -54,7 +57,7 @@ const vhost = ({next_app, next_handle, client}) => {
 
     const globalLimiter = rateLimit({
         windowMs: 10 * 60 * 1000,
-        max: 1500,
+        max: 3500,
         standardHeaders: true,
         legacyHeaders: false,
         store: new rateMongoStore({
@@ -62,7 +65,7 @@ const vhost = ({next_app, next_handle, client}) => {
             expireTimeMs: 10 * 60 * 1000,
             collectionName: 'RateLimitGLOBAL',
         }),
-        message: () => {return {error: true, message: "You are ratelimited. Only 1500 requests per 10 minutes are allowed to /"}},
+        message: () => {return {error: true, message: "You are ratelimited. Only 3500 requests per 10 minutes are allowed to /*"}},
     })
 
     app.use('*', globalLimiter)
@@ -178,10 +181,11 @@ const vhost = ({next_app, next_handle, client}) => {
                 username: user.assistants_username,
                 email: user.email,
                 avatarURL: user.avatarURL,
-                admin: user.admin
+                admin: user.admin,
+                blog_permissions: user.blog_permissions,
             }
 
-            return res.redirect('/dashboard')
+            return res.redirect('/dashboard?e=1')
         }
 
         const back_redirect = req.query.back_redirect || req.query.redirect_back || '/dashboard'
@@ -193,13 +197,115 @@ const vhost = ({next_app, next_handle, client}) => {
     })
 
     app.get('/blog/create', (req, res) => {
-        if(req.session?.user?.admin !== true)return res.status(401).redirect('/')
+        if(req.session?.user?.blog_permissions !== true)return res.status(401).redirect('/')
 
         return next_app.render(req, res, '/create-blog-post', {
             url: req.url,
             user: req.session.user || {}
         })
     })
+
+    app.get('/blog/edit/:postId', async (req, res) => {
+        if(req.session?.user?.blog_permissions !== true)return res.status(401).redirect('/')
+
+        const postData = await BlogPost.findOne({
+            _id: req.params.postId,
+        }).populate('category').exec()
+
+        if(!postData)return res.status(404).redirect('/')
+
+        return next_app.render(req, res, '/create-blog-post', {
+            url: req.url,
+            user: req.session.user || {},
+            post_data: JSON.parse(JSON.stringify(postData)),
+        })
+    })
+
+    app.post('/api/blog/update/:postId', async (req, res) => {
+        if (req.session?.user?.admin !== true) return res.status(401).redirect('/')
+
+        const postData = await BlogPost.findOne({
+            _id: req.params.postId,
+        }).populate('category').exec()
+
+        if(!postData)return res.status(404).redirect('/')
+
+        const {title, slug, category, content, image} = req.body
+
+        if(category){
+            let catTag = await BlogCategories.findOne({
+                slug: category,
+            })
+
+            if(!catTag){
+                catTag = await BlogCategories.create({
+                    name: category,
+                    slug: category,
+                })
+            }
+
+            postData.category = catTag._id
+        }
+
+        if(title)postData.title = title
+        if(slug)postData.slug = slug
+        if(content)postData.content = content
+        if(image)postData.image = image
+
+        await postData.save()
+
+        return res.send({error:false, message: "Post updated successfully", post_id: postData._id })
+    })
+
+    app.post('/api/blog/create', async (req, res) => {
+        if (req.session?.user?.blog_permissions !== true) return res.status(401).redirect('/')
+
+        const {title, slug, category, content, image} = req.body
+
+        let catTag = await BlogCategories.findOne({
+            slug: category,
+        })
+
+        if(!catTag){
+            catTag = await BlogCategories.create({
+                name: category,
+                slug: category,
+            })
+        }
+
+        if (!title || !content || !slug) return res.status(400).redirect('/blog/create')
+
+        const newPost = await BlogPost.create({
+            category: catTag._id,
+            title,
+            content,
+            slug,
+            image,
+        })
+
+        return res.send({error:false, message: "Post created successfully", post_id: newPost._id })
+    })
+
+    app.get('/blog/:category/:slug', async (req, res) => {
+        const catTag = await BlogCategories.findOne({
+            slug: req.params.category,
+        })
+
+        if(!catTag)return res.status(404).redirect('/blog?error=404,category_not_found')
+
+        const postData = await BlogPost.findOne({
+            slug: req.params.slug,
+            category: catTag._id,
+        }).populate('category').exec()
+
+        if(!postData)return res.redirect('/blog?e=404,post_not_found')
+
+        return next_app.render(req, res, '/blog-post', {
+            url: req.url,
+            user: req.session.user || {},
+            post_data: JSON.parse(JSON.stringify(postData)),
+        })
+    });
 
     app.get('/shop', (req,res)=>{
         if(!req.session.user) {

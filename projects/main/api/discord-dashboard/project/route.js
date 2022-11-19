@@ -42,26 +42,30 @@ router.post('/create', async(req,res)=>{
         message: 'Unauthorized',
     })
 
-    const { project_name, project_theme } = req.body;
+    const { project_name } = req.body;
 
-    if(!project_name || !project_theme)
+    if(!project_name)
         return res.status(400).json({
             error: true,
             message: 'Missing required fields',
         })
 
     const UserProjects = await Project.find({owner: req.session.user._id})
-    if(UserProjects.length >= 2) {
+    if(UserProjects.length >= 1) {
         return res.status(400).json({
             error: true,
-            message: 'You can only have up to 2 projects unless you have Premium Account Boost.',
+            message: 'You can only have up to 1 project unless you have active Discord-Dashboard Subscription.',
         })
     }
 
     const NewProject = await Project.create({
         owner: req.session.user._id,
         name: project_name,
-        theme: project_theme,
+        theme: {
+            codename: null,
+            name: 'Not Initialized',
+            version: null,
+        }
     })
 
     return res.status(200).json({
@@ -225,7 +229,6 @@ router.get('/views/comparison/:projectId', async(req,res)=>{
 
     function filterProjectViews(projectViews, {start, end}) {
         return projectViews.filter(view => {
-            console.log(view, start, end)
             return new Date(view.createdAt) >= start && new Date(view.createdAt) <= end;
         })
     }
@@ -246,8 +249,6 @@ router.get('/views/comparison/:projectId', async(req,res)=>{
         days_ago_12: filterProjectViews(ProjectViews, getDateXDaysAgo(12)).length,
         days_ago_13: filterProjectViews(ProjectViews, getDateXDaysAgo(13)).length,
     }))
-
-    console.log(dates)
 
     return res.json({
         error:false,

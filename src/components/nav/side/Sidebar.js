@@ -13,10 +13,18 @@ export default function Sidebar({ user }) {
                         <span className="menu-title">Home</span>
                     </a>
                 </li>
+
                 <li className={`nav-item${asPath.startsWith('/dashboard') ? ' active' : ''}`}>
                     <a className="nav-link" href="/dashboard">
                         <i className="mdi mdi-grid-large menu-icon" />
                         <span className="menu-title">Dashboard</span>
+                    </a>
+                </li>
+
+                <li className={`nav-item${asPath.startsWith('/blog') ? ' active' : ''}`}>
+                    <a className="nav-link" href="/blog">
+                        <i className="mdi mdi-newspaper menu-icon" />
+                        <span className="menu-title">Blog</span>
                     </a>
                 </li>
 

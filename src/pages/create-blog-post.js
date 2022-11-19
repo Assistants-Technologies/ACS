@@ -9,28 +9,23 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 
 const Editor = dynamic(
     () => import('react-draft-wysiwyg').then(mod => mod.Editor),
-    { ssr: false })  
-    
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
+    { ssr: false })
 
-/*import Row from '../components/row/Row';
-import Column from '../components/column/Column';*/
-import StatsRow from '../components/stats/StatsRow';
-import NavbarMenu from "../components/nav/top/NavbarMenu";
-import Sidebar from "../components/nav/side/Sidebar";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css"
 import PageBody from "../components/content/PageBody";
 import Scripts from "../components/content/Scripts";
 
-import FeaturedTab from "../components/row/FeaturedTab";
-import DiscordDashboardProjectTab from "../components/dbd-v3/DiscordDashboardProjectTab";
-
 import IsBeta from '../isBeta'
+import axios from "axios";
 
 export async function getServerSideProps(context) {
     return {
         props: {
             url: context.query.url.split('?')[0],
+            post_id: context.query.post_id || null,
+            content: context.query.content || null,
             user: context.query.user,
+            post_data: context.query.post_data || null,
         },
     }
 }
@@ -38,7 +33,37 @@ export async function getServerSideProps(context) {
 
 const defaultContent = {"blocks":[{"key":"3s3kt","text":"Start writing to create your first epic Assistants Post!","type":"header-two","depth":0,"inlineStyleRanges":[{"offset":0,"length":56,"style":"BOLD"}],"entityRanges":[],"data":{}},{"key":"f7fd2","text":"","type":"unstyled","depth":0,"inlineStyleRanges":[],"entityRanges":[],"data":{}},{"key":"8cp4u","text":"\"There's only one thing we know for sure. That life is now.\"\n- Isak ❤️","type":"unstyled","depth":0,"inlineStyleRanges":[{"offset":61,"length":9,"style":"BOLD"},{"offset":61,"length":9,"style":"ITALIC"}],"entityRanges":[],"data":{}}],"entityMap":{}}
 
-export default function TestPage ({ user, url }) {
+
+const UpdateBlogPostPage = ({ title, category, content, slug, id, image, }) => {
+    axios.post('/api/blog/update/'+id, {
+        slug,
+        title,
+        category,
+        content,
+        image,
+    })
+}
+
+const CreateBlogPostPage = async ({ title, category, content, slug, image }) => {
+    const data = (await axios.post('/api/blog/create', {
+        slug,
+        title,
+        category,
+        content,
+        image,
+    })).data
+    location.href = `/blog/edit/${data.post_id}`
+}
+
+
+export default function TestPage ({ user, url, content, post_data }) {
+    const [postId, setPostId] = React.useState(post_data?._id)
+    const [postSlug, setPostSlug] = React.useState(post_data?.slug)
+    const [postTitle, setPostTitle] = React.useState(post_data?.title)
+    const [postCategory, setPostCategory] = React.useState(post_data?.category?.slug || "general")
+    const [postContent, setPostContent] = React.useState(post_data?.content || JSON.stringify(defaultContent))
+    const [postImage, setPostImage] = React.useState(post_data?.image || null)
+
     const ud = (url.split("/").length - 1)
     let ud_s = ''
     if(ud != 1){
@@ -47,9 +72,10 @@ export default function TestPage ({ user, url }) {
         }
     }
 
-    const [editorState, setEditorState] = React.useState(EditorState.createWithContent(convertFromRaw(defaultContent)))
+    const [editorState, setEditorState] = React.useState(EditorState.createWithContent(convertFromRaw(JSON.parse(postContent))))
 
     const onEditorStateChange = (newEditorState) => {
+        setPostContent(JSON.stringify(convertToRaw(newEditorState.getCurrentContent())))
         setEditorState(newEditorState)
     }
 
@@ -103,22 +129,34 @@ export default function TestPage ({ user, url }) {
                                                 onEditorStateChange={onEditorStateChange}
                                             />
 
-                                            <textarea disabled value={JSON.stringify(convertToRaw(editorState.getCurrentContent()))}/>
+                                            <textarea disabled value={postContent}/>
+                                            <textarea disabled value={JSON.stringify(post_data)}/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            {/*
-                            <div className={"row"} id="tabs" style={{paddingTop:200}}>
-                                <div className="col-sm-12">
-                                    <h1>Preview</h1>
-                                    <div className="card card-rounded">
-                                        <div className="card-body">
-                                            <Editor toolbarHidden editorState={editorState} readOnly={true} />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>*/}
+                            <input placeholder={"Post title"} onChange={(event)=>{
+                                setPostTitle(event.target.value)
+                            }} value={postTitle}/>
+                            <select value={postCategory} onChange={(event)=>{
+                                setPostCategory(event.target.value)
+                            }}>
+                                <option value="discord-dashboard">discord-dashboard</option>
+                                <option value="general">General</option>
+                            </select>
+                            <input value={postSlug} placeholder={"Post slug (az,09,-), no /"} onChange={(event)=>{
+                                setPostSlug(event.target.value)
+                            }}/>
+                            <input value={postImage} placeholder={"Post image URL"} onChange={(event)=>{
+                                setPostImage(event.target.value)
+                            }}/>
+                            <button disabled={(postSlug != null && postTitle != null && postContent !=null && postCategory !=null) ? false : true} onClick={()=> {
+                                if(postId){
+                                    UpdateBlogPostPage({ image: postImage, id:postId, title: postTitle, category: postCategory, content: postContent, slug: postSlug})
+                                }else{
+                                    CreateBlogPostPage({image: postImage, title: postTitle, category: postCategory, content: postContent, slug: postSlug})
+                                }
+                            }}>{postId ? "Edit Post" : "Create Post"}</button>
                         </div>
                     </div>
                 </div>
