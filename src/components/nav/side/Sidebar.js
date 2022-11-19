@@ -108,20 +108,26 @@ export default function Sidebar({ user }) {
                             <li className="nav-item nav-category">Admin</li>
                             <li className={`nav-item${asPath.startsWith('/admin/support') ? ' active' : ''}`}>
                                 <a className="nav-link" href="/admin/support">
-                                    <i className="mdi mdi-human-handsup menu-icon" />
+                                    <i className="mdi mdi-equal-box menu-icon" />
                                     <span className="menu-title">Bot Queries</span>
                                 </a>
                             </li>
                             <li className={`nav-item${asPath.startsWith('/admin/users/list') ? ' active' : ''}`}>
                                 <a className="nav-link" href="/admin/users/list">
-                                    <i className="mdi mdi-human-handsup menu-icon" />
+                                    <i className="mdi mdi-account-details menu-icon" />
                                     <span className="menu-title">User List</span>
                                 </a>
                             </li>
                             <li className={`nav-item${asPath.startsWith('/admin/users/list') ? ' active' : ''}`}>
                                 <a className="nav-link" href="/admin/manage">
-                                    <i className="mdi mdi-human-handsup menu-icon" />
+                                    <i className="mdi mdi-account-settings menu-icon" />
                                     <span className="menu-title">User Management</span>
+                                </a>
+                            </li>
+                            <li className={`nav-item${asPath.startsWith('/blog/create') || asPath.startsWith('/blog/edit') ? ' active' : ''}`}>
+                                <a className="nav-link" href="/blog/create">
+                                    <i className="mdi mdi-mail menu-icon" />
+                                    <span className="menu-title">Blog Management</span>
                                 </a>
                             </li>
                         </>
