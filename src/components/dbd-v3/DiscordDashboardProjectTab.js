@@ -6,6 +6,15 @@ import { format } from 'date-fns'
 import { TailSpin } from  'react-loader-spinner'
 import Router from "next/router"
 
+const getTheme = (theme) => {
+    switch(theme.codename) {
+        case "krdx":
+            return <span className="badge badge-success">{theme.name}</span>
+        default:
+            return <span className="badge badge-success">{theme.name}</span>
+    }
+}
+
 export default function DiscordDashboardProjectTab ({ subscriptionInfo }) {
     const [loading, setLoading] = React.useState(true)
     const [userProjects, setUserProjects] = React.useState([])
@@ -82,10 +91,7 @@ export default function DiscordDashboardProjectTab ({ subscriptionInfo }) {
                                             <td>{format(new Date(project.createdAt), "d MMM yyyy kk:mm ::XXX").replace("::", "UTC")}</td>
                                             <td>
                                                 {
-                                                    project.theme === "krdx" ?
-                                                        <label className="badge badge-info">Kardex</label>
-                                                        :
-                                                        null
+                                                    getTheme(project.theme)
                                                 }
                                             </td>
                                             <td><a style={{textDecoration:'none'}} href={`/discord-dashboard/project/${project._id}`}>Click</a></td>

@@ -41,6 +41,7 @@ export default function Sidebar({ user }) {
                 <li className="nav-item nav-category">Tools</li>
 
 
+
                 <li className={`nav-item${asPath.startsWith('/discord-dashboard') ? ' active' : ''}`}>
                     <a style={{ borderRadius: '0px 20px 0px 0px' }} className="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false"
                         aria-controls="form-elements">
@@ -50,9 +51,9 @@ export default function Sidebar({ user }) {
                     </a>
                     <div className={`collapse ${asPath.startsWith('/discord-dashboard') ? ' show' : ''}`} id="form-elements">
                         <ul className="nav flex-column sub-menu" style={{ borderRadius: '0px 0px 20px 0px' }}>
-                            {/*<li className="nav-item"><a className={`nav-link${(asPath.startsWith('/discord-dashboard') && !asPath.startsWith('/discord-dashboard/')) || asPath.startsWith('/discord-dashboard/project/')?' active':''}`} href="/discord-dashboard">Projects</a></li>*/}
-                            <li className="nav-item"><a className={`nav-link${asPath.startsWith('/discord-dashboard/v2') ? ' active' : ''}`} href="/discord-dashboard/v2">v2 Licenses</a></li>
-                            <li className="nav-item"><a className="nav-link" href="https://dbd-docs.assistantscenter.com/#/" target="_blank">Documentation</a></li>
+                            <li className="nav-item"><a className={`nav-link${(asPath.startsWith('/discord-dashboard') && !asPath.startsWith('/discord-dashboard/')) || asPath.startsWith('/discord-dashboard/project/')?' active':''}`} href="/discord-dashboard">Projects (v3)</a></li>
+                            <li className="nav-item"><a className={`nav-link${asPath.startsWith('/discord-dashboard/v2') ? ' active' : ''}`} href="/discord-dashboard/v2">Licenses (v2)</a></li>
+                            <li className="nav-item"><a className="nav-link" href="https://docs.assistantscenter.com/#/" target="_blank">Documentation</a></li>
                             <li className="nav-item"><a className="nav-link" href="https://learnit.assistantscenter.com/category/discord-dashboard/discord-dashboard-tutorial/" target="_blank">Tutorial</a></li>
                         </ul>
                     </div>
