@@ -21,7 +21,7 @@ export default function Sidebar({ user }) {
                     </a>
                 </li>
 
-                <li className={`nav-item${asPath.startsWith('/blog') ? ' active' : ''}`}>
+                <li className={`nav-item${asPath.startsWith('/blog') && !(asPath.startsWith('/blog/create') || asPath.startsWith('/blog/edit')) ? ' active' : ''}`}>
                     <a className="nav-link" href="/blog">
                         <i className="mdi mdi-newspaper menu-icon" />
                         <span className="menu-title">Blog</span>
