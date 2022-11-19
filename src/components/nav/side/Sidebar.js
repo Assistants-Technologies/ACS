@@ -124,14 +124,18 @@ export default function Sidebar({ user }) {
                                     <span className="menu-title">User Management</span>
                                 </a>
                             </li>
-                            <li className={`nav-item${asPath.startsWith('/blog/create') || asPath.startsWith('/blog/edit') ? ' active' : ''}`}>
-                                <a className="nav-link" href="/blog/create">
-                                    <i className="mdi mdi-mail menu-icon" />
-                                    <span className="menu-title">Blog Management</span>
-                                </a>
-                            </li>
                         </>
                     )
+                }
+
+                {
+                    user?.blog_permissions &&
+                    <li className={`nav-item${asPath.startsWith('/blog/create') || asPath.startsWith('/blog/edit') ? ' active' : ''}`}>
+                        <a className="nav-link" href="/blog/create">
+                            <i className="mdi mdi-mail menu-icon" />
+                            <span className="menu-title">Blog Management</span>
+                        </a>
+                    </li>
                 }
 
 
