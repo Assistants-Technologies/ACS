@@ -49,17 +49,17 @@ export default function TestPage ({ user, url, post_data }) {
 
     return (
         <>
+            <NextSeo
+                title={post_data.title}
+                openGraph={{
+                    title: post_data.title,
+                    url: "https://assistantscenter.com/blog/"+post_data.category.slug+"/"+post_data.slug,
+                    images: [{
+                        url: post_data.image,
+                    }]
+                }}
+            />
             <Head>
-                <NextSeo
-                    title={post_data.title}
-                    openGraph={{
-                        title: post_data.title,
-                        url: "https://assistantscenter.com/blog/"+post_data.category.slug+"/"+post_data.slug,
-                        images: [{
-                            url: post_data.image,
-                        }]
-                    }}
-                />
                 <meta charSet="utf-8" />
                 <meta
                     name="viewport"
