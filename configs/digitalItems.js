@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 
 module.exports = {
     digital_items: [
-        {
+        /*{
             categoryName: 'Kardex Theme Addons',
             categoryDescription: 'Discord-Dashboard v3 Kardex Theme\'s Addons',
             categoryItems: [
@@ -59,7 +59,7 @@ module.exports = {
                     assign_item:()=>true,
                 },
             ]
-        },
+        },*/
             {
                 categoryName: "Discord-Dashboard v2 Licenses",
                 categoryDescription: "Choose a license you'd like to use.",
