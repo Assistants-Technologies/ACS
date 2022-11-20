@@ -73,7 +73,7 @@ export default function LandingPage ({ user, url }) {
             <main className="main" id="top">
                 <nav className="navbar navbar-light sticky-top" data-navbar-darken-on-scroll={900}>
                     <div className="container pt-2"><a className="navbar-brand" href="/" /><div><a className="navbar-brand" href="/" /><a className="navbar-brand brand-logo" href="/"><b style={{color: '#2f15eb'}}>Assist<span style={{color: '#e7e6ed'}}>ants</span></b></a><a className="navbar-brand brand-logo-mini" href="/" /></div>
-                        <div className="navbar-nav ms-auto"><a href="/auth?redirect_back=/dashboard" className="btn btn-secondary">Dashboard</a></div>
+                        <div className="navbar-nav ms-auto flex-row"><a style={{marginRight:10}} href="/blog" className="btn btn-secondary">Blog</a><a href="/auth?redirect_back=/dashboard" className="btn btn-secondary">Dashboard</a></div>
                     </div>
                 </nav>
                 {/* ============================================*/}

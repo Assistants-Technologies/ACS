@@ -221,6 +221,28 @@ const vhost = ({next_app, next_handle, client}) => {
         })
     })
 
+    app.get('/blog', async (req, res) => {
+        const page = req.query.page || 1
+        const limit = 10
+
+        let posts = (await BlogPost.find({}).sort({createdAt: -1}).skip((page - 1) * limit).limit(limit).populate('category').exec())
+        posts = JSON.parse(JSON.stringify(posts)).map(post => {
+            delete post.content
+            return post
+        })
+
+        const postsCount = await BlogPost.countDocuments({})
+
+        return next_app.render(req, res, '/blog', {
+            url: req.url,
+            user: req.session.user || {},
+            posts: JSON.parse(JSON.stringify(posts)),
+            postsCount,
+            page,
+            limit,
+        })
+    })
+
     app.post('/api/blog/update/:postId', async (req, res) => {
         if (req.session?.user?.admin !== true) return res.status(401).redirect('/')
 
