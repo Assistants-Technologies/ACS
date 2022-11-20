@@ -129,137 +129,146 @@ const Comparison = ({project}) => {
     }</>
 }
 
-export default function ViewsStats ({ project }) {
-    const data = [
-        { country: "cn", value: 1389 },
-        { country: "pl", value: 1289 },
-    ];
+const DailyTotal = ({ project }) => {
+    const [data, setData] = React.useState(null)
+
+    React.useEffect(() => {
+        const exec = async () => {
+            const res = await axios.get('/api/discord-dashboard/project/stats/'+project._id).catch(err=>{
+                console.log(err)
+            })
+            setData(res.data.data)
+        }
+        exec()
+    }, [])
 
     return (
         <>
-        <div className="col-lg-8 d-flex flex-column">
             <div className="row flex-grow">
-                <div className="col-12 col-lg-4 col-lg-12 grid-margin stretch-card">
-                    <div className="card card-rounded">
-                        <div className="card-body">
-                            <div className="d-sm-flex justify-content-between align-items-start">
-                                <div>
-                                    <h4 className="card-title card-title-dash">
-                                        Views comparison of the last 7 days with the previous 7 days
-                                    </h4>
-                                    <h5 className="card-subtitle card-subtitle-dash">
-                                        Views are counted: 1 per page per user per 3 hours, unique views are total unique users logged in and not logged in. Unique users are total unique users logged in.
-                                    </h5>
+                <div className="col-md-6 col-lg-12 grid-margin stretch-card">
+                    <div className="card bg-primary card-rounded">
+                        <div className="card-body pb-0">
+                            <h4 className="card-title card-title-dash text-white mb-4">
+                                Today's stats
+                            </h4>
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <p className="status-summary-ight-white mb-1">Total Page Views</p>
+                                    <h2 className="text-white">{data?.today?.views || "..."}</h2>
                                 </div>
-                                <div id="performance-line-legend">
-                                    <div className="chartjs-legend">
-                                        <ul>
-                                            <li>
-                                                <span style={{ backgroundColor: "#1F3BB3" }} />
-                                                This week
-                                            </li>
-                                            <li>
-                                                <span style={{ backgroundColor: "#52CDFF" }} />
-                                                Last week
-                                            </li>
-                                        </ul>
-                                    </div>
+                                <div className="col-sm-4">
+                                    <p className="status-summary-ight-white mb-1">Total Users</p>
+                                    <h2 className="text-white">{data?.today?.uniqueUsers || "..."}</h2>
                                 </div>
-                            </div>
-                            <div className="chartjs-wrapper mt-5">
-                                <div className="chartjs-size-monitor">
-                                    <div className="chartjs-size-monitor-expand">
-                                        <div>
-                                        </div>
-                                    </div>
-                                    <div className="chartjs-size-monitor-shrink">
-                                        <div>
-                                        </div>
-                                    </div>
+                                <div className="col-sm-4">
+                                    <p className="status-summary-ight-white mb-1">Settings Updated</p>
+                                    <h2 className="text-white">357</h2>
                                 </div>
-                                <div>
-                                    {
-                                        (typeof document !== 'undefined')  && data ? <Comparison project={project}/> : null
-                                    }
-                                </div>
-                                <canvas
-                                    id="performaneLine"
-                                    style={{ display: "block", height: 150, width: 658 }}
-                                    width={1316}
-                                    height={300}
-                                    className="chartjs-render-monitor"
-                                />
+                                <div className="pt-3"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+            <div className="row flex-grow">
+                <div className="col-md-6 col-lg-12 grid-margin stretch-card">
+                    <div className="card bg-primary card-rounded">
+                        <div className="card-body pb-0">
+                            <h4 className="card-title card-title-dash text-white mb-4">
+                                Total stats
+                            </h4>
+                            <div className="row">
+                                <div className="col-sm-4">
+                                    <p className="status-summary-ight-white mb-1">Total Page Views</p>
+                                    <h2 className="text-white">{data?.total?.views || "..."}</h2>
+                                </div>
+                                <div className="col-sm-4">
+                                    <p className="status-summary-ight-white mb-1">Total Users</p>
+                                    <h2 className="text-white">{data?.total?.uniqueUsers || "..."}</h2>
+                                </div>
+                                <div className="col-sm-4">
+                                    <p className="status-summary-ight-white mb-1">Settings Updated</p>
+                                    <h2 className="text-white">357</h2>
+                                </div>
+                                <div className="pt-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+}
+
+export default function ViewsStats ({ project }) {
+    return (
+        <>
+            <div className="col-lg-8 d-flex flex-column">
+                <div className="row flex-grow">
+                    <div className="col-12 col-lg-4 col-lg-12 grid-margin stretch-card">
+                        <div className="card card-rounded">
+                            <div className="card-body">
+                                <div className="d-sm-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h4 className="card-title card-title-dash">
+                                            Views comparison of the last 7 days with the previous 7 days
+                                        </h4>
+                                        <h5 className="card-subtitle card-subtitle-dash">
+                                            Views are counted: 1 per page per user per 3 hours, unique views are total unique users logged in and not logged in. Unique users are total unique users logged in.
+                                        </h5>
+                                    </div>
+                                    <div id="performance-line-legend">
+                                        <div className="chartjs-legend">
+                                            <ul>
+                                                <li>
+                                                    <span style={{ backgroundColor: "#1F3BB3" }} />
+                                                    This week
+                                                </li>
+                                                <li>
+                                                    <span style={{ backgroundColor: "#52CDFF" }} />
+                                                    Last week
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="chartjs-wrapper mt-5">
+                                    <div className="chartjs-size-monitor">
+                                        <div className="chartjs-size-monitor-expand">
+                                            <div>
+                                            </div>
+                                        </div>
+                                        <div className="chartjs-size-monitor-shrink">
+                                            <div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <Comparison project={project}/>
+                                    <canvas
+                                        id="performaneLine"
+                                        style={{ display: "block", height: 150, width: 658 }}
+                                        width={1316}
+                                        height={300}
+                                        className="chartjs-render-monitor"
+                                    />
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         <div className="col-lg-4 d-flex flex-column">
-            <div className="row flex-grow">
-                <div className="col-md-6 col-lg-12 grid-margin stretch-card">
-                    <div className="card bg-primary card-rounded">
-                        <div className="card-body pb-0">
-                            <h4 className="card-title card-title-dash text-white mb-4">
-                                Total Views Summary
-                            </h4>
-                            <div className="row">
-                                <div className="col-sm-4">
-                                    <p className="status-summary-ight-white mb-1">Views</p>
-                                    <h2 className="text-white">357</h2>
-                                </div>
-                                <div className="col-sm-4">
-                                    <p className="status-summary-ight-white mb-1">Users</p>
-                                    <h2 className="text-white">357</h2>
-                                </div>
-                                <div className="col-sm-4">
-                                    <p className="status-summary-ight-white mb-1">Unique Views</p>
-                                    <h2 className="text-white">357</h2>
-                                </div>
-                                <div className="pt-3"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div className="row flex-grow">
-                <div className="col-md-6 col-lg-12 grid-margin stretch-card">
-                    <div className="card bg-primary card-rounded">
-                        <div className="card-body pb-0">
-                            <h4 className="card-title card-title-dash text-white mb-4">
-                                Total Views Summary
-                            </h4>
-                            <div className="row">
-                                <div className="col-sm-4">
-                                    <p className="status-summary-ight-white mb-1">Views</p>
-                                    <h2 className="text-white">357</h2>
-                                </div>
-                                <div className="col-sm-4">
-                                    <p className="status-summary-ight-white mb-1">Users</p>
-                                    <h2 className="text-white">357</h2>
-                                </div>
-                                <div className="col-sm-4">
-                                    <p className="status-summary-ight-white mb-1">Unique Views</p>
-                                    <h2 className="text-white">357</h2>
-                                </div>
-                                <div className="pt-3"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <DailyTotal project={project}/>
         </div>
-        <div className="col-xxl-6 d-flex flex-column">
-            <div className="card card-rounded">
-                <div className="card-body">
-                    <a><b>Views per countries</b></a>
-                    {(typeof window !== 'undefined')  && data ?
+            <div className="col-xxl-6 d-flex flex-column">
+                <div className="card card-rounded">
+                    <div className="card-body">
+                        <a><b>Views per countries</b></a>
                         <CountryViews project={project}/>
-                        :null
-                    }
+                    </div>
                 </div>
             </div>
-        </div>
 
         </>
     )

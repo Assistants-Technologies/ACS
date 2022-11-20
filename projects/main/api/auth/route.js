@@ -45,7 +45,8 @@ router.get('/callback', async (req, res) => {
             username: user.assistants_username,
             email: user.email,
             avatarURL: user.avatarURL,
-            admin: user.admin
+            admin: user.admin,
+            blog_permissions: user.blog_permissions,
         }
         await req.session.save()
 

@@ -13,10 +13,18 @@ export default function Sidebar({ user }) {
                         <span className="menu-title">Home</span>
                     </a>
                 </li>
+
                 <li className={`nav-item${asPath.startsWith('/dashboard') ? ' active' : ''}`}>
                     <a className="nav-link" href="/dashboard">
                         <i className="mdi mdi-grid-large menu-icon" />
                         <span className="menu-title">Dashboard</span>
+                    </a>
+                </li>
+
+                <li className={`nav-item${asPath.startsWith('/blog') && !(asPath.startsWith('/blog/create') || asPath.startsWith('/blog/edit')) ? ' active' : ''}`}>
+                    <a className="nav-link" href="/blog">
+                        <i className="mdi mdi-newspaper menu-icon" />
+                        <span className="menu-title">Blog</span>
                     </a>
                 </li>
 
@@ -41,6 +49,7 @@ export default function Sidebar({ user }) {
                 <li className="nav-item nav-category">Tools</li>
 
 
+
                 <li className={`nav-item${asPath.startsWith('/discord-dashboard') ? ' active' : ''}`}>
                     <a style={{ borderRadius: '0px 20px 0px 0px' }} className="nav-link" data-bs-toggle="collapse" href="#form-elements" aria-expanded="false"
                         aria-controls="form-elements">
@@ -50,9 +59,9 @@ export default function Sidebar({ user }) {
                     </a>
                     <div className={`collapse ${asPath.startsWith('/discord-dashboard') ? ' show' : ''}`} id="form-elements">
                         <ul className="nav flex-column sub-menu" style={{ borderRadius: '0px 0px 20px 0px' }}>
-                            {/*<li className="nav-item"><a className={`nav-link${(asPath.startsWith('/discord-dashboard') && !asPath.startsWith('/discord-dashboard/')) || asPath.startsWith('/discord-dashboard/project/')?' active':''}`} href="/discord-dashboard">Projects</a></li>*/}
-                            <li className="nav-item"><a className={`nav-link${asPath.startsWith('/discord-dashboard/v2') ? ' active' : ''}`} href="/discord-dashboard/v2">v2 Licenses</a></li>
-                            <li className="nav-item"><a className="nav-link" href="https://dbd-docs.assistantscenter.com/#/" target="_blank">Documentation</a></li>
+                            <li className="nav-item"><a className={`nav-link${(asPath.startsWith('/discord-dashboard') && !asPath.startsWith('/discord-dashboard/')) || asPath.startsWith('/discord-dashboard/project/')?' active':''}`} href="/discord-dashboard">Projects (v3)</a></li>
+                            <li className="nav-item"><a className={`nav-link${asPath.startsWith('/discord-dashboard/v2') ? ' active' : ''}`} href="/discord-dashboard/v2">Licenses (v2)</a></li>
+                            <li className="nav-item"><a className="nav-link" href="https://docs.assistantscenter.com/#/" target="_blank">Documentation</a></li>
                             <li className="nav-item"><a className="nav-link" href="https://learnit.assistantscenter.com/category/discord-dashboard/discord-dashboard-tutorial/" target="_blank">Tutorial</a></li>
                         </ul>
                     </div>
@@ -99,20 +108,34 @@ export default function Sidebar({ user }) {
                             <li className="nav-item nav-category">Admin</li>
                             <li className={`nav-item${asPath.startsWith('/admin/support') ? ' active' : ''}`}>
                                 <a className="nav-link" href="/admin/support">
-                                    <i className="mdi mdi-human-handsup menu-icon" />
+                                    <i className="mdi mdi-equal-box menu-icon" />
                                     <span className="menu-title">Bot Queries</span>
                                 </a>
                             </li>
                             <li className={`nav-item${asPath.startsWith('/admin/users/list') ? ' active' : ''}`}>
                                 <a className="nav-link" href="/admin/users/list">
-                                    <i className="mdi mdi-human-handsup menu-icon" />
+                                    <i className="mdi mdi-account-details menu-icon" />
                                     <span className="menu-title">User List</span>
                                 </a>
                             </li>
                             <li className={`nav-item${asPath.startsWith('/admin/users/list') ? ' active' : ''}`}>
                                 <a className="nav-link" href="/admin/manage">
-                                    <i className="mdi mdi-human-handsup menu-icon" />
+                                    <i className="mdi mdi-account-settings menu-icon" />
                                     <span className="menu-title">User Management</span>
+                                </a>
+                            </li>
+                        </>
+                    )
+                }
+
+                {
+                    user && user.blog_permissions && (
+                        <>
+                            <li className="nav-item nav-category">Blogger</li>
+                            <li className={`nav-item${asPath.startsWith('/blog/create') || asPath.startsWith('/blog/edit') ? ' active' : ''}`}>
+                                <a className="nav-link" href="/blog/create">
+                                    <i className="mdi mdi-mail menu-icon" />
+                                    <span className="menu-title">Blog Management</span>
                                 </a>
                             </li>
                         </>

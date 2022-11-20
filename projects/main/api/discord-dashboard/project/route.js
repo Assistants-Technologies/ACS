@@ -42,26 +42,30 @@ router.post('/create', async(req,res)=>{
         message: 'Unauthorized',
     })
 
-    const { project_name, project_theme } = req.body;
+    const { project_name } = req.body;
 
-    if(!project_name || !project_theme)
+    if(!project_name)
         return res.status(400).json({
             error: true,
             message: 'Missing required fields',
         })
 
     const UserProjects = await Project.find({owner: req.session.user._id})
-    if(UserProjects.length >= 2) {
+    if(UserProjects.length >= 1) {
         return res.status(400).json({
             error: true,
-            message: 'You can only have up to 2 projects unless you have Premium Account Boost.',
+            message: 'You can only have up to 1 project unless you have active Discord-Dashboard Subscription.',
         })
     }
 
     const NewProject = await Project.create({
         owner: req.session.user._id,
         name: project_name,
-        theme: project_theme,
+        theme: {
+            codename: null,
+            name: 'Not Initialized',
+            version: null,
+        }
     })
 
     return res.status(200).json({
@@ -69,7 +73,7 @@ router.post('/create', async(req,res)=>{
         project_id: NewProject._id,
     })
 })
-/*
+
 router.get('/views/total/countries/:projectId', async (req,res)=>{
     const projectId = req.params.projectId
     if(!req.session?.user?._id) return res.json({
@@ -120,6 +124,59 @@ router.get('/views/total/countries/:projectId', async (req,res)=>{
     })
 })
 
+
+router.get('/stats/:projectId', async (req,res)=>{
+    const projectId = req.params.projectId
+    if(!req.session?.user?._id) return res.json({
+        error: true,
+        message: 'Unauthorized',
+    })
+
+    let ObjectId = require('mongoose').Types.ObjectId
+    if(!ObjectId.isValid(projectId)) {
+        return res.status(400).json({
+            error: true,
+            message: 'Invalid ObjectId ' + projectId,
+        })
+    }
+
+    const ProjectData = await Project.findOne({
+        _id: projectId,
+    })
+
+    if(!ProjectData) {
+        return res.status(400).json({
+            error: true,
+            message: 'Project does not exist',
+        })
+    }
+
+    if(ProjectData.owner.toString() !== req.session.user._id.toString()) {
+        return res.status(400).json({
+            error: true,
+            message: 'No access to the project.',
+        })
+    }
+
+    const ProjectViews = await Views.find({
+        project_id: projectId,
+    })
+
+    return res.status(200).json({
+        error: false,
+        data: {
+            today: {
+                views: ProjectViews.filter(view => new Date().toDateString() == new Date(view.createdAt).toDateString()).length,
+                uniqueUsers: ProjectViews.filter(view => new Date().toDateString() == new Date(view.createdAt).toDateString()).filter((view, index, self) => self.findIndex(t => t.user_id === view.user_id) === index).length,
+            },
+            total: {
+                views: ProjectViews.length,
+                uniqueUsers: ProjectViews.filter((view, index, self) => self.findIndex(t => t.user_id === view.user_id) === index).length,
+            }
+        }
+    })
+})
+
 router.get('/views/comparison/:projectId', async(req,res)=>{
     const projectId = req.params.projectId
     if(!req.session?.user?._id) return res.json({
@@ -137,17 +194,21 @@ router.get('/views/comparison/:projectId', async(req,res)=>{
 
     const ProjectData = await Project.findOne({
         _id: projectId,
-        createdAt: {
-            $gte: new Date(new Date().getTime() - 12096e5),
-            $lt: new Date(Date.now()),
-        }
     })
 
-    if(ProjectData?.owner != req.session.user._id)
-        return res.json({
+    if(!ProjectData) {
+        return res.status(400).json({
             error: true,
-            message: 'You are not authorized to access this project. Please use proper account.',
+            message: 'Project does not exist',
         })
+    }
+
+    if(ProjectData.owner.toString() !== req.session.user._id.toString()) {
+        return res.status(400).json({
+            error: true,
+            message: 'No access to the project.',
+        })
+    }
 
     const ProjectViews = await Views.find({
         project_id: projectId,
@@ -168,7 +229,6 @@ router.get('/views/comparison/:projectId', async(req,res)=>{
 
     function filterProjectViews(projectViews, {start, end}) {
         return projectViews.filter(view => {
-            console.log(view, start, end)
             return new Date(view.createdAt) >= start && new Date(view.createdAt) <= end;
         })
     }
@@ -195,5 +255,5 @@ router.get('/views/comparison/:projectId', async(req,res)=>{
         dates
     })
 })
-*/
+
 module.exports = router

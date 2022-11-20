@@ -6,6 +6,60 @@ const mongoose = require("mongoose");
 
 module.exports = {
     digital_items: [
+        /*{
+            categoryName: 'Kardex Theme Addons',
+            categoryDescription: 'Discord-Dashboard v3 Kardex Theme\'s Addons',
+            categoryItems: [
+                {
+                    id: "kardex-custom-components",
+                    name: "Custom Components",
+                    description: "Custom Components for Kardex Theme - build your own, unique pages and components!",
+                    image: "https://cdn.assistantscenter.com/l6yvtyo6",
+                    price: 400,
+                    aho: {
+                        type: 'modal',
+                        html: {
+                            content: '',
+                        },
+                        getInfo: () => '123',
+                    },
+                    owns_already: ()=>false,
+                    assign_item:()=>true,
+                },
+                {
+                    id: "kardex-theme-ui-editor",
+                    name: "Theme UI Editor",
+                    description: "Allow yourself to change anything you want! Adjust this, and that, and you will achieve your goal - the best theme for your Dashboard!",
+                    image: "https://cdn.assistantscenter.com/l6yvtyo6",
+                    price: 300,
+                    aho: {
+                        type: 'modal',
+                        html: {
+                            content: '',
+                        },
+                        getInfo: () => '123',
+                    },
+                    owns_already: ()=>false,
+                    assign_item:()=>true,
+                },
+                {
+                    id: "kardex-save-floating-button",
+                    name: "Save Floating Button",
+                    description: "Better, floating, save button!",
+                    image: "https://cdn.assistantscenter.com/l6yvtyo6",
+                    price: 50,
+                    aho: {
+                        type: 'modal',
+                        html: {
+                            content: '',
+                        },
+                        getInfo: () => '123',
+                    },
+                    owns_already: ()=>false,
+                    assign_item:()=>true,
+                },
+            ]
+        },*/
             {
                 categoryName: "Discord-Dashboard v2 Licenses",
                 categoryDescription: "Choose a license you'd like to use.",

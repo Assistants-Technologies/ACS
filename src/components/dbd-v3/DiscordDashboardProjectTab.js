@@ -6,13 +6,21 @@ import { format } from 'date-fns'
 import { TailSpin } from  'react-loader-spinner'
 import Router from "next/router"
 
+const getTheme = (theme) => {
+    switch(theme.codename) {
+        case "krdx":
+            return <span className="badge badge-success">{theme.name}</span>
+        default:
+            return <span className="badge badge-success">{theme.name}</span>
+    }
+}
+
 export default function DiscordDashboardProjectTab ({ subscriptionInfo }) {
     const [loading, setLoading] = React.useState(true)
     const [userProjects, setUserProjects] = React.useState([])
     const [displayModal, setDisplayModal] = React.useState(false)
 
     const [projectName, setProjectName] = React.useState("")
-    const [projectTheme, setProjectTheme] = React.useState("krdx")
 
 
     React.useEffect(()=>{
@@ -26,12 +34,10 @@ export default function DiscordDashboardProjectTab ({ subscriptionInfo }) {
 
     const CreateProject = async () => {
         if(!projectName) return alert("Please enter a project name")
-        if(!projectTheme) return alert("Please enter a project theme")
 
         try {
             const res = await axios.post('/api/discord-dashboard/project/create', {
                 project_name: projectName,
-                project_theme: projectTheme,
             })
 
             if (res.data.error) {
@@ -82,10 +88,7 @@ export default function DiscordDashboardProjectTab ({ subscriptionInfo }) {
                                             <td>{format(new Date(project.createdAt), "d MMM yyyy kk:mm ::XXX").replace("::", "UTC")}</td>
                                             <td>
                                                 {
-                                                    project.theme === "krdx" ?
-                                                        <label className="badge badge-info">Kardex</label>
-                                                        :
-                                                        null
+                                                    getTheme(project.theme)
                                                 }
                                             </td>
                                             <td><a style={{textDecoration:'none'}} href={`/discord-dashboard/project/${project._id}`}>Click</a></td>
@@ -136,25 +139,16 @@ export default function DiscordDashboardProjectTab ({ subscriptionInfo }) {
 
                                         <div className={"pt-3"}>
                                             <div className="row">
-                                                <div className="col-md-6">
+                                                <div className="col-md-12">
                                                     <div className="form-group">
                                                         <label htmlFor="projectName">Project Name</label>
                                                         <input type="text" className="form-control"
                                                                 id="projectName"
                                                                placeholder="Project Name"
-                                                               style={{color:'black'}}
                                                                value={projectName}
                                                                onChange={(event)=>setProjectName(event.target.value)}
                                                                maxLength={30}
                                                         />
-                                                    </div>
-                                                </div>
-                                                <div className="col-md-6">
-                                                    <div className="form-group">
-                                                        <label htmlFor="theme">Project Theme</label>
-                                                        <select value={projectTheme} onChange={(event)=>setProjectTheme(event.target.value)} className="form-control" id="theme" style={{color:'black'}}>
-                                                            <option name="krdx" value="krdx">Kardex Theme</option>
-                                                        </select>
                                                     </div>
                                                 </div>
                                             </div>

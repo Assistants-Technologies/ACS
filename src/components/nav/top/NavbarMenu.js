@@ -42,14 +42,25 @@ export default function NavbarMenu ({ user, uds }) {
             </div>
             <div className="navbar-menu-wrapper d-flex align-items-top">
                 <ul className="navbar-nav">
-                    <li className="nav-item font-weight-semibold d-none d-lg-block ms-0">
+                    {user?._id && <li className="nav-item font-weight-semibold d-none d-lg-block ms-0">
                         <h1 className="welcome-text">
-                            Good {welcomeText}{user && <>, <span className="text-black fw-bold">{user.username}</span></>}
+                            Good {welcomeText}{user && <>, <span
+                            className="text-black fw-bold">{user.username}</span></>}
                         </h1>
                         <h3 className="welcome-sub-text">
                             Manage your Assistants Center Services{" "}
                         </h3>
-                    </li>
+                    </li>}
+                    {!user?._id &&
+                        <li className="nav-item font-weight-semibold d-none d-lg-block ms-0">
+                            <h1 className="welcome-text">
+                                Good {welcomeText},
+                            </h1>
+                            <h3 className="welcome-sub-text">
+                                Welcome to Assistants Center{" "}
+                            </h3>
+                        </li>
+                    }
                 </ul>
                 <ul className="navbar-nav ms-auto">
                     {/*<li className="nav-item dropdown">
@@ -111,7 +122,7 @@ export default function NavbarMenu ({ user, uds }) {
                             </a>
                         </div>
                     </li>*/}
-                    {user && <li className="nav-item dropdown d-none d-lg-block user-dropdown">
+                    {user?._id && <li className="nav-item dropdown d-none d-lg-block user-dropdown">
                         <a
                             className="nav-link"
                             id="UserDropdown"

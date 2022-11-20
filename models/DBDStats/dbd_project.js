@@ -15,8 +15,12 @@ const dbdProjectSchema = new Schema(
             required: true,
         },
         theme: {
-            type: String,
-            required: true,
+            type: Object,
+            default: {
+                name: null,
+                codename: null,
+                version: null,
+            },
         },
     },
     {
