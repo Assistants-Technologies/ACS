@@ -14,7 +14,6 @@ router.use(fileUpload())
 
 router.get('/:user_id', async (req,res) => {
     const fileExists = fs.existsSync(path.join(__dirname, `../../../public/avatar/${req?.session?.user?._id+'.png'}`));
-    console.log(path.join(__dirname, `../../../public/avatar/${req?.session?.user?._id+'.png'}`))
     if(fileExists)
         return res.sendFile(path.join(__dirname, `../../../public/avatar/${req?.session?.user?._id+'.png'}`));
     else
