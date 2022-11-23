@@ -29,17 +29,6 @@ export default function TestPage ({ user, url, licenses }) {
         }
     }
 
-    React.useEffect(()=>{
-        const push = () => {
-            if(!window.adsbygoogle?.loaded){
-                return setTimeout(push, 100)
-            }
-            (window.adsbygoogle || []).push({});
-        }
-
-        push()
-    }, [])
-
     const title = `${IsBeta ? 'BETA | ' : ''}Assistants Center - Discord Dashboard v2`
 
     return (
@@ -144,29 +133,6 @@ export default function TestPage ({ user, url, licenses }) {
                                 </div>
                             </div>
 
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-sm-12">
-                        <div className="home-tab">
-                            <div className="tab-content" id="content-featured">
-                                <div className="tab-pane fade show active" id="featured">
-                                    <div className="row">
-                                        <div className="col-sm-12">
-                                            <div className="card card-rounded">
-                                                <div className="card-body">
-                                                    <ins className="adsbygoogle"
-                                                         style={{display:'block'}}
-                                                         data-ad-format="autorelaxed"
-                                                         data-ad-client="ca-pub-3673520795587574"
-                                                         data-ad-slot="6516761795"></ins>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>

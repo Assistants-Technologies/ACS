@@ -10,6 +10,7 @@ const vhost = ({next_app, next_handle, client}) => {
     }))
 
     app.use('/api/stats', StatsProjectAuthorize, require('./stats/route'))
+    app.use('/api/register-theme', StatsProjectAuthorize, require('./register-theme/route'))
 
     return app
 }
