@@ -3,31 +3,25 @@ const router = express.Router()
 
 const questionsList = require(`${__models}/questionList`)
 
-router.use(async (req, res, next) => {
-    const questions = await questionsList.findOne({
-        search: 'search'
-    });
-
-    if (!questions) {
-        db = new questionsList();
-        await db.save();
-    }
-
-    next();
-});
-
 router.get('/', async (req, res) => {
     if (req.session?.user?.admin !== true)
         return res.status(403).send()
 
-    const questions = await questionsList.findOne({
-        search: 'search'
-    });
+    const questions = await questionsList.find();
 
-    return res.send({ error: false, questions })
+    const clean = questions.map(x => {
+        return {
+            id: x.id,
+            query: x.query,
+            answer: x.answer,
+            match: x.match
+        }
+    })
+
+    return res.send({ error: false, questions: clean })
 })
 
-router.post('/edit/:id/set', async function (req, res) {
+router.post('/edit/:id/edit', async function (req, res) {
     if (req.session?.user?.admin !== true)
         return res.status(403).send()
 
@@ -36,27 +30,14 @@ router.post('/edit/:id/set', async function (req, res) {
     if (!query || !answer)
         return res.send({ error: true, message: 'No query or answer' })
 
-    const questions = await questionsList.findOne({
-        search: 'search'
-    });
-
-    const question = questions.list.find((x) => x.id == req.params.id)
+    const question = await questionsList.findOne({ id: req.params.id });
     if (!question) return res.send({ error: true, message: 'Question not found' })
 
-    const array = questions.list
+    question.query = query
+    question.answer = answer
+    question.match = match ? parseInt(match) : 50
 
-    const index = array.findIndex(a => a.id === question.id);
-
-    array[index] = {
-        id: question.id,
-        query,
-        answer,
-        match: match ? parseInt(match) : 50
-    }
-
-    questions.list = array
-
-    await questions.save()
+    await question.save()
 
     return res.send({ error: false, message: 'Question updated' })
 });
@@ -67,19 +48,19 @@ router.post('/edit/:id/delete', async function (req, res) {
 
     const { id } = req.params;
 
-    await questionsList.findOneAndUpdate(
-        {
-            search: 'search'
-        },
-        {
-            $pull: {
-                list: {
-                    id: id
-                }
-            },
-        },
-        { safe: true, multi: false }
-    );
+    const question = await questionsList.findOne({
+        id: id
+    });
+
+    if (!question) return res.send({ error: true, message: 'Question not found' })
+
+    await questionsList.deleteOne({ 
+        id: id
+    }).catch(err => {
+        return res.send({ error: true, message: err })
+    })
+
+    return res.send({ error: false, message: 'Question deleted' })
 });
 
 router.post('/create', async function (req, res) {
@@ -90,18 +71,18 @@ router.post('/create', async function (req, res) {
     if (!query || !answer)
         return res.send({ error: true, message: 'Query or answer is empty' })
 
-    const questions = await questionsList.findOne({ search: 'search' })
+    let questions = await questionsList.find({})
 
-    await questionsList.updateOne({ search: 'search' }, {
-        $push: {
-            list: {
-                query,
-                answer,
-                id: (parseInt(questions.list.reverse()[0].id) + 1).toString(),
-                match: parseInt(match) || 50
-            },
-        }
-    }, { new: true })
+    questions.sort((a, b) => a.id - b.id)
+
+    const largestId = questions[questions.length - 1].id
+
+    questionsList.create({
+        query,
+        answer,
+        id: (parseInt(largestId) + 1).toString(),
+        match: parseInt(match) || 50
+    })
 
     res.send({ error: false, message: 'Question created' });
 });

@@ -38,6 +38,15 @@ export default function TestPage({ user, url }) {
         });
     }
 
+    async function deleteQuestion(id, name) {
+        if (id === "NaN" || id === undefined || id === null) return alert("Invalid ID")
+        if (confirm(`Are you sure you want to delete the question "${name}"?`)) {
+            axios.post(`/api/admin/support/questions/edit/${id}/delete`).then(() => {
+                getQuestions()
+            })
+        }
+    }
+
     React.useEffect(() => {
         getQuestions();
     }, [])
@@ -86,7 +95,7 @@ export default function TestPage({ user, url }) {
                                 <div className="card-body">
                                     <h2><b>[ADMIN] Queries List</b></h2>
 
-                                    <h4 style={{ paddingTop: 10 }}>Question Count: <b>{questions?.list ? questions.list.length : "Loading..."}</b></h4>
+                                    <h4 style={{ paddingTop: 10 }}>Question Count: <b>{questions?.length || "Loading..."}</b></h4>
 
                                     <a href='/admin/support/create' className="btn btn-primary" style={{ marginTop: 10 }}>Add Question</a>
                                     <div className="table-responsive">
@@ -107,8 +116,7 @@ export default function TestPage({ user, url }) {
                                             <tbody>
                                                 {
                                                     questions &&
-                                                    questions.list &&
-                                                    questions.list.reverse().map(question => {
+                                                    questions.reverse().map(question => {
                                                         if (!question) return null;
                                                         let safeQuery = question.query.replace(`"`, `'`).replace('`', `'`);
                                                         return (
@@ -123,12 +131,7 @@ export default function TestPage({ user, url }) {
                                                                     <a href={`/admin/support/edit/${question.id}`} className="btn btn-primary btn-sm">Edit</a>
                                                                 </td>
                                                                 <td>
-                                                                    <button className="btn btn-danger btn-sm" onClick={async () => {
-                                                                        if (confirm(`Are you sure you want to delete the question "${safeQuery}"?`)) {
-                                                                            await axios.post(`/api/admin/support/questions/edit/${question?.id}/delete`)
-                                                                            getQuestions();
-                                                                        }
-                                                                    }}>Delete</button>
+                                                                    <button className="btn btn-danger btn-sm" onClick={() => deleteQuestion(question.id, safeQuery)}>Delete</button>
                                                                 </td>
                                                             </tr>
                                                         )

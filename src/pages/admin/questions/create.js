@@ -19,7 +19,7 @@ export async function getServerSideProps(context) {
     }
 }
 
-export default function TestPage({ user, url, question }) {
+export default function TestPage({ user, url }) {
     const ud = (url.split("/").length - 1)
     let ud_s = ''
     if (ud != 1) {
@@ -50,21 +50,18 @@ export default function TestPage({ user, url, question }) {
     }
 
     React.useEffect(() => {
-        axios.get('/api/admin/support/questions').then(res => {
-            setQuery(res.data?.questions?.list?.find((x) => x.id == question)?.query || [])
-            setAnswer(res.data?.questions?.list?.find((x) => x.id == question)?.answer || [])
-            setMatch(res.data?.questions?.list?.find((x) => x.id == question)?.match || 50)
-        });
-        setTimeout(() => {
-            $("textarea").each(function () {
-                this.setAttribute("style", "height:" + (this.scrollHeight) + "px;overflow-y:hidden;");
-            }).on("input", function () {
-                this.style.height = 0;
-                this.style.height = (this.scrollHeight) + "px";
-                this.parentElement.height = (this.scrollHeight) + "px";
-            });
-        }, 500)
+        setMatch(50)
     }, [])
+
+    React.useEffect(() => {
+        $("textarea").each(function () {
+            this.setAttribute("style", "height:" + (this.scrollHeight) + "px;overflow-y:hidden;");
+        }).on("input", function () {
+            this.style.height = 0;
+            this.style.height = (this.scrollHeight) + "px";
+            this.parentElement.height = (this.scrollHeight) + "px";
+        });
+    }, [answer])
 
     const title = `${IsBeta ? 'BETA | ' : ''}Assistants Center - Admin Users Management`
 
