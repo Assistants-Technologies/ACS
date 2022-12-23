@@ -101,7 +101,7 @@ module.exports = (dev) => {
         ],
         paymentTypes: {
             "PLN": ["card", "blik"],
-            "EUR": ["card", "giropay", "ideal"],
+            "EUR": ["card"],
             "USD": ["card"],
             "GBP": ["card",]
         },
