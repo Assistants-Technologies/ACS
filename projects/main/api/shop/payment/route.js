@@ -98,7 +98,7 @@ router.get('/create', async (req, res) => {
         mode: 'payment',
         success_url: process.env.STRIPE_SUCCESS_URL,
         cancel_url: process.env.STRIPE_CANCEL_URL,
-        payment_method_types: paymentTypes[currency],
+        automatic_payment_methods: {enabled: true},
         payment_intent_data: {
             receipt_email: user.verified ? user.email : undefined,
         },
