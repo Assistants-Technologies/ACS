@@ -11,6 +11,23 @@ const digitalItems = require('../../../../../configs/digitalItems').digital_item
 const LicensesList = require('../../../../../models/licensesList')
 const User = require('../../../../../models/user')
 
+
+const rateLimit = require('express-rate-limit')
+const rateMongoStore = require('rate-limit-mongo')
+
+const regenLimit = rateLimit({
+    windowMs: 5 * 60 * 1000,
+    max: 5,
+    standardHeaders: true,
+    legacyHeaders: false,
+    store: new rateMongoStore({
+        uri: process.env.MONGO_URL,
+        expireTimeMs: 5 * 60 * 1000,
+        collectionName: 'RateLimitAPI',
+    }),
+    message: () => { return { error: true, message: "Max requests reached, please try again in 5 minutes" } },
+})
+
 async function getUnusedLicense() {
     const li = uuidv4();
     const check = await LicensesList.findOne({
@@ -122,7 +139,7 @@ router.post('/assign', async (req, res) => {
     return res.send({ error: verified })
 })
 
-router.post('/regen/dbd', async (req, res) => {
+router.post('/regen/dbd', regenLimit, async (req, res) => {
     if (!req.session.user)
         return res.send({
             error: true,
