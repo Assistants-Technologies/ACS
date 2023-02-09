@@ -64,7 +64,7 @@ module.exports = (dev) => {
                 name: "10.000 Coins",
                 id: "10000_coins",
                 prices: {
-                    "PLN": dev ? "price_1LSQXnKWxgCmg6SfQdTRx4dK" : "price_1MZhu8KWxgCmg6SfghNygOi2,
+                    "PLN": dev ? "price_1LSQXnKWxgCmg6SfQdTRx4dK" : "price_1MZhu8KWxgCmg6SfghNygOi2",
                     "EUR": dev ? "price_1LSQXnKWxgCmg6SfQdTRx4dK" : "price_1MZhsxKWxgCmg6SfSc0vnh7c",
                     "USD": dev ? "price_1LSQXnKWxgCmg6SfQdTRx4dK" : "price_1MZhsEKWxgCmg6SfWJWFah73",
                     "GBP": dev ? "price_1LSQXnKWxgCmg6SfQdTRx4dK" : "price_1MZhtnKWxgCmg6Sf4HANxHsZ"
