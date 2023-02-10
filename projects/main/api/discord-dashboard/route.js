@@ -5,6 +5,7 @@ router.use('/stripe-connect', require('./stripe-connect/route'))
 
 router.use('/project', require('./project/route'))
 router.use('/license', require('./license/route'))
+router.use('/soft-ui', require('./softui/route'))
 
 const User = require('../../../../models/user')
 const DiscordDashboard = require('../../../../models/discordDashboard')
