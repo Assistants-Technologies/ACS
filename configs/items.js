@@ -60,6 +60,25 @@ module.exports = (dev) => {
                     return true
                 }
             },
+                        {
+                name: "10.000 Coins",
+                id: "10000_coins",
+                prices: {
+                    "PLN": dev ? "price_1LSQXnKWxgCmg6SfQdTRx4dK" : "price_1MZhu8KWxgCmg6SfghNygOi2",
+                    "EUR": dev ? "price_1LSQXnKWxgCmg6SfQdTRx4dK" : "price_1MZhsxKWxgCmg6SfSc0vnh7c",
+                    "USD": dev ? "price_1LSQXnKWxgCmg6SfQdTRx4dK" : "price_1MZhsEKWxgCmg6SfWJWFah73",
+                    "GBP": dev ? "price_1LSQXnKWxgCmg6SfQdTRx4dK" : "price_1MZhtnKWxgCmg6Sf4HANxHsZ"
+                },
+                assign_item: async ({ session, user_id }) => {
+                    const user = await User.findOne({_id: user_id})
+
+                    const coins = user.coins
+                    user.coins = coins + 10000
+                    await user.save()
+
+                    return true
+                }
+            },
             {
                 name: "20.000 Coins",
                 id: "20000_coins",
