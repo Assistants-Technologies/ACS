@@ -23,8 +23,6 @@ export async function getServerSideProps(context) {
 }
 
 export default function TestPage({ user, url, license }) {
-    console.log(license)
-
     const ud = (url.split("/").length - 1)
     let ud_s = ''
     if (ud != 1) {
