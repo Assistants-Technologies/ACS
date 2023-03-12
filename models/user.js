@@ -10,6 +10,26 @@ const userSchema = new Schema({
         default: null,
         sparse: true,
     },
+    ip_address: {
+        type: String,
+        default: null,
+        sparse: true,
+    },
+    known_accounts: {
+        type: Array,
+        default: []
+    },
+    warnings: {
+        type: Array,
+        default: []
+    },
+    suspended: {
+        enabled: { type: Boolean, default: false },
+        until: { type: Number, default: null },
+        reason: { type: String, default: null, sparse: true },
+        admin: { type: String, default: null, sparse: true },
+        ip: { type: Boolean, default: false },
+    },
     assistants_username: {
         type: String,
         unique: true,
@@ -63,7 +83,7 @@ const userSchema = new Schema({
         default: false
     },
     admin: {
-        type:Boolean,
+        type: Boolean,
         default: false,
     },
     premium_boost: {
