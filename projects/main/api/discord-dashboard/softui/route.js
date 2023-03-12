@@ -31,6 +31,9 @@ router.post("/addons/fetch", async (req, res) => {
   const user = await User.findOne({ _id: license.user });
   if (!user) return res.json({ error: true, info: "Failed to find user" });
 
+  if(user.warnings?.find(w => w.active === true)) return res.json({ error: true, info: "User has active warnings" });
+  if(user.suspended?.enabled) return res.json({ error: true, info: "User is suspended" });
+
   const licenseItem = user.productLicenses.find(
     (l) => l.licenseID === req.body.addon
   );

@@ -72,12 +72,14 @@ router.route('/users/edit/:type/:id').post(async (req, res) => {
         user.verified = req.body.verified;
 
         await user.save();
+        sendAdminLog(`User ${user.assistants_username} (${user._id}) permissions edited by ${req.session.user.assistants_username} (${req.session.user._id})`, req.client);
         return res.send({ error: false, message: 'User permissions updated' });
     } else if (type === "coins") {
         if (req.body.coins < 0 || !req.body.coins) return res.send({ error: true, message: 'Coins must be > 1' });
 
         user.coins = req.body.coins;
         await user.save();
+        sendAdminLog(`User ${user.assistants_username} (${user._id}) coins set to \`${user.coins.toLocaleString()}\` by ${req.session.user.assistants_username} (${req.session.user._id})`, req.client);
         return res.send({ error: false, message: 'User coins updated' });
     } else if (type === "email") {
         if (!req.body.email) return res.send({ error: true, message: 'Email is required' });
@@ -88,11 +90,14 @@ router.route('/users/edit/:type/:id').post(async (req, res) => {
 
         user.email = req.body.email;
         await user.save();
+        sendAdminLog(`User ${user.assistants_username} (${user._id}) email was changed to \`${user.email}\` by ${req.session.user.assistants_username} (${req.session.user._id})`, req.client);
         return res.send({ error: false, message: 'User email updated' });
     } else if (type === "known_accounts") {
+        if(user.suspended?.enabled) return res.send({ error: true, message: 'User is suspended' });
         user.known_accounts = [];
         await user.save();
 
+        sendAdminLog(`User ${user.assistants_username} (${user._id}) known accounts cleared by ${req.session.user.assistants_username} (${req.session.user._id})`, req.client);
         return res.send({ error: false, message: 'User known accounts cleared' });
     }
 });
@@ -118,6 +123,7 @@ router.route('/users/warn/:id').post(async (req, res) => {
 
     await user.save();
 
+    sendAdminLog(`User ${user.assistants_username} (${user._id}) was warned by ${req.session.user.assistants_username} (${req.body.reason})`, req.client);
     return res.send({ error: false, message: 'User warned' });
 });
 
@@ -147,6 +153,7 @@ router.route('/users/suspend/:id').post(async (req, res) => {
 
     await user.save();
 
+    sendAdminLog(`User ${user.assistants_username} (${user._id}) was suspended by ${req.session.user.assistants_username} (${req.session.user._id})`, req.client);
     return res.send({ error: false, message: 'User suspended' });
 });
 
@@ -194,6 +201,7 @@ router.route('/users/reactivate/:id').post(async (req, res) => {
         await user.save();
     }
 
+    sendAdminLog(`User ${user.assistants_username} (${user._id}) was reactivated by ${req.session.user.assistants_username} (${req.session.user._id})`, req.client);
     return res.send({ error: false, message: 'User reactivated' });
 });
 
@@ -225,6 +233,7 @@ router.route('/users/warnings/clear/:id').post(async (req, res) => {
 
     req.session.user = user;
 
+    sendAdminLog(`${req.session.user.assistants_username} cleared all warnings for ${user.assistants_username} (${user._id})`, req.client);
     return res.send({ error: false, message: 'Warnings successfully cleared' });
 });
 
@@ -300,8 +309,25 @@ router.route('/users/delete/:id').post(async (req, res) => {
 
     const dbdProjectStatsView = await DBDProjectStatsView.find({ user: user._id });
     if (dbdProjectStatsView?.length) dbdProjectStatsView.forEach(dpsv => dpsv.delete());
-
+    sendAdminLog(`User \`${user.assistants_username}\` has been deleted by \`${req.session.user.assistants_username}\``, req.client);
     return res.send({ error: false, message: 'Account \'yeeted\' out of existence.' });
 });
 
+const { EmbedBuilder } = require('discord.js');
+async function sendAdminLog(msg, client) {
+    let channel = client.channels.cache.get(process.env.DISCORD_ADMIN_LOGS_CHANNEL_ID);
+    if (!channel) {
+        await client.channels.fetch(process.env.DISCORD_ADMIN_LOGS_CHANNEL_ID);
+        channel = client.channels.cache.get(process.env.DISCORD_ADMIN_LOGS_CHANNEL_ID);
+        if(!channel) return console.log("Admin Logs channel not found");
+    }
+
+    const embed = new EmbedBuilder()
+        .setAuthor({ name: "Admin Log", iconURL: client.user.avatarURL() })
+        .setColor("Red")
+        .setDescription(msg)
+        .setTimestamp();
+    
+    channel.send({ embeds: [embed] });
+}
 module.exports = router
