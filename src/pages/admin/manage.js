@@ -39,6 +39,7 @@ export default function TestPage({ user, url, props }) {
     const [emBody, setEmBody] = useState(null)
     const [emTitle, setEmTitle] = useState(null)    
     const [userEmail, setUserEmail] = useState(null)
+    const [userUsername, setUserUsername] = useState(null)
     const [manageUser, setManageUser] = useState({})
 
     const getUser = async (value) => {
@@ -462,7 +463,15 @@ export default function TestPage({ user, url, props }) {
                                                                             }} />
                                                                         </div>
                                                                     </>
-                                                                        : editType === "known accounts" ?
+                                                                        : editType === "username" ? <>
+                                                                        <p>Original Username: <b>{userDB?.assistants_username?.toLocaleString()}</b></p>
+                                                                        <div className="input-group mb-3">
+                                                                            <span className="input-group-text" id="UsernameDesc">Username:</span>
+                                                                            <input type="text" className="form-control" placeholder="istinknight" aria-label="" id="usernameValue" aria-describedby="UsernameDesc" value={userUsername} onChange={(e) => {
+                                                                                setUserUsername(e.target.value);
+                                                                            }} />
+                                                                        </div>
+                                                                            </> : editType === "known accounts" ?
                                                                             <>
                                                                                 <p>Are you sure you want to wipe all known accounts?</p>
                                                                             </> : <></>}
@@ -470,7 +479,7 @@ export default function TestPage({ user, url, props }) {
                                                                 <div className="modal-footer">
                                                                     <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                                                                     <button type="button" className="btn btn-primary" data-bs-dismiss="modal" onClick={() => {
-                                                                        axios.post(`/api/admin/users/edit/${editType.replace(" ", "_")}/${userDB?._id}`, editType === "permissions" ? userPerms : editType === "coins" ? { coins: userCoins } : editType === "email" ? { email: userEmail } : {})
+                                                                        axios.post(`/api/admin/users/edit/${editType.replace(" ", "_")}/${userDB?._id}`, editType === "permissions" ? userPerms : editType === "coins" ? { coins: userCoins } : editType === "email" ? { email: userEmail } : editType === "username" ? { username: userUsername } : {})
                                                                             .then(res => {
                                                                                 const data = res.data;
 
@@ -543,9 +552,16 @@ export default function TestPage({ user, url, props }) {
                                                                                         $("#editPermsModal").modal('show');
                                                                                     }}>Update Email Address</button>
                                                                                     <button className="btn btn-secondary w-100 mb-2" onClick={() => {
-                                                                                        setEditType("known accounts");
+                                                                                        setEditType("username");
+                                                                                        setUserEmail(userDB?.assistants_username);
                                                                                         $("#editPermsModal").modal('show');
-                                                                                    }}>Reset Known Accounts</button>
+                                                                                    }}>Change Username</button>
+                                                                                </div>
+                                                                                <div className="d-flex">
+                                                                                        <button className="btn btn-secondary w-100 mb-2" onClick={() => {
+                                                                                            setEditType("known accounts");
+                                                                                            $("#editPermsModal").modal('show');
+                                                                                        }}>Reset Known Accounts</button>
                                                                                 </div>
                                                                                 <div className="d-flex">
                                                                                     <button className="btn btn-primary w-100 mb-2" onClick={() => {
