@@ -45,7 +45,7 @@ export default function TestPage({ user, url, props }) {
         const val = value || document.getElementById('userSearch').value;
         if (value) document.getElementById('userSearch').value = value;
 
-        const selectedUser = users.find(user => user._id == val || user.ip_address == val || user.assistants_username.toLowerCase() == val.toLowerCase() || user.email.toLowerCase() == val.toLowerCase() || user.connections?.discord?.id == val);
+        const selectedUser = users.find(user => user?._id == val || user?.ip_address == val || user?.assistants_username?.toLowerCase() == val.toLowerCase() || user?.email?.toLowerCase() == val.toLowerCase() || user?.connections?.discord?.id == val);
         if (!selectedUser) {
             $('#userNotFoundModal').modal('show');
             return setUserDB(null);
