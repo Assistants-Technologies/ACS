@@ -118,7 +118,7 @@ export default function LandingPage ({ user, url }) {
                                 <p className="mb-0 text-center text-xl-end"><a className="text-300 text-decoration-none footer-link" href="/tos"> Terms &amp; conditon </a><a className="text-300 text-decoration-none footer-link ps-4" href="/pp">Privacy Policy </a></p>
                             </div>
                             <div className="col-xl-5 pt-2 pt-xl-0 text-center text-xl-end">
-                                <p className="mb-0">Copyright © 2022 Assistants Center. All rights reserved.</p>
+                                <p className="mb-0">Copyright © 2021-2023 Assistants Center. All rights reserved.</p>
                             </div>
                         </div>
                     </div>{/* end of .container*/}

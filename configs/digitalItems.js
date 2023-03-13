@@ -245,6 +245,12 @@ module.exports = {
       categoryName: "Soft-UI Addons",
       categoryDescription: "Soft-UI Theme Addons for Discord-Dashboard v2.",
       categoryId: "soft-ui-addons",
+      categoryItems: []
+     },
+    /*{
+      categoryName: "Soft-UI Addons",
+      categoryDescription: "Soft-UI Theme Addons for Discord-Dashboard v2.",
+      categoryId: "soft-ui-addons",
       categoryItems: [
         {
           id: "sui_addon_leaderboard",
@@ -423,6 +429,6 @@ module.exports = {
           }
         }
       ]
-    }
+    }*/
   ]
 }
