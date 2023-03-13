@@ -107,7 +107,7 @@ const vhost = ({ next_app, next_handle, client }) => {
         if (req.session.user) User.findOne({ _id: req.session.user._id }, (err, user) => {
             if (err) return;
             if (!user) return;
-            var ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+            var ip = req.headers['cf-connecting-ip'];
 
             updateKnownAccounts(ip, user);
 
