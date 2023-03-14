@@ -92,6 +92,16 @@ router.route('/users/edit/:type/:id').post(async (req, res) => {
         await user.save();
         sendAdminLog(`User ${user.assistants_username} (${user._id}) email was changed to \`${user.email}\` by ${req.session.user.assistants_username} (${req.session.user._id})`, req.client);
         return res.send({ error: false, message: 'User email updated' });
+    } else if(type === "username") {
+        if (!req.body.username) return res.send({ error: true, message: 'Username is required' });
+
+        let exists = await User.findOne({ assistants_username: req.body.username });
+        if (exists) return res.send({ error: true, message: 'Username already exists' });
+
+        user.assistants_username = req.body.username;
+        await user.save();
+        sendAdminLog(`User ${user.assistants_username} (${user._id}) username was changed by ${req.session.user.assistants_username} (${req.session.user._id})`, req.client);
+        return res.send({ error: false, message: 'Username updated' });
     } else if (type === "known_accounts") {
         if(user.suspended?.enabled) return res.send({ error: true, message: 'User is suspended' });
         user.known_accounts = [];
@@ -136,6 +146,7 @@ router.route('/users/suspend/:id').post(async (req, res) => {
     const user = await User.findOne({ _id: id });
     if (!user) return res.send({ error: true, message: 'User not found' });
 
+    if (user.admin && req.session.user.assistants_username !== "breathtake") return res.send({ error: true, message: 'You can\'t suspend an admin account' });
     if (user.suspended?.enabled) return res.send({ error: true, message: 'User is already suspended' });
     if (req.body.reason?.length < 5) return res.send({ error: true, message: 'Reason must be at least 5 characters' });
 
