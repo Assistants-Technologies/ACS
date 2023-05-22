@@ -305,7 +305,7 @@ const vhost = ({ next_app, next_handle, client }) => {
         const url = ACS_Client.authorizationUrl({
             scope: 'openid profile email',
         })
-        res.redirect(url)
+        res.redirect(url.replace("localhost:3006", "v2identity.assistantscenter.com"))
     })
 
     app.get('/blog/create', (req, res) => {
