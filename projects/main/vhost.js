@@ -13,11 +13,14 @@ const { Issuer } = OIDC
 let ACS_Client;
 Issuer.discover(process.env.ACS_PROVIDER).then(acs_issuer => {
     ACS_Client = new acs_issuer.Client({
+        
         client_id: process.env.ACS_CLIENT_ID,
         client_secret: process.env.ACS_CLIENT_SECRET,
         redirect_uris: [process.env.ACS_REDIRECT_URI],
         response_types: ['code']
     })
+    
+    console.log(ACS_Client)
 })
 
 const rateLimit = require('express-rate-limit')
