@@ -92,35 +92,44 @@ router.get('/create', async (req, res) => {
 
     const checkout_metadata_key = v4()
 
-    const session = await stripe.checkout.sessions.create({
-        customer: customer.id,
-        line_items: paymentItemsList,
-        mode: 'payment',
-        success_url: process.env.STRIPE_SUCCESS_URL,
-        cancel_url: process.env.STRIPE_CANCEL_URL,
-        payment_method_types: paymentTypes[currency],
-        payment_intent_data: {
-            receipt_email: user.verified ? user.email : undefined,
-        },
-        metadata: {
-            'checkout_metadata_key': checkout_metadata_key
-        },
-        discounts: discount_code ? [
-            {
-                coupon: discount_code
-            }
-        ] : []
-    });
+    try {
 
-    await CheckoutSession.create({
-        user: req.session.user._id,
-        partner_supported: partner_user ? partner_user.user : undefined,
-        item_type: 'item',
-        session_data: session,
-        items_ids: itemsList,
-        checkout_metadata_key
-    })
-    res.redirect(303, session.url);
+        const session = await stripe.checkout.sessions.create({
+            customer: customer.id,
+            line_items: paymentItemsList,
+            mode: 'payment',
+            success_url: process.env.STRIPE_SUCCESS_URL,
+            cancel_url: process.env.STRIPE_CANCEL_URL,
+            payment_method_types: paymentTypes[currency],
+            payment_intent_data: {
+                receipt_email: user.verified ? user.email : undefined,
+            },
+            metadata: {
+                'checkout_metadata_key': checkout_metadata_key
+            },
+            discounts: discount_code ? [
+                {
+                    coupon: discount_code
+                }
+            ] : []
+        });
+
+        await CheckoutSession.create({
+            user: req.session.user._id,
+            partner_supported: partner_user ? partner_user.user : undefined,
+            item_type: 'item',
+            session_data: session,
+            items_ids: itemsList,
+            checkout_metadata_key
+        })
+        res.redirect(303, session.url);
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({
+            error: true,
+            message: err.message,
+        })
+    }
 });
 
 
