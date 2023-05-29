@@ -397,7 +397,7 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                                     <label htmlFor="discountCode">
                                                                         Discount code
                                                                     </label>
-                                                                    <input value={referralCode}
+                                                                    <input value={discountCode}
                                                                            onChange={(event) => setDiscountCode(event.target.value)}
                                                                            type="text" className="form-control"
                                                                            id="supportCreatorCode"
