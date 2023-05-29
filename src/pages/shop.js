@@ -43,6 +43,8 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
 
     const [referralCode, setReferralCode] = React.useState(preloadedReferralCode || '')
 
+    const [discountCode, setDiscountCode] = React.useState('')
+
     React.useEffect(()=>{
         const urlString = window.location.href
         const elementToJump = (urlString.split('#')[1] || '').toLowerCase()
@@ -392,6 +394,17 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                                 <hr />
 
                                                                 <div className="form-group">
+                                                                    <label htmlFor="discountCode">
+                                                                        Discount code
+                                                                    </label>
+                                                                    <input value={referralCode}
+                                                                           onChange={(event) => setDiscountCode(event.target.value)}
+                                                                           type="text" className="form-control"
+                                                                           id="supportCreatorCode"
+                                                                           placeholder="Discount code"/>
+                                                                </div>
+
+                                                                <div className="form-group">
                                                                     <label htmlFor="supportCreatorCode">
                                                                         Support a creator
                                                                     </label>
@@ -406,7 +419,7 @@ export default function ShopPage({ user, url, preloadedReferralCode }) {
                                                                     <div style={{ paddingTop: 15 }}>
                                                                         <button type="button"
                                                                             className="btn btn-primary btn-icon-text"
-                                                                            onClick={() => Router.push(`/api/shop/payment/create?currency=${displayCurrency}&items=${setSelected}&referral_code=${referralCode}`)}
+                                                                            onClick={() => Router.push(`/api/shop/payment/create?currency=${displayCurrency}&items=${setSelected}&referral_code=${referralCode}&discount_code=${discountCode}`)}
                                                                             style={{ color: 'white', height: '50px', fontSize: '16px', justifyContent: 'center', display: 'flex', borderColor: 'transparent !important' }}
                                                                         >
                                                                             <i style={{ fontSize: '14px' }} className="mdi mdi-credit-card"></i>

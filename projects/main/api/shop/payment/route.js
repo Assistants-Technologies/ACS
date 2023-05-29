@@ -27,7 +27,7 @@ router.get('/create', async (req, res) => {
             message: "Not authenticated"
         })
     }
-    const { items: itemsFromQuery, currency, referral_code } = req?.query;
+    const { items: itemsFromQuery, currency, referral_code, discount_code } = req?.query;
 
     let partner_user
     if(referral_code){
@@ -104,12 +104,12 @@ router.get('/create', async (req, res) => {
         },
         metadata: {
             'checkout_metadata_key': checkout_metadata_key
-        }
-        /*discounts: [
+        },
+        discounts: discount_code ? [
             {
-                coupon: 'nhSqiNs9'
+                coupon: discount_code
             }
-        ],*/
+        ] : []
     });
 
     await CheckoutSession.create({
